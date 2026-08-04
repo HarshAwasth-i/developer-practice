@@ -3,6 +3,7 @@ const dotenv = require("dotenv");
 const connectDB = require("./config/db");
 const taskRoutes = require("./routes/taskRoutes");
 const errorHandler = require("./middleware/errorMiddleware");
+const userRoutes = require("./routes/userRoutes");
 
 dotenv.config();
 
@@ -12,6 +13,7 @@ const app = express();
 
 app.use(express.json());
 app.use("/tasks", taskRoutes);
+app.use("/api/user", userRoutes);
 
 app.get("/", (req, res) => {
     res.send("Task Manager API Running...");
