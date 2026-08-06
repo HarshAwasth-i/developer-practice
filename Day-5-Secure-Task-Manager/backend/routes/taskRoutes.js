@@ -1,22 +1,13 @@
 const express = require("express");
-const router = express.Router();
-
 const authMiddleware = require("../middleware/authMiddleware");
 
-const {
-    createTask,
-    getTasks,
-    updateTask,
-    deleteTask,
-} = require("../controllers/taskController");
+const router = express.Router();
 
-// Protected Routes
-router.post("/", authMiddleware, createTask);
-
-router.get("/", authMiddleware, getTasks);
-
-router.put("/:id", authMiddleware, updateTask);
-
-router.delete("/:id", authMiddleware, deleteTask);
+router.get("/profile", authMiddleware, (req, res) => {
+  res.json({
+    message: "Protected Route Accessed",
+    user: req.user,
+  });
+});
 
 module.exports = router;
