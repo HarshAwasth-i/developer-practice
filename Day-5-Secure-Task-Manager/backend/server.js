@@ -1,10 +1,9 @@
 const express = require("express");
 const dotenv = require("dotenv");
 const cors = require("cors");
-const authRoutes = require("./routes/authRoutes");
-const taskRoutes = require("./routes/taskRoutes");
 
 const connectDB = require("./config/db");
+const errorHandler = require("./middleware/errorMiddleware");
 
 dotenv.config();
 
@@ -12,20 +11,23 @@ connectDB();
 
 const app = express();
 
+
 // Middleware
 app.use(cors());
 app.use(express.json());
 
-app.use("/api/tasks", taskRoutes);
-app.use("/api/auth", authRoutes);
 
-// Test Route
-app.get("/", (req, res) => {
-    res.send("🚀 Secure Task Manager API Running...");
-});
+// Routes
+app.use("/api/auth", require("./routes/authRoutes"));
 
+
+// Error Middleware (must be after routes)
+app.use(errorHandler);
+
+
+// Server
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
-    console.log(`✅ Server running on port ${PORT}`);
+    console.log(`Server running on port ${PORT}`);
 });
