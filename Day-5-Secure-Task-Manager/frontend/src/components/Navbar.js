@@ -1,28 +1,50 @@
-import { useNavigate } from "react-router-dom";
+import "../styles/Navbar.css";
+import { Link } from "react-router-dom";
 
-function Navbar() {
-  const navigate = useNavigate();
 
-  const logout = () => {
-    localStorage.removeItem("token");
-    navigate("/");
-  };
+function Navbar(){
 
-  return (
-    <div
-      style={{
-        display: "flex",
-        justifyContent: "space-between",
-        padding: "15px",
-        background: "#222",
-        color: "white",
-      }}
-    >
-      <h3>Task Manager</h3>
+    return(
 
-      <button onClick={logout}>Logout</button>
-    </div>
-  );
+        <nav className="navbar">
+
+
+            <h2 className="logo">
+                Dev Practice
+            </h2>
+
+
+            <div className="nav-links">
+
+
+                <Link to="/">
+                    Home
+                </Link>
+
+
+                <Link to="/login">
+                    Login
+                </Link>
+
+
+                <Link to="/register">
+                    Register
+                </Link>
+
+
+                <Link to="/dashboard">
+                    Dashboard
+                </Link>
+
+
+            </div>
+
+
+        </nav>
+
+    )
+
 }
+
 
 export default Navbar;
