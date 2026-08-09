@@ -1,8 +1,7 @@
 import "../styles/Navbar.css";
 import { Link } from "react-router-dom";
 
-
-function Navbar(){
+function Navbar({darkMode, setDarkMode}){
 
     return(
 
@@ -37,6 +36,14 @@ function Navbar(){
                 </Link>
 
 
+                <button 
+                    className="theme-btn"
+                    onClick={()=>setDarkMode(!darkMode)}
+                >
+                    {darkMode ? "☀️" : "🌙"}
+                </button>
+
+
             </div>
 
 
@@ -45,6 +52,5 @@ function Navbar(){
     )
 
 }
-
 
 export default Navbar;

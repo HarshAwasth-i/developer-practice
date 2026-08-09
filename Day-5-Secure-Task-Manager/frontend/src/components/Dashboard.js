@@ -1,7 +1,27 @@
 import "../styles/Dashboard.css";
-
+import StatCard from "./StatCard";
 
 function Dashboard(){
+
+    const stats = [
+        {
+            title:"Projects",
+            value:5
+        },
+        {
+            title:"Tasks",
+            value:20
+        },
+        {
+            title:"Completed",
+            value:15
+        },
+        {
+            title:"Pending",
+            value:5
+        }
+    ];
+
 
     return(
 
@@ -9,52 +29,28 @@ function Dashboard(){
 
 
             <h1>
-                Welcome to Dashboard
+                Welcome to My Dashboard 
             </h1>
 
 
             <div className="card-container">
 
 
-                <div className="card">
+                {
+                    stats.map((item,index)=>(
 
-                    <h3>
-                        Projects
-                    </h3>
+                        <StatCard
 
-                    <p>
-                        5
-                    </p>
+    key={index}
 
-                </div>
+    title={item.title}
 
+    value={item.value}
 
+/>
 
-                <div className="card">
-
-                    <h3>
-                        Tasks
-                    </h3>
-
-                    <p>
-                        20
-                    </p>
-
-                </div>
-
-
-
-                <div className="card">
-
-                    <h3>
-                        Completed
-                    </h3>
-
-                    <p>
-                        15
-                    </p>
-
-                </div>
+                    ))
+                }
 
 
             </div>

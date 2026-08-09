@@ -6,9 +6,10 @@
 
     padding:20px 40px;
 
-    background:#222;
-    color:white;
+    background:white;
+    color:black;
 
+    transition:0.3s;
 }
 
 
@@ -23,14 +24,48 @@
 
     display:flex;
     gap:20px;
-
+    align-items:center;
 }
 
 
 .nav-links a{
 
-    color:white;
+    color:black;
 
     text-decoration:none;
+
+}
+
+
+/* Dark Mode Navbar */
+
+.app.dark .navbar{
+
+    background:#222;
+    color:white;
+
+}
+
+
+.app.dark .nav-links a{
+
+    color:white;
+
+}
+
+
+/* Theme Button */
+
+.theme-btn{
+
+    border:none;
+
+    padding:8px 12px;
+
+    cursor:pointer;
+
+    border-radius:8px;
+
+    font-size:18px;
 
 }

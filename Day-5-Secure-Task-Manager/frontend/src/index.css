@@ -8,9 +8,22 @@ box-sizing:border-box;
 
 
 body{
+    margin:0;
+    font-family: Arial, sans-serif;
+    background:white;
+    color:black;
+}
 
-background:#f4f4f4;
 
-font-family:Arial, sans-serif;
+.app{
+    min-height:100vh;
+    transition:0.3s;
+}
 
+
+/* Dark Mode */
+
+.app.dark{
+    background:#121212;
+    color:white;
 }

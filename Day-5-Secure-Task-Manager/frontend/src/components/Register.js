@@ -77,21 +77,13 @@ onChange={(e)=>setPassword(e.target.value)}
 
 />
 
-
-
 <button>
 Create Account
 </button>
 
-
 </form>
-
-
 </div>
-
 )
-
 }
-
 
 export default Register;

@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { useState, useEffect } from "react";
 
 import Navbar from "./components/Navbar";
 import Login from "./components/Login";
@@ -9,47 +10,68 @@ import Home from "./components/Home";
 
 function App(){
 
-  return(
-
-    <BrowserRouter>
-
-      <Navbar/>
+    const [darkMode, setDarkMode] = useState(
+    localStorage.getItem("theme") === "dark"
+);
 
 
-      <Routes>
+useEffect(()=>{
 
-        <Route 
-          path="/" 
-          element={<Home/>}
-        />
+    if(darkMode){
+        localStorage.setItem("theme","dark");
+    }
+    else{
+        localStorage.setItem("theme","light");
+    }
 
+},[darkMode]);
 
-        <Route 
-          path="/login" 
-          element={<Login/>}
-        />
+    return(
 
+        <BrowserRouter>
 
-        <Route 
-          path="/register" 
-          element={<Register/>}
-        />
+            <div className={darkMode ? "app dark" : "app"}>
 
-
-        <Route 
-          path="/dashboard" 
-          element={<Dashboard/>}
-        />
+                <Navbar 
+                    darkMode={darkMode}
+                    setDarkMode={setDarkMode}
+                />
 
 
-      </Routes>
+                <Routes>
+
+                    <Route 
+                        path="/" 
+                        element={<Home/>}
+                    />
 
 
-    </BrowserRouter>
+                    <Route 
+                        path="/login" 
+                        element={<Login/>}
+                    />
 
-  )
+
+                    <Route 
+                        path="/register" 
+                        element={<Register/>}
+                    />
+
+
+                    <Route 
+                        path="/dashboard" 
+                        element={<Dashboard/>}
+                    />
+
+                </Routes>
+
+            </div>
+
+
+        </BrowserRouter>
+
+    )
 
 }
-
 
 export default App;
