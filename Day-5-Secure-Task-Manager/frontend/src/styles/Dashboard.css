@@ -1,6 +1,9 @@
 .dashboard{
 
     padding:40px;
+    min-height:100vh;
+    background:#111;
+    color:white;
 
 }
 
@@ -12,70 +15,15 @@
 }
 
 
-.card-container{
+.task-container{
 
     display:grid;
-
-    grid-template-columns:repeat(4,1fr);
-
+    grid-template-columns:repeat(3,300px);
     gap:20px;
 
 }
-
-
-
-.card{
-
-    background:white;
-
-    padding:30px;
-
-    border-radius:12px;
-
-    box-shadow:0 5px 15px rgba(0,0,0,0.1);
-
-    text-align:center;
-
-    transition:0.3s ease;
-
-}
-
-
-
-.card:hover{
-
-    transform:translateY(-5px);
-
-}
-
-
-
-.card h3{
-
-    font-size:20px;
-
-}
-
-
-
-.card p{
-
-    font-size:30px;
-
-    font-weight:bold;
-
-}
-.app.dark .card{
-
-    background:#222;
-
-    color:white;
-
-}
-
-
-.app.dark .dashboard{
-
-    color:white;
-
+.task-container{
+    display:grid;
+    grid-template-columns:repeat(3,300px);
+    gap:20px;
 }

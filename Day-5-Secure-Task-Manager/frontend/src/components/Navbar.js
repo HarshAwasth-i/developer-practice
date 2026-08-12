@@ -1,7 +1,30 @@
 import "../styles/Navbar.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+
 
 function Navbar({darkMode, setDarkMode}){
+
+
+    const navigate = useNavigate();
+
+
+    const token = localStorage.getItem("token");
+
+
+
+    function logout(){
+
+
+        localStorage.removeItem("token");
+
+
+        navigate("/login");
+
+
+    }
+
+
+
 
     return(
 
@@ -9,8 +32,11 @@ function Navbar({darkMode, setDarkMode}){
 
 
             <h2 className="logo">
+
                 Dev Practice
+
             </h2>
+
 
 
             <div className="nav-links">
@@ -21,27 +47,66 @@ function Navbar({darkMode, setDarkMode}){
                 </Link>
 
 
-                <Link to="/login">
-                    Login
-                </Link>
+
+                {
+                    !token &&
+
+                    <>
+
+                    <Link to="/login">
+                        Login
+                    </Link>
 
 
-                <Link to="/register">
-                    Register
-                </Link>
+                    <Link to="/register">
+                        Register
+                    </Link>
+
+                    </>
+
+                }
 
 
-                <Link to="/dashboard">
-                    Dashboard
-                </Link>
+
+                {
+                    token &&
+
+                    <Link to="/dashboard">
+                        Dashboard
+                    </Link>
+
+                }
 
 
-                <button 
-                    className="theme-btn"
-                    onClick={()=>setDarkMode(!darkMode)}
+
+                {
+                    token &&
+
+                    <button
+                    onClick={logout}
+                    >
+
+                    Logout
+
+                    </button>
+
+                }
+
+
+
+
+                <button
+
+                className="theme-btn"
+
+                onClick={()=>setDarkMode(!darkMode)}
+
                 >
-                    {darkMode ? "☀️" : "🌙"}
+
+                {darkMode ? "☀️" : "🌙"}
+
                 </button>
+
 
 
             </div>
@@ -51,6 +116,8 @@ function Navbar({darkMode, setDarkMode}){
 
     )
 
+
 }
+
 
 export default Navbar;
