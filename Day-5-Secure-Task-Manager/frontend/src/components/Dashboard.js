@@ -1,66 +1,52 @@
+import TaskCard from "./TaskCard";
 import "../styles/Dashboard.css";
-import StatCard from "./StatCard";
+
 
 function Dashboard(){
 
-    const stats = [
-        {
-            title:"Projects",
-            value:5
-        },
-        {
-            title:"Tasks",
-            value:20
-        },
-        {
-            title:"Completed",
-            value:15
-        },
-        {
-            title:"Pending",
-            value:5
-        }
-    ];
+const tasks=[
+    {
+        id:1,
+        title:"Learn React",
+        description:"Complete component practice",
+        status:"Completed"
+    },
+    {
+        id:2,
+        title:"Build Dashboard",
+        description:"Create task manager UI",
+        status:"Pending"
+    }
+]
 
 
-    return(
+return(
 
-        <div className="dashboard">
+<div className="dashboard">
 
-
-            <h1>
-                Welcome to My Dashboard 
-            </h1>
-
-
-            <div className="card-container">
+<h1>
+Dashboard
+</h1>
 
 
-                {
-                    stats.map((item,index)=>(
+<div>
 
-                        <StatCard
-
-    key={index}
-
-    title={item.title}
-
-    value={item.value}
-
+{
+tasks.map((task)=>(
+<TaskCard 
+key={task.id}
+task={task}
 />
-
-                    ))
-                }
-
-
-            </div>
-
-
-        </div>
-
-    )
-
+))
 }
 
+</div>
+
+
+</div>
+
+)
+
+}
 
 export default Dashboard;
