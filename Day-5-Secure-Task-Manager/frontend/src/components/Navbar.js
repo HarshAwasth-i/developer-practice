@@ -1,5 +1,6 @@
 import "../styles/Navbar.css";
 import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 
 function Navbar({darkMode, setDarkMode}){
@@ -8,14 +9,15 @@ function Navbar({darkMode, setDarkMode}){
     const navigate = useNavigate();
 
 
-    const token = localStorage.getItem("token");
+    const { token, logout } = useAuth();
 
 
 
-    function logout(){
+
+    function handleLogout(){
 
 
-        localStorage.removeItem("token");
+        logout();
 
 
         navigate("/login");
@@ -28,7 +30,9 @@ function Navbar({darkMode, setDarkMode}){
 
     return(
 
+
         <nav className="navbar">
+
 
 
             <h2 className="logo">
@@ -39,7 +43,10 @@ function Navbar({darkMode, setDarkMode}){
 
 
 
+
+
             <div className="nav-links">
+
 
 
                 <Link to="/">
@@ -48,19 +55,24 @@ function Navbar({darkMode, setDarkMode}){
 
 
 
+
+
                 {
                     !token &&
 
                     <>
 
-                    <Link to="/login">
-                        Login
-                    </Link>
+
+                        <Link to="/login">
+                            Login
+                        </Link>
 
 
-                    <Link to="/register">
-                        Register
-                    </Link>
+
+                        <Link to="/register">
+                            Register
+                        </Link>
+
 
                     </>
 
@@ -68,14 +80,20 @@ function Navbar({darkMode, setDarkMode}){
 
 
 
+
+
                 {
                     token &&
 
                     <Link to="/dashboard">
+
                         Dashboard
+
                     </Link>
 
                 }
+
+
 
 
 
@@ -83,14 +101,15 @@ function Navbar({darkMode, setDarkMode}){
                     token &&
 
                     <button
-                    onClick={logout}
+                    onClick={handleLogout}
                     >
 
-                    Logout
+                        Logout
 
                     </button>
 
                 }
+
 
 
 
@@ -103,16 +122,19 @@ function Navbar({darkMode, setDarkMode}){
 
                 >
 
-                {darkMode ? "☀️" : "🌙"}
+                    {darkMode ? "☀️" : "🌙"}
 
                 </button>
+
 
 
 
             </div>
 
 
+
         </nav>
+
 
     )
 

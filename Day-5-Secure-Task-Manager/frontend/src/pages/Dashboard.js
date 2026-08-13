@@ -1,79 +1,111 @@
 import { useEffect, useState } from "react";
+
 import API from "../api/axios";
 
+import AddTask from "../components/AddTask";
+import TaskCard from "../components/TaskCard";
+import StatCard from "../components/StatCard";
+import Loader from "../components/Loader";
+import EmptyState from "../components/EmptyState";
 
-function Dashboard() {
-
-
-    const [title, setTitle] = useState("");
-
-    const [description, setDescription] = useState("");
-
-    const [tasks, setTasks] = useState([]);
-
-    const [editId, setEditId] = useState(null);
+import "../styles/Dashboard.css";
 
 
+function Dashboard(){
 
-    const fetchTasks = async () => {
 
-        try {
+    const [tasks,setTasks] = useState([]);
+
+    const [editingTask,setEditingTask] = useState(null);
+
+    const [loading,setLoading] = useState(true);
+
+    const [error,setError] = useState("");
+
+
+
+
+    const fetchTasks = async()=>{
+
+
+        try{
+
+            setLoading(true);
+
+            setError("");
+
 
             const res = await API.get("/tasks");
 
+
             setTasks(res.data.tasks);
 
-        } 
+
+        }
         catch(err){
+
 
             console.log(err);
 
+
+            setError("Failed to load tasks");
+
+
         }
+        finally{
+
+
+            setLoading(false);
+
+
+        }
+
 
     };
 
 
 
+
+
     useEffect(()=>{
 
+
         fetchTasks();
+
 
     },[]);
 
 
 
 
-    const createTask = async(e)=>{
-
-        e.preventDefault();
 
 
-        if(!title.trim() || !description.trim()){
 
-            alert("Please fill all fields");
-
-            return;
-
-        }
-
+    const addTask = async(task)=>{
 
 
         try{
 
 
-            if(editId){
+            if(editingTask){
 
 
-                await API.put(`/tasks/${editId}`,{
+                await API.put(
 
-                    title,
+                    `/tasks/${editingTask._id}`,
 
-                    description
+                    {
 
-                });
+                        title:task.title,
+
+                        description:task.description
+
+                    }
+
+                );
 
 
-                setEditId(null);
+                setEditingTask(null);
 
 
             }
@@ -82,9 +114,9 @@ function Dashboard() {
 
                 await API.post("/tasks",{
 
-                    title,
+                    title:task.title,
 
-                    description
+                    description:task.description
 
                 });
 
@@ -93,22 +125,23 @@ function Dashboard() {
 
 
 
-            setTitle("");
-
-            setDescription("");
-
             fetchTasks();
+
 
 
         }
         catch(err){
 
+
             console.log(err);
+
 
         }
 
 
     };
+
+
 
 
 
@@ -118,11 +151,16 @@ function Dashboard() {
 
 
         const confirmDelete = window.confirm(
+
             "Are you sure you want to delete this task?"
+
         );
 
 
-        if(!confirmDelete) return;
+
+        if(!confirmDelete)
+            return;
+
 
 
 
@@ -135,10 +173,13 @@ function Dashboard() {
             fetchTasks();
 
 
+
         }
         catch(err){
 
+
             console.log(err);
+
 
         }
 
@@ -149,18 +190,39 @@ function Dashboard() {
 
 
 
+
+const toggleStatus = async(task)=>{
+
+    try{
+
+        await API.put(`/tasks/${task._id}`,{
+
+            completed: !task.completed
+
+        });
+
+
+        fetchTasks();
+
+
+    }
+    catch(err){
+
+        console.log(err);
+
+    }
+
+};
 
     const editTask=(task)=>{
 
 
-        setTitle(task.title);
-
-        setDescription(task.description);
-
-        setEditId(task._id);
+        setEditingTask(task);
 
 
     };
+
+
 
 
 
@@ -169,11 +231,7 @@ function Dashboard() {
     const cancelEdit=()=>{
 
 
-        setEditId(null);
-
-        setTitle("");
-
-        setDescription("");
+        setEditingTask(null);
 
 
     };
@@ -183,9 +241,31 @@ function Dashboard() {
 
 
 
+
+
+    const totalTasks = tasks.length;
+
+
+const completedTasks = tasks.filter(
+    task=>task.completed
+).length;
+
+
+
+
+    const pendingTasks = totalTasks - completedTasks;
+
+
+
+
+
+
+
     return(
 
-        <div style={{padding:"30px"}}>
+
+        <div className="dashboard">
+
 
 
             <h1>
@@ -194,78 +274,58 @@ function Dashboard() {
 
 
 
-            <form onSubmit={createTask}>
 
 
-                <input
+            <div className="stats-container">
 
-                type="text"
 
-                placeholder="Task Title"
+                <StatCard
 
-                value={title}
+                title="Total Tasks"
 
-                onChange={(e)=>setTitle(e.target.value)}
+                value={totalTasks}
 
                 />
 
 
 
-                <br/>
-                <br/>
+                <StatCard
 
+                title="Completed"
 
-
-                <textarea
-
-                placeholder="Task Description"
-
-                value={description}
-
-                onChange={(e)=>setDescription(e.target.value)}
+                value={completedTasks}
 
                 />
 
 
 
-                <br/>
-                <br/>
+                <StatCard
+
+                title="Pending"
+
+                value={pendingTasks}
+
+                />
+
+
+            </div>
 
 
 
-                <button type="submit">
-
-                    {editId ? "Update Task" : "Add Task"}
-
-                </button>
 
 
 
-                {
-                    editId &&
+            <AddTask
 
-                    <button
+            addTask={addTask}
 
-                    type="button"
+            editingTask={editingTask}
 
-                    onClick={cancelEdit}
+            cancelEdit={cancelEdit}
 
-                    style={{marginLeft:"10px"}}
-
-                    >
-
-                    Cancel
-
-                    </button>
-                }
+            />
 
 
-
-            </form>
-
-
-
-            <hr/>
 
 
 
@@ -277,14 +337,31 @@ function Dashboard() {
 
 
 
+
+
+
             {
+                loading ?
+
+                <Loader/>
+
+                :
+
+                error ?
+
+                <p>
+                    {error}
+                </p>
+
+
+                :
+
+
                 tasks.length===0
 
                 ?
 
-                <p>
-                    Create your first task 🚀
-                </p>
+                <EmptyState/>
 
 
                 :
@@ -293,69 +370,19 @@ function Dashboard() {
                 tasks.map((task)=>(
 
 
-                    <div
+                    <TaskCard
 
-                    key={task._id}
+key={task._id}
 
-                    style={{
+task={task}
 
-                        border:"1px solid gray",
+deleteTask={deleteTask}
 
-                        borderRadius:"8px",
+editTask={editTask}
 
-                        padding:"15px",
+toggleStatus={toggleStatus}
 
-                        marginBottom:"15px"
-
-                    }}
-
-                    >
-
-
-                        <h3>
-                            {task.title}
-                        </h3>
-
-
-
-                        <p>
-                            {task.description}
-                        </p>
-
-
-
-
-                        <button
-
-                        onClick={()=>editTask(task)}
-
-                        >
-
-                        Edit
-
-                        </button>
-
-
-
-
-
-                        <button
-
-                        onClick={()=>deleteTask(task._id)}
-
-                        style={{marginLeft:"10px"}}
-
-                        >
-
-                        Delete
-
-                        </button>
-
-
-
-
-                    </div>
-
+/>
 
                 ))
 
@@ -364,9 +391,11 @@ function Dashboard() {
 
 
 
+
         </div>
 
-    );
+
+    )
 
 
 }

@@ -1,12 +1,25 @@
-/* import "../styles/TaskCard.css"; */
 .task-card{
 
     background:#222;
+
     padding:20px;
+
     border-radius:12px;
+
     border:1px solid #333;
 
+    transition:0.3s;
+
 }
+
+
+
+.task-card:hover{
+
+    transform:translateY(-5px);
+
+}
+
 
 
 .task-card h3{
@@ -16,34 +29,76 @@
 }
 
 
+
 .task-card p{
 
     color:#ccc;
 
+    line-height:1.5;
+
 }
+
 
 
 .task-card span{
 
     display:inline-block;
+
     margin-top:10px;
+
     color:#4ade80;
 
+    font-weight:bold;
+
 }
+
+
+
 .task-buttons{
 
     margin-top:15px;
+
     display:flex;
+
     gap:10px;
 
 }
 
 
+
 .task-buttons button{
 
-    padding:8px 12px;
+    padding:8px 14px;
+
     border:none;
-    border-radius:5px;
+
+    border-radius:6px;
+
     cursor:pointer;
+
+}
+
+
+
+.task-buttons button:hover{
+
+    opacity:0.8;
+
+}
+
+.completed{
+
+    color:#4ade80;
+
+    font-weight:bold;
+
+}
+
+
+.pending{
+
+    color:#facc15;
+
+    font-weight:bold;
 
 }

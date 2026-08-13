@@ -11,6 +11,8 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 
+import { AuthProvider } from "./context/AuthContext";
+
 
 
 function App(){
@@ -44,13 +46,13 @@ function App(){
 
 
 
-    return(
+return(
 
+    <AuthProvider>
 
-        <BrowserRouter>
+    <BrowserRouter>
 
-
-            <div className={darkMode ? "app dark" : "app"}>
+        <div className={darkMode ? "app dark" : "app"}>
 
 
                 <Navbar
@@ -120,7 +122,7 @@ function App(){
 
 
         </BrowserRouter>
-
+</AuthProvider>
 
     )
 

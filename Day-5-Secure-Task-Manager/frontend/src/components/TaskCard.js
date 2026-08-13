@@ -1,7 +1,7 @@
 import "../styles/TaskCard.css";
 
 
-function TaskCard({task, deleteTask, toggleStatus}){
+function TaskCard({task, deleteTask, editTask, toggleStatus}){
 
 
     return(
@@ -19,26 +19,60 @@ function TaskCard({task, deleteTask, toggleStatus}){
             </p>
 
 
-            <span>
-                Status: {task.status}
+
+            <span
+            className={task.completed ? "completed" : "pending"}
+            >
+
+                Status: {task.completed ? "Completed" : "Pending"}
+
             </span>
+
+
+
 
 
             <div className="task-buttons">
 
 
                 <button
-                onClick={()=>toggleStatus(task.id)}
+                onClick={()=>toggleStatus(task)}
                 >
-                    Change Status
+
+                    {
+                        task.completed
+                        ?
+                        "Mark Pending"
+                        :
+                        "Complete"
+                    }
+
                 </button>
+
+
+
 
 
                 <button
-                onClick={()=>deleteTask(task.id)}
+                onClick={()=>editTask(task)}
                 >
-                    Delete
+
+                    Edit
+
                 </button>
+
+
+
+
+
+                <button
+                onClick={()=>deleteTask(task._id)}
+                >
+
+                    Delete
+
+                </button>
+
 
 
             </div>
@@ -47,6 +81,7 @@ function TaskCard({task, deleteTask, toggleStatus}){
         </div>
 
     )
+
 
 }
 

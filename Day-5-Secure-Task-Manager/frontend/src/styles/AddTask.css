@@ -1,28 +1,49 @@
 .add-task{
 
     display:flex;
+
     gap:10px;
-    margin:20px;
+
+    margin:20px 0;
 
 }
+
 
 
 .add-task input{
 
-    padding:10px;
-    border-radius:5px;
+    padding:12px;
+
+    border-radius:6px;
+
     border:1px solid #ccc;
 
+    outline:none;
+
 }
+
 
 
 .add-task button{
 
     padding:10px 20px;
+
     background:black;
+
     color:white;
+
     border:none;
-    border-radius:5px;
+
+    border-radius:6px;
+
     cursor:pointer;
+
+}
+
+
+
+.add-task button:hover{
+
+    background:#333;
 
 }

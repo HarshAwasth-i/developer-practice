@@ -1,67 +1,176 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+
 import API from "../api/axios";
+import { useAuth } from "../context/AuthContext";
+
 
 function Login() {
-  const navigate = useNavigate();
 
-  const [form, setForm] = useState({
-    email: "",
-    password: "",
-  });
 
-  const handleChange = (e) => {
-    setForm({
-      ...form,
-      [e.target.name]: e.target.value,
+    const navigate = useNavigate();
+
+
+    const { login } = useAuth();
+
+
+
+    const [form, setForm] = useState({
+
+        email:"",
+        password:""
+
     });
-  };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
 
-    try {
-      const res = await API.post("/auth/login", form);
 
-      localStorage.setItem("token", res.data.token);
 
-      alert("Login Successful");
+    const handleChange = (e)=>{
 
-      navigate("/dashboard");
-    } catch (err) {
-      alert(err.response?.data?.message || "Login Failed");
-    }
-  };
 
-  return (
-    <div style={{ padding: "30px" }}>
-      <h2>Login</h2>
+        setForm({
 
-      <form onSubmit={handleSubmit}>
-        <input
-          type="email"
-          name="email"
-          placeholder="Email"
-          onChange={handleChange}
-        />
+            ...form,
 
-        <br />
-        <br />
+            [e.target.name]: e.target.value
 
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          onChange={handleChange}
-        />
+        });
 
-        <br />
-        <br />
 
-        <button type="submit">Login</button>
-      </form>
-    </div>
-  );
+    };
+
+
+
+
+
+    const handleSubmit = async(e)=>{
+
+
+        e.preventDefault();
+
+
+
+        try{
+
+
+            const res = await API.post(
+                "/auth/login",
+                form
+            );
+
+
+
+            login(res.data.token);
+
+
+
+            alert("Login Successful");
+
+
+
+            navigate("/dashboard");
+
+
+
+        }
+        catch(err){
+
+
+            alert(
+
+                err.response?.data?.message ||
+
+                "Login Failed"
+
+            );
+
+
+        }
+
+
+    };
+
+
+
+
+
+
+    return(
+
+
+        <div style={{padding:"30px"}}>
+
+
+            <h2>
+                Login
+            </h2>
+
+
+
+
+            <form onSubmit={handleSubmit}>
+
+
+                <input
+
+                type="email"
+
+                name="email"
+
+                placeholder="Email"
+
+                value={form.email}
+
+                onChange={handleChange}
+
+                />
+
+
+
+                <br/>
+                <br/>
+
+
+
+                <input
+
+                type="password"
+
+                name="password"
+
+                placeholder="Password"
+
+                value={form.password}
+
+                onChange={handleChange}
+
+                />
+
+
+
+                <br/>
+                <br/>
+
+
+
+                <button type="submit">
+
+                    Login
+
+                </button>
+
+
+
+            </form>
+
+
+        </div>
+
+
+    )
+
+
 }
+
 
 export default Login;
