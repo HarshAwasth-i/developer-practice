@@ -22,6 +22,9 @@ function Dashboard(){
 
     const [error,setError] = useState("");
 
+    const [searchTerm,setSearchTerm] = useState("");
+    const [filter,setFilter] = useState("all");
+    const [sort,setSort] = useState("newest");
 
 
 
@@ -29,6 +32,7 @@ function Dashboard(){
 
 
         try{
+
 
             setLoading(true);
 
@@ -39,6 +43,7 @@ function Dashboard(){
 
 
             setTasks(res.data.tasks);
+
 
 
         }
@@ -108,6 +113,7 @@ function Dashboard(){
                 setEditingTask(null);
 
 
+
             }
             else{
 
@@ -125,16 +131,14 @@ function Dashboard(){
 
 
 
-            fetchTasks();
 
+            fetchTasks();
 
 
         }
         catch(err){
 
-
             console.log(err);
-
 
         }
 
@@ -163,7 +167,6 @@ function Dashboard(){
 
 
 
-
         try{
 
 
@@ -173,13 +176,10 @@ function Dashboard(){
             fetchTasks();
 
 
-
         }
         catch(err){
 
-
             console.log(err);
-
 
         }
 
@@ -191,28 +191,39 @@ function Dashboard(){
 
 
 
-const toggleStatus = async(task)=>{
-
-    try{
-
-        await API.put(`/tasks/${task._id}`,{
-
-            completed: !task.completed
-
-        });
 
 
-        fetchTasks();
+    const toggleStatus = async(task)=>{
 
 
-    }
-    catch(err){
+        try{
 
-        console.log(err);
 
-    }
+            await API.put(`/tasks/${task._id}`,{
 
-};
+                completed: !task.completed
+
+            });
+
+
+            fetchTasks();
+
+
+        }
+        catch(err){
+
+            console.log(err);
+
+        }
+
+
+    };
+
+
+
+
+
+
 
     const editTask=(task)=>{
 
@@ -221,8 +232,6 @@ const toggleStatus = async(task)=>{
 
 
     };
-
-
 
 
 
@@ -246,14 +255,107 @@ const toggleStatus = async(task)=>{
     const totalTasks = tasks.length;
 
 
-const completedTasks = tasks.filter(
-    task=>task.completed
-).length;
 
+    const completedTasks = tasks.filter(
+
+        task=>task.completed
+
+    ).length;
 
 
 
     const pendingTasks = totalTasks - completedTasks;
+    const progress =
+totalTasks === 0
+?
+0
+:
+Math.round(
+(completedTasks / totalTasks) * 100
+);
+
+
+
+
+
+
+const filteredTasks = tasks
+
+.filter((task)=>{
+
+
+    const matchesSearch =
+
+        task.title.toLowerCase()
+        .includes(searchTerm.toLowerCase())
+
+        ||
+
+        task.description.toLowerCase()
+        .includes(searchTerm.toLowerCase());
+
+
+
+
+    const matchesFilter =
+
+        filter === "all"
+
+        ?
+
+        true
+
+
+        :
+
+        filter === "completed"
+
+        ?
+
+        task.completed
+
+
+        :
+
+        !task.completed;
+
+
+
+
+    return matchesSearch && matchesFilter;
+
+
+})
+
+
+
+.sort((a,b)=>{
+
+
+    if(sort==="newest"){
+
+
+        return new Date(b.createdAt)
+        -
+        new Date(a.createdAt);
+
+
+    }
+
+
+    else{
+
+
+        return new Date(a.createdAt)
+        -
+        new Date(b.createdAt);
+
+
+    }
+
+
+});
+
 
 
 
@@ -276,6 +378,7 @@ const completedTasks = tasks.filter(
 
 
 
+
             <div className="stats-container">
 
 
@@ -288,7 +391,6 @@ const completedTasks = tasks.filter(
                 />
 
 
-
                 <StatCard
 
                 title="Completed"
@@ -296,7 +398,6 @@ const completedTasks = tasks.filter(
                 value={completedTasks}
 
                 />
-
 
 
                 <StatCard
@@ -330,6 +431,121 @@ const completedTasks = tasks.filter(
 
 
 
+
+            <input
+
+            className="search-box"
+
+            type="text"
+
+            placeholder="Search tasks..."
+
+            value={searchTerm}
+
+            onChange={(e)=>setSearchTerm(e.target.value)}
+
+            />
+ 
+ <div className="progress-section">
+
+    <h3>
+        Task Progress
+    </h3>
+
+
+    <div className="progress-bar">
+
+
+        <div
+
+        className="progress-fill"
+
+        style={{
+            width:`${progress}%`
+        }}
+
+        >
+
+        </div>
+
+
+    </div>
+
+
+    <p>
+        {completedTasks} of {totalTasks} tasks completed
+    </p>
+
+
+</div>
+
+
+<div className="filter-buttons">
+
+
+    <button
+
+    onClick={()=>setFilter("all")}
+
+    >
+
+        All
+
+    </button>
+
+
+
+
+    <button
+
+    onClick={()=>setFilter("completed")}
+
+    >
+
+        Completed
+
+    </button>
+
+
+
+
+    <button
+
+    onClick={()=>setFilter("pending")}
+
+    >
+
+        Pending
+
+    </button>
+
+
+</div>
+
+<select
+
+value={sort}
+
+onChange={(e)=>setSort(e.target.value)}
+
+>
+
+<option value="newest">
+
+Newest First
+
+</option>
+
+
+<option value="oldest">
+
+Oldest First
+
+</option>
+
+
+</select>
+
             <h2>
                 My Tasks
             </h2>
@@ -340,12 +556,16 @@ const completedTasks = tasks.filter(
 
 
 
+
             {
+
                 loading ?
 
                 <Loader/>
 
+
                 :
+
 
                 error ?
 
@@ -354,10 +574,12 @@ const completedTasks = tasks.filter(
                 </p>
 
 
+
                 :
 
 
-                tasks.length===0
+
+                filteredTasks.length===0
 
                 ?
 
@@ -367,27 +589,35 @@ const completedTasks = tasks.filter(
                 :
 
 
-                tasks.map((task)=>(
+                filteredTasks.map((task)=>(
 
 
                     <TaskCard
 
-key={task._id}
 
-task={task}
+                    key={task._id}
 
-deleteTask={deleteTask}
 
-editTask={editTask}
+                    task={task}
 
-toggleStatus={toggleStatus}
 
-/>
+                    deleteTask={deleteTask}
+
+
+                    editTask={editTask}
+
+
+                    toggleStatus={toggleStatus}
+
+
+                    />
+
 
                 ))
 
 
             }
+
 
 
 

@@ -1,17 +1,31 @@
 import "../styles/TaskCard.css";
 
 
-function TaskCard({task, deleteTask, editTask, toggleStatus}){
+function TaskCard({
+    task,
+    deleteTask,
+    editTask,
+    toggleStatus
+}){
 
 
     return(
 
-        <div className="task-card">
+        <div
+        className={
+            task.completed
+            ?
+            "task-card completed-card"
+            :
+            "task-card"
+        }
+        >
 
 
             <h3>
-                {task.title}
+                📌 {task.title}
             </h3>
+
 
 
             <p>
@@ -20,13 +34,46 @@ function TaskCard({task, deleteTask, editTask, toggleStatus}){
 
 
 
+
+
             <span
-            className={task.completed ? "completed" : "pending"}
+            className={
+                task.completed
+                ?
+                "completed"
+                :
+                "pending"
+            }
             >
 
-                Status: {task.completed ? "Completed" : "Pending"}
+                {
+                    task.completed
+                    ?
+                    "🟢 Completed"
+                    :
+                    "🟡 Pending"
+                }
 
             </span>
+
+
+
+
+
+            <p className="date">
+
+                Created:
+
+                {" "}
+
+                {
+                    new Date(task.createdAt)
+                    .toLocaleDateString()
+                }
+
+            </p>
+
+
 
 
 
@@ -35,17 +82,18 @@ function TaskCard({task, deleteTask, editTask, toggleStatus}){
             <div className="task-buttons">
 
 
+
                 <button
                 onClick={()=>toggleStatus(task)}
                 >
 
-                    {
-                        task.completed
-                        ?
-                        "Mark Pending"
-                        :
-                        "Complete"
-                    }
+                {
+                    task.completed
+                    ?
+                    "Mark Pending"
+                    :
+                    "Complete"
+                }
 
                 </button>
 
@@ -79,6 +127,7 @@ function TaskCard({task, deleteTask, editTask, toggleStatus}){
 
 
         </div>
+
 
     )
 
