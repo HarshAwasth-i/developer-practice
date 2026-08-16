@@ -60,7 +60,10 @@ function Login() {
 
 
 
-            login(res.data.token);
+            login(
+    res.data.token,
+    res.data.user
+);
 
 
 

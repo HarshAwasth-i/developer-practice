@@ -7,6 +7,7 @@ import TaskCard from "../components/TaskCard";
 import StatCard from "../components/StatCard";
 import Loader from "../components/Loader";
 import EmptyState from "../components/EmptyState";
+import ActivityCard from "../components/ActivityCard";
 
 import "../styles/Dashboard.css";
 
@@ -16,6 +17,8 @@ function Dashboard(){
 
     const [tasks,setTasks] = useState([]);
 
+    const [activities,setActivities] = useState([]);
+
     const [editingTask,setEditingTask] = useState(null);
 
     const [loading,setLoading] = useState(true);
@@ -23,8 +26,12 @@ function Dashboard(){
     const [error,setError] = useState("");
 
     const [searchTerm,setSearchTerm] = useState("");
+
     const [filter,setFilter] = useState("all");
+
     const [sort,setSort] = useState("newest");
+
+
 
 
 
@@ -39,6 +46,7 @@ function Dashboard(){
             setError("");
 
 
+
             const res = await API.get("/tasks");
 
 
@@ -47,6 +55,7 @@ function Dashboard(){
 
 
         }
+
         catch(err){
 
 
@@ -57,6 +66,7 @@ function Dashboard(){
 
 
         }
+
         finally{
 
 
@@ -72,10 +82,46 @@ function Dashboard(){
 
 
 
+
+
+    const fetchActivities = async()=>{
+
+
+        try{
+
+
+            const res = await API.get("/activities");
+
+
+            setActivities(res.data.activities);
+
+
+
+        }
+
+        catch(err){
+
+
+            console.log(err);
+
+
+        }
+
+
+    };
+
+
+
+
+
+
+
     useEffect(()=>{
 
 
         fetchTasks();
+
+        fetchActivities();
 
 
     },[]);
@@ -113,16 +159,19 @@ function Dashboard(){
                 setEditingTask(null);
 
 
-
             }
+
+
             else{
 
 
                 await API.post("/tasks",{
 
+
                     title:task.title,
 
                     description:task.description
+
 
                 });
 
@@ -131,19 +180,25 @@ function Dashboard(){
 
 
 
-
             fetchTasks();
+
+            fetchActivities();
+
 
 
         }
+
         catch(err){
 
+
             console.log(err);
+
 
         }
 
 
     };
+
 
 
 
@@ -175,17 +230,22 @@ function Dashboard(){
 
             fetchTasks();
 
+            fetchActivities();
+
+
 
         }
+
         catch(err){
 
+
             console.log(err);
+
 
         }
 
 
     };
-
 
 
 
@@ -201,18 +261,27 @@ function Dashboard(){
 
             await API.put(`/tasks/${task._id}`,{
 
-                completed: !task.completed
+
+                completed:!task.completed
+
 
             });
 
 
+
             fetchTasks();
+
+            fetchActivities();
+
 
 
         }
+
         catch(err){
 
+
             console.log(err);
+
 
         }
 
@@ -237,6 +306,8 @@ function Dashboard(){
 
 
 
+
+
     const cancelEdit=()=>{
 
 
@@ -251,9 +322,7 @@ function Dashboard(){
 
 
 
-
     const totalTasks = tasks.length;
-
 
 
     const completedTasks = tasks.filter(
@@ -265,41 +334,57 @@ function Dashboard(){
 
 
     const pendingTasks = totalTasks - completedTasks;
+
+
+
+
+
     const progress =
-totalTasks === 0
-?
-0
-:
-Math.round(
-(completedTasks / totalTasks) * 100
-);
+
+    totalTasks===0
+
+    ?
+
+    0
+
+    :
+
+    Math.round(
+
+        (completedTasks/totalTasks)*100
+
+    );
 
 
 
 
 
 
-const filteredTasks = tasks
 
-.filter((task)=>{
+    const filteredTasks = tasks
+
+    .filter((task)=>{
 
 
-    const matchesSearch =
+        const matchesSearch =
 
         task.title.toLowerCase()
+
         .includes(searchTerm.toLowerCase())
 
         ||
 
         task.description.toLowerCase()
+
         .includes(searchTerm.toLowerCase());
 
 
 
 
-    const matchesFilter =
+        const matchesFilter =
 
-        filter === "all"
+
+        filter==="all"
 
         ?
 
@@ -308,7 +393,8 @@ const filteredTasks = tasks
 
         :
 
-        filter === "completed"
+
+        filter==="completed"
 
         ?
 
@@ -322,39 +408,38 @@ const filteredTasks = tasks
 
 
 
-    return matchesSearch && matchesFilter;
-
-
-})
+        return matchesSearch && matchesFilter;
 
 
 
-.sort((a,b)=>{
+    })
 
 
-    if(sort==="newest"){
+
+    .sort((a,b)=>{
 
 
-        return new Date(b.createdAt)
-        -
-        new Date(a.createdAt);
+        if(sort==="newest"){
 
 
-    }
+            return new Date(b.createdAt)
+
+            -
+
+            new Date(a.createdAt);
 
 
-    else{
+        }
 
 
         return new Date(a.createdAt)
+
         -
+
         new Date(b.createdAt);
 
 
-    }
-
-
-});
+    });
 
 
 
@@ -378,7 +463,6 @@ const filteredTasks = tasks
 
 
 
-
             <div className="stats-container">
 
 
@@ -391,6 +475,7 @@ const filteredTasks = tasks
                 />
 
 
+
                 <StatCard
 
                 title="Completed"
@@ -398,6 +483,7 @@ const filteredTasks = tasks
                 value={completedTasks}
 
                 />
+
 
 
                 <StatCard
@@ -409,7 +495,69 @@ const filteredTasks = tasks
                 />
 
 
+
             </div>
+
+
+
+
+
+
+
+
+            <div className="progress-section">
+
+
+                <h3>
+                    Task Progress
+                </h3>
+<ActivityCard
+
+activities={activities}
+
+/>
+
+
+                <div className="progress-bar">
+
+
+                    <div
+
+                    className="progress-fill"
+
+                    style={{
+                        width:`${progress}%`
+                    }}
+
+                    >
+
+                    </div>
+
+
+                </div>
+
+
+                <p>
+
+                    {completedTasks} of {totalTasks} tasks completed
+
+                </p>
+
+
+            </div>
+
+
+
+
+
+
+
+            <ActivityCard
+
+            activities={activities}
+
+            />
+
 
 
 
@@ -436,8 +584,6 @@ const filteredTasks = tasks
 
             className="search-box"
 
-            type="text"
-
             placeholder="Search tasks..."
 
             value={searchTerm}
@@ -445,106 +591,75 @@ const filteredTasks = tasks
             onChange={(e)=>setSearchTerm(e.target.value)}
 
             />
- 
- <div className="progress-section">
-
-    <h3>
-        Task Progress
-    </h3>
-
-
-    <div className="progress-bar">
-
-
-        <div
-
-        className="progress-fill"
-
-        style={{
-            width:`${progress}%`
-        }}
-
-        >
-
-        </div>
-
-
-    </div>
-
-
-    <p>
-        {completedTasks} of {totalTasks} tasks completed
-    </p>
-
-
-</div>
-
-
-<div className="filter-buttons">
-
-
-    <button
-
-    onClick={()=>setFilter("all")}
-
-    >
-
-        All
-
-    </button>
 
 
 
 
-    <button
-
-    onClick={()=>setFilter("completed")}
-
-    >
-
-        Completed
-
-    </button>
 
 
 
 
-    <button
-
-    onClick={()=>setFilter("pending")}
-
-    >
-
-        Pending
-
-    </button>
+            <div className="filter-buttons">
 
 
-</div>
+                <button onClick={()=>setFilter("all")}>
 
-<select
+                    All
 
-value={sort}
-
-onChange={(e)=>setSort(e.target.value)}
-
->
-
-<option value="newest">
-
-Newest First
-
-</option>
+                </button>
 
 
-<option value="oldest">
+                <button onClick={()=>setFilter("completed")}>
 
-Oldest First
+                    Completed
 
-</option>
+                </button>
 
 
-</select>
+                <button onClick={()=>setFilter("pending")}>
+
+                    Pending
+
+                </button>
+
+
+            </div>
+
+
+
+
+
+
+
+            <select
+
+            value={sort}
+
+            onChange={(e)=>setSort(e.target.value)}
+
+            >
+
+                <option value="newest">
+
+                    Newest First
+
+                </option>
+
+
+                <option value="oldest">
+
+                    Oldest First
+
+                </option>
+
+
+            </select>
+
+
+
+
+
+
 
             <h2>
                 My Tasks
@@ -556,10 +671,11 @@ Oldest First
 
 
 
-
             {
 
-                loading ?
+                loading
+
+                ?
 
                 <Loader/>
 
@@ -567,16 +683,14 @@ Oldest First
                 :
 
 
-                error ?
+                error
 
-                <p>
-                    {error}
-                </p>
+                ?
 
+                <p>{error}</p>
 
 
                 :
-
 
 
                 filteredTasks.length===0
@@ -594,18 +708,13 @@ Oldest First
 
                     <TaskCard
 
-
                     key={task._id}
-
 
                     task={task}
 
-
                     deleteTask={deleteTask}
 
-
                     editTask={editTask}
-
 
                     toggleStatus={toggleStatus}
 
@@ -615,8 +724,8 @@ Oldest First
 
                 ))
 
-
             }
+
 
 
 

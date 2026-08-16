@@ -1,4 +1,5 @@
 const Task = require("../models/Task");
+const Activity = require("../models/Activity");
 
 // Create Task
 exports.createTask = async (req, res) => {
@@ -10,6 +11,15 @@ exports.createTask = async (req, res) => {
             description,
             user: req.user.id,
         });
+        await Activity.create({
+
+    user:req.user.id,
+
+    action:"created",
+
+    taskTitle:title
+
+});
 
         res.status(201).json({
             success: true,
@@ -51,6 +61,20 @@ exports.updateTask = async (req, res) => {
             req.body,
             { new: true }
         );
+        if(req.body.completed !== undefined){
+
+    await Activity.create({
+
+        user:req.user.id,
+
+        action:"deleted",
+
+        taskTitle:task.title
+
+    });
+    await Task.findByIdAndDelete(req.params.id);
+
+}
 
         if (!task) {
             return res.status(404).json({

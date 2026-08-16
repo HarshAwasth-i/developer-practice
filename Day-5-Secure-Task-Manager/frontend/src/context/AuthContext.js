@@ -8,7 +8,7 @@ const AuthContext = createContext();
 export function AuthProvider({children}){
 
 
-    const [token, setToken] = useState(
+    const [token,setToken] = useState(
 
         localStorage.getItem("token")
 
@@ -16,19 +16,54 @@ export function AuthProvider({children}){
 
 
 
-    function login(userToken){
+    const [user,setUser] = useState(
+
+        JSON.parse(localStorage.getItem("user"))
+
+    );
+
+
+
+
+
+
+    function login(userToken,userData){
+        console.log("TOKEN:", userToken);
+
+    console.log("USER DATA:", userData);
 
 
         localStorage.setItem(
+
             "token",
+
             userToken
+
         );
+
+
+
+        localStorage.setItem(
+
+            "user",
+
+            JSON.stringify(userData)
+
+        );
+
 
 
         setToken(userToken);
 
 
+        setUser(userData);
+
+
+
     }
+
+
+
 
 
 
@@ -39,10 +74,18 @@ export function AuthProvider({children}){
         localStorage.removeItem("token");
 
 
+        localStorage.removeItem("user");
+
+
         setToken(null);
 
 
+        setUser(null);
+
+
     }
+
+
 
 
 
@@ -52,9 +95,12 @@ export function AuthProvider({children}){
 
         <AuthContext.Provider
 
+
         value={{
 
             token,
+
+            user,
 
             login,
 
@@ -64,6 +110,7 @@ export function AuthProvider({children}){
 
         }}
 
+
         >
 
             {children}
@@ -71,10 +118,14 @@ export function AuthProvider({children}){
 
         </AuthContext.Provider>
 
+
     )
 
 
 }
+
+
+
 
 
 

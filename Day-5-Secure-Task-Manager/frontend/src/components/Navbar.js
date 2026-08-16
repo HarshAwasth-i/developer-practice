@@ -1,15 +1,17 @@
 import "../styles/Navbar.css";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import ProfileDropdown from "./ProfileDropdown";
 
 
-function Navbar({darkMode, setDarkMode}){
+function Navbar({darkMode,setDarkMode}){
 
 
     const navigate = useNavigate();
 
 
-    const { token, logout } = useAuth();
+    const {token,user,logout} = useAuth();
+
 
 
 
@@ -24,6 +26,8 @@ function Navbar({darkMode, setDarkMode}){
 
 
     }
+
+
 
 
 
@@ -57,21 +61,25 @@ function Navbar({darkMode, setDarkMode}){
 
 
 
+
                 {
                     !token &&
 
                     <>
 
+                    <Link to="/login">
 
-                        <Link to="/login">
-                            Login
-                        </Link>
+                        Login
+
+                    </Link>
 
 
 
-                        <Link to="/register">
-                            Register
-                        </Link>
+                    <Link to="/register">
+
+                        Register
+
+                    </Link>
 
 
                     </>
@@ -82,8 +90,12 @@ function Navbar({darkMode, setDarkMode}){
 
 
 
+
+
                 {
                     token &&
+
+                    <>
 
                     <Link to="/dashboard">
 
@@ -91,24 +103,31 @@ function Navbar({darkMode, setDarkMode}){
 
                     </Link>
 
-                }
+
+
+
+<ProfileDropdown/>
 
 
 
 
-
-                {
-                    token &&
 
                     <button
+
                     onClick={handleLogout}
+
                     >
 
                         Logout
 
                     </button>
 
+
+                    </>
+
+
                 }
+
 
 
 
@@ -122,7 +141,14 @@ function Navbar({darkMode, setDarkMode}){
 
                 >
 
-                    {darkMode ? "☀️" : "🌙"}
+                {
+                    darkMode
+                    ?
+                    "☀️"
+                    :
+                    "🌙"
+                }
+
 
                 </button>
 
