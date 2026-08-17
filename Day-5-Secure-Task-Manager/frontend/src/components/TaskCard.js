@@ -4,14 +4,39 @@ import "../styles/TaskCard.css";
 function TaskCard({
     task,
     deleteTask,
-    editTask,
-    toggleStatus
+    toggleStatus,
+    editTask
 }){
+
+
+    const priorityClass =
+
+    task.priority === "High"
+
+    ?
+
+    "high"
+
+    :
+
+    task.priority === "Low"
+
+    ?
+
+    "low"
+
+    :
+
+    "medium";
+
+
 
 
     return(
 
+
         <div
+
         className={
             task.completed
             ?
@@ -19,17 +44,34 @@ function TaskCard({
             :
             "task-card"
         }
+
         >
 
 
-            <h3>
-                📌 {task.title}
-            </h3>
+
+            <div className="task-title">
+
+
+                <span>
+                    📌
+                </span>
+
+
+                <h3>
+                    {task.title}
+                </h3>
+
+
+            </div>
 
 
 
-            <p>
+
+
+            <p className="task-description">
+
                 {task.description}
+
             </p>
 
 
@@ -37,6 +79,27 @@ function TaskCard({
 
 
             <span
+
+            className={`priority ${priorityClass}`}
+
+            >
+
+                {
+                    task.priority || "Medium"
+                }
+
+                {" "}Priority
+
+
+            </span>
+
+
+
+
+
+
+            <span
+
             className={
                 task.completed
                 ?
@@ -44,17 +107,20 @@ function TaskCard({
                 :
                 "pending"
             }
+
             >
 
                 {
                     task.completed
                     ?
-                    "🟢 Completed"
+                    "✅ Completed"
                     :
                     "🟡 Pending"
                 }
 
+
             </span>
+
 
 
 
@@ -71,8 +137,8 @@ function TaskCard({
                     .toLocaleDateString()
                 }
 
-            </p>
 
+            </p>
 
 
 
@@ -82,18 +148,20 @@ function TaskCard({
             <div className="task-buttons">
 
 
-
                 <button
+
                 onClick={()=>toggleStatus(task)}
+
                 >
 
-                {
-                    task.completed
-                    ?
-                    "Mark Pending"
-                    :
-                    "Complete"
-                }
+                    {
+                        task.completed
+                        ?
+                        "↩ Mark Pending"
+                        :
+                        "✓ Complete"
+                    }
+
 
                 </button>
 
@@ -102,10 +170,12 @@ function TaskCard({
 
 
                 <button
+
                 onClick={()=>editTask(task)}
+
                 >
 
-                    Edit
+                    ✏ Edit
 
                 </button>
 
@@ -114,16 +184,19 @@ function TaskCard({
 
 
                 <button
+
                 onClick={()=>deleteTask(task._id)}
+
                 >
 
-                    Delete
+                    🗑 Delete
 
                 </button>
 
 
 
             </div>
+
 
 
         </div>

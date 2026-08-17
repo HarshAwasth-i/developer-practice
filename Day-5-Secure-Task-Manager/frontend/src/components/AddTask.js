@@ -1,34 +1,24 @@
-import {useEffect, useState} from "react";
+import {useState} from "react";
+
 import "../styles/AddTask.css";
 
 
-function AddTask({addTask, editingTask, cancelEdit}){
+function AddTask({
+
+    addTask,
+
+    editingTask,
+
+    cancelEdit
+
+}){
 
 
     const [title,setTitle] = useState("");
 
     const [description,setDescription] = useState("");
 
-
-
-
-    useEffect(()=>{
-
-
-        if(editingTask){
-
-
-            setTitle(editingTask.title);
-
-            setDescription(editingTask.description);
-
-
-        }
-
-
-    },[editingTask]);
-
-
+    const [priority,setPriority] = useState("Medium");
 
 
 
@@ -41,17 +31,7 @@ function AddTask({addTask, editingTask, cancelEdit}){
 
 
 
-        if(!title.trim() || !description.trim()){
-
-
-            alert("Please fill all fields");
-
-            return;
-
-
-        }
-
-
+        if(!title.trim()) return;
 
 
 
@@ -61,12 +41,9 @@ function AddTask({addTask, editingTask, cancelEdit}){
 
             description,
 
-            id: editingTask?._id
-
+            priority
 
         });
-
-
 
 
 
@@ -74,10 +51,10 @@ function AddTask({addTask, editingTask, cancelEdit}){
 
         setDescription("");
 
+        setPriority("Medium");
 
 
     }
-
 
 
 
@@ -130,14 +107,61 @@ function AddTask({addTask, editingTask, cancelEdit}){
 
 
 
+
+            <select
+
+            value={priority}
+
+            onChange={(e)=>setPriority(e.target.value)}
+
+            >
+
+
+                <option value="Low">
+
+                    Low
+
+                </option>
+
+
+                <option value="Medium">
+
+                    Medium
+
+                </option>
+
+
+                <option value="High">
+
+                    High
+
+                </option>
+
+
+            </select>
+
+
+
+
+
+
+
             <button>
 
+                {
+                    editingTask
 
-                {editingTask ? "Update Task" : "Add Task"}
+                    ?
 
+                    "Update Task"
+
+                    :
+
+                    "Add Task"
+
+                }
 
             </button>
-
 
 
 

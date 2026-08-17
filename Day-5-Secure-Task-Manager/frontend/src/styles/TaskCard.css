@@ -1,16 +1,13 @@
 .task-card{
 
 
-    background:#222;
+    padding:25px;
 
-    padding:20px;
-
-    border-radius:12px;
+    border-radius:16px;
 
     border:1px solid #333;
 
     transition:0.3s;
-
 
 }
 
@@ -26,9 +23,33 @@
 
 
 
+.app.dark .task-card{
+
+    background:#222;
+
+    color:white;
+
+}
+
+
+
+
+
+.app.light .task-card{
+
+    background:#f5f5f5;
+
+    color:black;
+
+}
+
+
+
+
+
 .completed-card{
 
-    opacity:0.7;
+    opacity:0.75;
 
 }
 
@@ -36,9 +57,23 @@
 
 
 
-.task-card h3{
+.task-title{
 
-    margin-bottom:10px;
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
+}
+
+
+
+.task-title h3{
+
+    margin:0;
+
+    font-size:22px;
 
 }
 
@@ -46,9 +81,28 @@
 
 
 
-.task-card p{
+.task-description{
 
-    color:#ccc;
+    margin-top:15px;
+
+}
+
+
+
+
+
+.pending,
+.completed{
+
+    display:inline-block;
+
+    margin-top:15px;
+
+    padding:6px 12px;
+
+    border-radius:20px;
+
+    font-weight:bold;
 
 }
 
@@ -58,13 +112,9 @@
 
 .pending{
 
-    display:inline-block;
+    background:#e5e7eb;
 
-    margin-top:10px;
-
-    color:#facc15;
-
-    font-weight:bold;
+    color:#111;
 
 }
 
@@ -74,13 +124,9 @@
 
 .completed{
 
-    display:inline-block;
+    background:#4ade80;
 
-    margin-top:10px;
-
-    color:#4ade80;
-
-    font-weight:bold;
+    color:#111;
 
 }
 
@@ -90,11 +136,11 @@
 
 .date{
 
-    margin-top:10px;
+    margin-top:15px;
 
     font-size:14px;
 
-    color:#999;
+    color:#888;
 
 }
 
@@ -104,11 +150,11 @@
 
 .task-buttons{
 
-    margin-top:15px;
-
     display:flex;
 
     gap:10px;
+
+    margin-top:20px;
 
     flex-wrap:wrap;
 
@@ -120,13 +166,51 @@
 
 .task-buttons button{
 
-    padding:8px 14px;
+
+    padding:10px 15px;
 
     border:none;
 
-    border-radius:6px;
+    border-radius:8px;
 
     cursor:pointer;
+
+    transition:0.2s;
+
+
+}
+
+
+
+
+
+.task-buttons button:hover{
+
+    transform:scale(1.05);
+
+}
+
+
+
+
+
+.app.dark .task-buttons button{
+
+    background:white;
+
+    color:black;
+
+}
+
+
+
+
+
+.app.light .task-buttons button{
+
+    background:#111;
+
+    color:white;
 
 }
 
@@ -151,5 +235,76 @@
 
     }
 
+}
+
+.priority{
+
+    display:inline-block;
+
+    margin-top:15px;
+
+    margin-right:10px;
+
+    padding:6px 12px;
+
+    border-radius:20px;
+
+    font-weight:bold;
+
+}
+
+
+
+.high{
+
+    background:#ef4444;
+
+    color:white;
+
+}
+
+
+
+.medium{
+
+    background:#facc15;
+
+    color:#111;
+
+}
+
+
+
+.low{
+
+    background:#4ade80;
+
+    color:#111;
+
+}
+
+.high{
+
+    background:#ef4444;
+
+    color:white;
+
+}
+
+
+.medium{
+
+    background:#facc15;
+
+    color:#111;
+
+}
+
+
+.low{
+
+    background:#4ade80;
+
+    color:#111;
 
 }

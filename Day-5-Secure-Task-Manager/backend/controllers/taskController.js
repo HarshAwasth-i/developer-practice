@@ -4,13 +4,19 @@ const Activity = require("../models/Activity");
 // Create Task
 exports.createTask = async (req, res) => {
     try {
-        const { title, description } = req.body;
+      const { title, description, priority } = req.body;
 
-        const task = await Task.create({
-            title,
-            description,
-            user: req.user.id,
-        });
+      const task = await Task.create({
+
+    title,
+
+    description,
+
+    priority,
+
+    user:req.user.id
+
+});
         await Activity.create({
 
     user:req.user.id,

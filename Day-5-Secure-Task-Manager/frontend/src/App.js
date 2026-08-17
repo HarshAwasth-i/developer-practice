@@ -11,6 +11,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 
+
 import { AuthProvider } from "./context/AuthContext";
 
 
@@ -29,16 +30,13 @@ function App(){
     useEffect(()=>{
 
 
-        if(darkMode){
+        localStorage.setItem(
 
-            localStorage.setItem("theme","dark");
+            "theme",
 
-        }
-        else{
+            darkMode ? "dark" : "light"
 
-            localStorage.setItem("theme","light");
-
-        }
+        );
 
 
     },[darkMode]);
@@ -46,88 +44,96 @@ function App(){
 
 
 
-return(
 
-    <AuthProvider>
-
-    <BrowserRouter>
-
-        <div className={darkMode ? "app dark" : "app"}>
+    return(
 
 
-                <Navbar
-
-                    darkMode={darkMode}
-
-                    setDarkMode={setDarkMode}
-
-                />
+        <AuthProvider>
 
 
+            <BrowserRouter>
 
-                <Routes>
+
+                <div className={darkMode ? "app dark" : "app light"}>
 
 
-                    <Route
+                    <Navbar
 
-                        path="/"
+                        darkMode={darkMode}
 
-                        element={<Home/>}
+                        setDarkMode={setDarkMode}
 
                     />
 
 
 
-                    <Route
-
-                        path="/login"
-
-                        element={<Login/>}
-
-                    />
+                    <Routes>
 
 
+                        <Route
 
-                    <Route
+                            path="/"
 
-                        path="/register"
+                            element={<Home/>}
 
-                        element={<Register/>}
-
-                    />
+                        />
 
 
 
-                    <Route
+                        <Route
 
-                        path="/dashboard"
+                            path="/login"
 
-                        element={
+                            element={<Login/>}
 
-                            <ProtectedRoute>
-
-                                <Dashboard/>
-
-                            </ProtectedRoute>
-
-                        }
-
-                    />
+                        />
 
 
-                </Routes>
+
+                        <Route
+
+                            path="/register"
+
+                            element={<Register/>}
+
+                        />
 
 
-            </div>
+
+                        <Route
+
+                            path="/dashboard"
+
+                            element={
+
+                                <ProtectedRoute>
+
+                                    <Dashboard/>
+
+                                </ProtectedRoute>
+
+                            }
+
+                        />
 
 
-        </BrowserRouter>
-</AuthProvider>
+                    </Routes>
+
+
+                </div>
+
+
+            </BrowserRouter>
+
+
+        </AuthProvider>
+
 
     )
 
 
 }
+
 
 
 export default App;

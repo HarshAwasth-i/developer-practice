@@ -1,29 +1,85 @@
 *{
 
-margin:0;
-padding:0;
-box-sizing:border-box;
+    margin:0;
+
+    padding:0;
+
+    box-sizing:border-box;
 
 }
+
+
+
+html,
+body,
+#root{
+
+    min-height:100%;
+
+}
+
 
 
 body{
-    margin:0;
-    font-family: Arial, sans-serif;
-    background:white;
-    color:black;
+
+    font-family:Arial, sans-serif;
+
 }
+
 
 
 .app{
+
     min-height:100vh;
+
     transition:0.3s;
+
 }
 
 
-/* Dark Mode */
+
+/* LIGHT MODE */
+
+.app.light{
+
+    background:white;
+
+    color:black;
+
+}
+
+
+
+/* DARK MODE */
 
 .app.dark{
-    background:#121212;
+
+    background:#111;
+
     color:white;
+
+}
+
+
+
+/* all headings */
+
+.app.dark h1,
+.app.dark h2,
+.app.dark h3,
+.app.dark p{
+
+    color:white;
+
+}
+
+
+
+.app.light h1,
+.app.light h2,
+.app.light h3,
+.app.light p{
+
+    color:black;
+
 }

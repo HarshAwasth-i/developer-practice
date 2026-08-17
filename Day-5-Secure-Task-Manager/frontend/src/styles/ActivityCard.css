@@ -1,8 +1,6 @@
 .activity-card{
 
 
-    background:#222;
-
     padding:25px;
 
     border-radius:15px;
@@ -11,8 +9,35 @@
 
     margin:30px 0;
 
+    transition:0.3s;
 
 }
+
+
+
+/* Dark Mode */
+
+.app.dark .activity-card{
+
+    background:#222;
+
+    color:white;
+
+}
+
+
+
+/* Light Mode */
+
+.app.light .activity-card{
+
+    background:#f5f5f5;
+
+    color:black;
+
+}
+
+
 
 
 
@@ -25,19 +50,48 @@
 
 
 
-.activity-item{
 
+.activity-item{
 
     padding:18px;
 
     margin-bottom:15px;
 
-    background:#1b1b1b;
-
     border-radius:10px;
 
     border:1px solid #333;
 
+    transition:0.3s;
+
+}
+
+
+
+
+
+.app.dark .activity-item{
+
+    background:#1b1b1b;
+
+}
+
+
+
+
+
+.app.light .activity-item{
+
+    background:white;
+
+}
+
+
+
+
+
+.activity-item:hover{
+
+    transform:translateX(5px);
 
 }
 
@@ -47,15 +101,14 @@
 
 .activity-header{
 
-
     display:flex;
 
     align-items:center;
 
     gap:10px;
 
-
 }
+
 
 
 
@@ -65,6 +118,7 @@
     font-size:22px;
 
 }
+
 
 
 
@@ -81,11 +135,25 @@
 
 .activity-item p{
 
-
     margin:10px 0;
+
+}
+
+
+
+
+
+.app.dark .activity-item p{
 
     color:#ddd;
 
+}
+
+
+
+.app.light .activity-item p{
+
+    color:#444;
 
 }
 
@@ -95,8 +163,6 @@
 
 .activity-item small{
 
-
     color:#888;
-
 
 }

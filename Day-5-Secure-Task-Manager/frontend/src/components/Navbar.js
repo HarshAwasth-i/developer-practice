@@ -10,7 +10,10 @@ function Navbar({darkMode,setDarkMode}){
     const navigate = useNavigate();
 
 
-    const {token,user,logout} = useAuth();
+    const {
+    token,
+    logout
+} = useAuth();
 
 
 

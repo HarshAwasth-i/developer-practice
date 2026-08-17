@@ -9,6 +9,8 @@ import Loader from "../components/Loader";
 import EmptyState from "../components/EmptyState";
 import ActivityCard from "../components/ActivityCard";
 
+import toast from "react-hot-toast";
+
 import "../styles/Dashboard.css";
 
 
@@ -16,7 +18,10 @@ function Dashboard(){
 
 
     const [tasks,setTasks] = useState([]);
+    const [statusFilter,setStatusFilter] = useState("All");
 
+const [priorityFilter,setPriorityFilter] = useState("All");
+const [search,setSearch] = useState("");
     const [activities,setActivities] = useState([]);
 
     const [editingTask,setEditingTask] = useState(null);
@@ -25,14 +30,6 @@ function Dashboard(){
 
     const [error,setError] = useState("");
 
-    const [searchTerm,setSearchTerm] = useState("");
-
-    const [filter,setFilter] = useState("all");
-
-    const [sort,setSort] = useState("newest");
-
-
-
 
 
     const fetchTasks = async()=>{
@@ -40,45 +37,29 @@ function Dashboard(){
 
         try{
 
-
             setLoading(true);
 
-            setError("");
-
-
-
             const res = await API.get("/tasks");
-
 
             setTasks(res.data.tasks);
 
 
-
         }
-
         catch(err){
-
 
             console.log(err);
 
-
             setError("Failed to load tasks");
 
-
         }
-
         finally{
 
-
             setLoading(false);
-
 
         }
 
 
     };
-
-
 
 
 
@@ -96,20 +77,15 @@ function Dashboard(){
             setActivities(res.data.activities);
 
 
-
         }
-
         catch(err){
 
-
             console.log(err);
-
 
         }
 
 
     };
-
 
 
 
@@ -149,7 +125,9 @@ function Dashboard(){
 
                         title:task.title,
 
-                        description:task.description
+                        description:task.description,
+
+                        priority:task.priority
 
                     }
 
@@ -159,21 +137,38 @@ function Dashboard(){
                 setEditingTask(null);
 
 
-            }
 
+                toast.success(
+                    "Task updated successfully"
+                );
+
+
+            }
 
             else{
 
 
-                await API.post("/tasks",{
+                await API.post(
+
+                    "/tasks",
+
+                    {
+
+                        title:task.title,
+
+                        description:task.description,
+
+                        priority:task.priority
+
+                    }
+
+                );
 
 
-                    title:task.title,
 
-                    description:task.description
-
-
-                });
+                toast.success(
+                    "Task created successfully"
+                );
 
 
             }
@@ -187,18 +182,20 @@ function Dashboard(){
 
 
         }
-
         catch(err){
 
 
             console.log(err);
+
+            toast.error(
+                "Something went wrong"
+            );
 
 
         }
 
 
     };
-
 
 
 
@@ -209,23 +206,17 @@ function Dashboard(){
     const deleteTask = async(id)=>{
 
 
-        const confirmDelete = window.confirm(
-
-            "Are you sure you want to delete this task?"
-
-        );
-
-
-
-        if(!confirmDelete)
-            return;
-
-
-
         try{
 
 
             await API.delete(`/tasks/${id}`);
+
+
+
+            toast.success(
+                "Task deleted successfully"
+            );
+
 
 
             fetchTasks();
@@ -233,19 +224,22 @@ function Dashboard(){
             fetchActivities();
 
 
-
         }
-
         catch(err){
 
 
             console.log(err);
+
+            toast.error(
+                "Something went wrong"
+            );
 
 
         }
 
 
     };
+
 
 
 
@@ -259,13 +253,33 @@ function Dashboard(){
         try{
 
 
-            await API.put(`/tasks/${task._id}`,{
+            await API.put(
+
+                `/tasks/${task._id}`,
+
+                {
+
+                    completed:!task.completed
+
+                }
+
+            );
 
 
-                completed:!task.completed
 
+            toast.success(
 
-            });
+                task.completed
+
+                ?
+
+                "Task marked pending"
+
+                :
+
+                "Task completed 🎉"
+
+            );
 
 
 
@@ -274,9 +288,7 @@ function Dashboard(){
             fetchActivities();
 
 
-
         }
-
         catch(err){
 
 
@@ -293,7 +305,6 @@ function Dashboard(){
 
 
 
-
     const editTask=(task)=>{
 
 
@@ -301,7 +312,6 @@ function Dashboard(){
 
 
     };
-
 
 
 
@@ -335,114 +345,85 @@ function Dashboard(){
 
     const pendingTasks = totalTasks - completedTasks;
 
+const filteredTasks = tasks
+.filter((task)=>{
 
 
+    return (
 
+        task.title
+        .toLowerCase()
+        .includes(search.toLowerCase())
 
-    const progress =
+        ||
 
-    totalTasks===0
-
-    ?
-
-    0
-
-    :
-
-    Math.round(
-
-        (completedTasks/totalTasks)*100
+        task.description
+        .toLowerCase()
+        .includes(search.toLowerCase())
 
     );
 
 
+})
+
+.filter((task)=>{
 
 
+    if(statusFilter==="Completed")
+
+        return task.completed;
 
 
+    if(statusFilter==="Pending")
 
-    const filteredTasks = tasks
-
-    .filter((task)=>{
-
-
-        const matchesSearch =
-
-        task.title.toLowerCase()
-
-        .includes(searchTerm.toLowerCase())
-
-        ||
-
-        task.description.toLowerCase()
-
-        .includes(searchTerm.toLowerCase());
+        return !task.completed;
 
 
+    return true;
 
 
-        const matchesFilter =
+})
 
 
-        filter==="all"
-
-        ?
-
-        true
+.filter((task)=>{
 
 
-        :
+    if(priorityFilter==="All")
+
+        return true;
 
 
-        filter==="completed"
-
-        ?
-
-        task.completed
+    return task.priority === priorityFilter;
 
 
-        :
+})
 
-        !task.completed;
-
-
+.sort((a,b)=>{
 
 
-        return matchesSearch && matchesFilter;
+    const priorityOrder = {
+
+        High:3,
+
+        Medium:2,
+
+        Low:1
+
+    };
 
 
+    return (
 
-    })
-
-
-
-    .sort((a,b)=>{
-
-
-        if(sort==="newest"){
-
-
-            return new Date(b.createdAt)
-
-            -
-
-            new Date(a.createdAt);
-
-
-        }
-
-
-        return new Date(a.createdAt)
+        priorityOrder[b.priority || "Medium"]
 
         -
 
-        new Date(b.createdAt);
+        priorityOrder[a.priority || "Medium"]
+
+    );
 
 
-    });
-
-
-
+});
 
 
 
@@ -458,7 +439,6 @@ function Dashboard(){
             <h1>
                 Dashboard
             </h1>
-
 
 
 
@@ -503,61 +483,11 @@ function Dashboard(){
 
 
 
-
-
-            <div className="progress-section">
-
-
-                <h3>
-                    Task Progress
-                </h3>
-<ActivityCard
-
-activities={activities}
-
-/>
-
-
-                <div className="progress-bar">
-
-
-                    <div
-
-                    className="progress-fill"
-
-                    style={{
-                        width:`${progress}%`
-                    }}
-
-                    >
-
-                    </div>
-
-
-                </div>
-
-
-                <p>
-
-                    {completedTasks} of {totalTasks} tasks completed
-
-                </p>
-
-
-            </div>
-
-
-
-
-
-
-
             <ActivityCard
 
             activities={activities}
 
             />
-
 
 
 
@@ -574,98 +504,89 @@ activities={activities}
 
             />
 
+<input
+
+className="search-bar"
+
+type="text"
+
+placeholder="Search tasks..."
+
+value={search}
+
+onChange={(e)=>setSearch(e.target.value)}
+
+/>
+<div className="filters">
+
+
+    <select
+
+    value={statusFilter}
+
+    onChange={(e)=>setStatusFilter(e.target.value)}
+
+    >
+
+        <option value="All">
+            All Tasks
+        </option>
+
+        <option value="Completed">
+            Completed
+        </option>
+
+
+        <option value="Pending">
+            Pending
+        </option>
+
+
+    </select>
 
 
 
 
 
+    <select
 
-            <input
+    value={priorityFilter}
 
-            className="search-box"
+    onChange={(e)=>setPriorityFilter(e.target.value)}
 
-            placeholder="Search tasks..."
-
-            value={searchTerm}
-
-            onChange={(e)=>setSearchTerm(e.target.value)}
-
-            />
+    >
 
 
+        <option value="All">
+            All Priority
+        </option>
 
 
+        <option value="High">
+            High
+        </option>
 
 
+        <option value="Medium">
+            Medium
+        </option>
 
 
-            <div className="filter-buttons">
+        <option value="Low">
+            Low
+        </option>
 
 
-                <button onClick={()=>setFilter("all")}>
-
-                    All
-
-                </button>
+    </select>
 
 
-                <button onClick={()=>setFilter("completed")}>
-
-                    Completed
-
-                </button>
-
-
-                <button onClick={()=>setFilter("pending")}>
-
-                    Pending
-
-                </button>
-
-
-            </div>
-
-
-
-
-
-
-
-            <select
-
-            value={sort}
-
-            onChange={(e)=>setSort(e.target.value)}
-
-            >
-
-                <option value="newest">
-
-                    Newest First
-
-                </option>
-
-
-                <option value="oldest">
-
-                    Oldest First
-
-                </option>
-
-
-            </select>
-
-
-
-
+</div>
 
 
 
             <h2>
                 My Tasks
             </h2>
-
-
 
 
 
@@ -683,17 +604,7 @@ activities={activities}
                 :
 
 
-                error
-
-                ?
-
-                <p>{error}</p>
-
-
-                :
-
-
-                filteredTasks.length===0
+                tasks.length===0
 
                 ?
 
@@ -725,8 +636,6 @@ activities={activities}
                 ))
 
             }
-
-
 
 
 

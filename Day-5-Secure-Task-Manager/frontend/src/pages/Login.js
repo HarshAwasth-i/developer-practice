@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import API from "../api/axios";
 import { useAuth } from "../context/AuthContext";
 
+import toast from "react-hot-toast";
+
 
 function Login() {
 
@@ -67,7 +69,7 @@ function Login() {
 
 
 
-            alert("Login Successful");
+            toast.success("Login Successful");
 
 
 
@@ -79,13 +81,10 @@ function Login() {
         catch(err){
 
 
-            alert(
-
-                err.response?.data?.message ||
-
-                "Login Failed"
-
-            );
+           toast.error(
+ err.response?.data?.message ||
+ "Login Failed"
+);
 
 
         }

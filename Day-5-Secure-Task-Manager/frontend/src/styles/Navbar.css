@@ -1,16 +1,17 @@
 .navbar{
 
     display:flex;
+
     justify-content:space-between;
+
     align-items:center;
 
-    padding:20px 40px;
-
-    background:white;
-    color:black;
+    padding:25px 60px;
 
     transition:0.3s;
+
 }
+
 
 
 .logo{
@@ -20,41 +21,56 @@
 }
 
 
+
 .nav-links{
 
     display:flex;
+
     gap:20px;
+
     align-items:center;
+
 }
+
 
 
 .nav-links a{
 
-    color:black;
-
     text-decoration:none;
+
+    color:inherit;
 
 }
 
 
-/* Dark Mode Navbar */
+
+.nav-links button{
+
+    cursor:pointer;
+
+}
+
+
 
 .app.dark .navbar{
 
     background:#222;
-    color:white;
-
-}
-
-
-.app.dark .nav-links a{
 
     color:white;
 
 }
 
 
-/* Theme Button */
+
+.app.light .navbar{
+
+    background:white;
+
+    color:black;
+
+}
+
+
 
 .theme-btn{
 
@@ -70,9 +86,9 @@
 
 }
 
-.user-name{
 
-    color:white;
+
+.user-name{
 
     font-weight:bold;
 
