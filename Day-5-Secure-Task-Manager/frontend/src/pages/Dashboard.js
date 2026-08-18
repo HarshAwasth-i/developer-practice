@@ -13,6 +13,8 @@ import ActivityCard from "../components/ActivityCard";
 import TaskChart from "../components/TaskChart";
 import ConfirmModal from "../components/ConfirmModal";
 
+import AnalyticsCard from "../components/AnalyticsCard";
+
 function Dashboard(){
 
 
@@ -602,7 +604,54 @@ value={`${productivityScore}%`}
 </div>
 
 
+<div className="analytics-summary">
 
+
+<AnalyticsCard
+
+title="Completion"
+
+value={`${completionRate}%`}
+
+icon="🚀"
+
+/>
+
+
+<AnalyticsCard
+
+title="Total Tasks"
+
+value={totalTasks}
+
+icon="📋"
+
+/>
+
+
+<AnalyticsCard
+
+title="Completed"
+
+value={completedTasks}
+
+icon="✅"
+
+/>
+
+
+<AnalyticsCard
+
+title="Pending"
+
+value={pendingTasks}
+
+icon="⏳"
+
+/>
+
+
+</div>
 
 
 

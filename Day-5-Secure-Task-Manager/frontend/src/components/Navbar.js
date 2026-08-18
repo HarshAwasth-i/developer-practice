@@ -1,5 +1,5 @@
 import "../styles/Navbar.css";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import ProfileDropdown from "./ProfileDropdown";
 
@@ -42,11 +42,9 @@ function Navbar({darkMode,setDarkMode}){
 
 
 
-            <h2 className="logo">
-
-                Dev Practice
-
-            </h2>
+           <h2 className="logo">
+    ⚡ DevSync
+</h2>
 
 
 
@@ -56,9 +54,14 @@ function Navbar({darkMode,setDarkMode}){
 
 
 
-                <Link to="/">
-                    Home
-                </Link>
+               <NavLink 
+to="/"
+className={({isActive})=>
+isActive ? "active-link" : ""
+}
+>
+    Home
+</NavLink>
 
 
 
@@ -100,11 +103,14 @@ function Navbar({darkMode,setDarkMode}){
 
                     <>
 
-                    <Link to="/dashboard">
-
-                        Dashboard
-
-                    </Link>
+                   <NavLink 
+to="/dashboard"
+className={({isActive})=>
+isActive ? "active-link" : ""
+}
+>
+    Dashboard
+</NavLink>
 
 
 

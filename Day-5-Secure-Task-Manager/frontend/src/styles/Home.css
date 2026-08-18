@@ -1,0 +1,249 @@
+.home{
+
+    padding:60px 80px;
+
+}
+
+
+
+.hero{
+
+    text-align:center;
+
+    padding:80px 20px;
+
+}
+
+
+
+.hero h1{
+
+    font-size:55px;
+
+    margin-bottom:20px;
+
+}
+
+
+
+.hero p{
+
+    font-size:22px;
+
+    color:#666;
+
+    max-width:700px;
+
+    margin:auto;
+
+}
+
+
+
+.hero-buttons{
+
+    margin-top:30px;
+
+    display:flex;
+
+    justify-content:center;
+
+    gap:20px;
+
+}
+
+
+
+.primary-btn,
+.secondary-btn{
+
+    padding:14px 30px;
+
+    border-radius:10px;
+
+    border:none;
+
+    cursor:pointer;
+
+    font-size:16px;
+
+}
+
+
+
+.primary-btn{
+
+    background:#111;
+
+    color:white;
+
+}
+
+
+
+.secondary-btn{
+
+    background:#ddd;
+
+    color:black;
+
+}
+
+
+
+
+
+.features{
+
+    margin-top:50px;
+
+    text-align:center;
+
+}
+
+
+
+.feature-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(3,1fr);
+
+    gap:25px;
+
+    margin-top:30px;
+
+}
+
+
+
+.feature-card{
+
+    padding:30px;
+
+    border-radius:15px;
+
+    background:#222;
+
+    color:white;
+
+}
+
+
+
+.feature-card p{
+
+    color:#ccc;
+
+}
+
+
+
+
+
+.workflow{
+
+    margin-top:80px;
+
+    text-align:center;
+
+}
+
+
+
+.steps{
+
+    display:flex;
+
+    justify-content:center;
+
+    gap:50px;
+
+    margin-top:40px;
+
+}
+
+
+
+.steps span{
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    margin:auto;
+
+    width:50px;
+
+    height:50px;
+
+    background:#111;
+
+    color:white;
+
+    border-radius:50%;
+
+}
+
+
+
+
+
+.cta{
+
+    margin-top:80px;
+
+    text-align:center;
+
+    padding:50px;
+
+    border-radius:20px;
+
+    background:#222;
+
+    color:white;
+
+}
+
+
+
+
+
+.app.light .feature-card,
+.app.light .cta{
+
+    background:#f5f5f5;
+
+    color:black;
+
+}
+
+
+
+@media(max-width:900px){
+
+
+    .home{
+
+        padding:30px;
+
+    }
+
+
+    .feature-grid{
+
+        grid-template-columns:1fr;
+
+    }
+
+
+    .steps{
+
+        flex-direction:column;
+
+    }
+
+
+}

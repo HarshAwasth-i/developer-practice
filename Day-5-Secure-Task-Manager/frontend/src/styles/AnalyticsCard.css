@@ -1,0 +1,81 @@
+.analytics-card{
+
+    background:#222;
+
+    color:white;
+
+    padding:25px;
+
+    border-radius:15px;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:20px;
+
+    border:1px solid #333;
+
+    transition:0.3s;
+
+}
+
+
+
+.analytics-card:hover{
+
+    transform:translateY(-5px);
+
+}
+
+
+
+.analytics-icon{
+
+    font-size:35px;
+
+}
+
+
+
+.analytics-card h3{
+
+    margin:0;
+
+    font-size:18px;
+
+}
+
+
+
+.analytics-card p{
+
+    margin-top:10px;
+
+    font-size:30px;
+
+    font-weight:bold;
+
+}
+
+
+
+.app.light .analytics-card{
+
+    background:white;
+
+    color:black;
+
+}
+
+
+
+@media(max-width:768px){
+
+    .analytics-card{
+
+        width:100%;
+
+    }
+
+}
