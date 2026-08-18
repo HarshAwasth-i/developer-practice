@@ -95,3 +95,17 @@
     margin:0 10px;
 
 }
+
+
+.app.dark .user-name{
+
+    color:white;
+
+}
+
+
+.app.light .user-name{
+
+    color:black;
+
+}

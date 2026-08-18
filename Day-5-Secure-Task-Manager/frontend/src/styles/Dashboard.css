@@ -1,13 +1,16 @@
 .dashboard{
 
-    padding:40px;
+    width:100%;
+
+    padding:40px 70px;
 
     min-height:100vh;
 
     box-sizing:border-box;
 
-}
+    overflow-x:hidden;
 
+}
 
 
 /* Dashboard Heading */
@@ -22,21 +25,17 @@
 
 
 
-
-
 /* Stats Cards */
 
 .stats-container{
 
-    display:flex;
+    display:grid;
 
-    gap:30px;
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
 
-    flex-wrap:wrap;
+    gap:25px;
 
-    margin-bottom:40px;
-
-    flex-wrap:wrap;
+    width:100%;
 
 }
 
@@ -48,347 +47,15 @@
 
 .progress-section{
 
-    margin-top:30px;
-
-    margin-bottom:30px;
-
-}
-
-
-
-
-
-.progress-bar{
-
-    width:100%;
-
-    height:10px;
-
-    background:#333;
-
-    border-radius:10px;
-
-    overflow:hidden;
-
-}
-
-
-
-
-
-.progress-fill{
-
-    height:100%;
-
-    background:#4ade80;
-
-    border-radius:10px;
-
-}
-
-
-
-
-
-/* Activity */
-
-.activity-card{
-
-    margin-top:30px;
-
-    margin-bottom:30px;
-
-}
-
-
-
-
-
-/* Task Container */
-
-.task-container{
-
-    display:grid;
-
-    grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
-
-    gap:20px;
-
-}
-
-
-
-
-
-/* Add Task */
-
-.add-task{
-
-    display:flex;
-
-    gap:10px;
-
     margin:30px 0;
 
-    flex-wrap:wrap;
-
 }
 
 
-
-
-
-.add-task input{
-
-    padding:12px;
-
-    border-radius:8px;
-
-    border:1px solid #444;
-
-    background:#222;
-
-    color:white;
-
-}
-
-
-
-
-
-.add-task button{
-
-    padding:12px 20px;
-
-    background:white;
-
-    color:black;
-
-    border:none;
-
-    border-radius:8px;
-
-    cursor:pointer;
-
-}
-
-
-
-
-
-/* Search */
-
-.search-box{
-
-    width:300px;
-
-    padding:12px;
-
-    margin:20px 0;
-
-    background:#222;
-
-    color:white;
-
-    border:1px solid #444;
-
-    border-radius:8px;
-
-}
-
-
-
-
-
-/* Filters */
-
-.filter-buttons{
-
-    display:flex;
-
-    gap:10px;
-
-    margin-bottom:20px;
-
-}
-
-
-
-
-
-.filter-buttons button{
-
-    padding:8px 15px;
-
-    border:none;
-
-    border-radius:6px;
-
-    cursor:pointer;
-
-}
-
-
-
-
-
-/* Dropdown */
-
-select{
-
-    padding:10px;
-
-    background:#222;
-
-    color:white;
-
-    border:1px solid #444;
-
-    border-radius:8px;
-
-    margin-bottom:20px;
-
-}
-
-
-
-
-
-/* Mobile Responsive */
-
-@media(max-width:768px){
-
-
-    .dashboard{
-
-        padding:20px;
-
-    }
-
-
-
-    .stats-container{
-
-        flex-direction:column;
-
-    }
-
-
-
-    .search-box{
-
-        width:100%;
-
-    }
-
-
-}
-
-.filters{
-
-    display:flex;
-
-    gap:15px;
-
-    margin:25px 0;
-
-}
-
-
-
-.filters select{
-
-    padding:10px;
-
-    border-radius:8px;
-
-    cursor:pointer;
-
-}
-
-
-
-@media(max-width:768px){
-
-    .filters{
-
-        flex-direction:column;
-
-    }
-
-}
-
-.search-bar{
-
-    width:300px;
-
-    padding:12px;
-
-    border-radius:8px;
-
-    border:1px solid #333;
-
-    margin-bottom:20px;
-
-}
-
-
-
-@media(max-width:768px){
-
-    .search-bar{
-
-        width:100%;
-
-    }
-
-}
-
-.progress-section{
-
-margin:30px 0;
-
-}
-
-
-
-.progress-bar{
-
-width:100%;
-
-height:20px;
-
-background:#333;
-
-border-radius:20px;
-
-overflow:hidden;
-
-}
-
-
-
-.progress-fill{
-
-height:100%;
-
-background:#4ade80;
-
-transition:0.5s;
-
-}
-
-
-
-.progress-section p{
-
-margin-top:10px;
-
-font-size:18px;
-
-}
 
 .progress-header{
+
+    width:100%;
 
     display:flex;
 
@@ -396,7 +63,7 @@ font-size:18px;
 
     align-items:center;
 
-    margin-bottom:15px;
+    margin-bottom:20px;
 
 }
 
@@ -437,5 +104,218 @@ font-size:18px;
     border-radius:20px;
 
     transition:width 0.5s ease;
+
+}
+
+
+
+.progress-section p{
+
+    margin-top:10px;
+
+    font-size:18px;
+
+}
+
+
+
+
+
+/* Task Container */
+
+.task-container{
+
+    display:grid;
+
+    grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+
+    gap:20px;
+
+}
+
+
+
+
+
+/* Add Task */
+
+.add-task{
+
+    display:flex;
+
+    gap:10px;
+
+    margin:30px 0;
+
+    flex-wrap:wrap;
+
+}
+
+
+
+.add-task input{
+
+    padding:12px;
+
+    border-radius:8px;
+
+    border:1px solid #444;
+
+    background:#222;
+
+    color:white;
+
+}
+
+
+
+.add-task button{
+
+    padding:12px 20px;
+
+    background:white;
+
+    color:black;
+
+    border:none;
+
+    border-radius:8px;
+
+    cursor:pointer;
+
+}
+
+
+
+
+
+/* Search */
+
+.search-bar{
+
+    width:300px;
+
+    padding:12px;
+
+    border-radius:8px;
+
+    border:1px solid #333;
+
+    margin-bottom:20px;
+
+}
+
+
+
+
+
+/* Filters */
+
+.filters{
+
+    display:flex;
+
+    gap:15px;
+
+    margin:25px 0;
+
+}
+
+
+
+.filters select{
+
+    padding:10px;
+
+    border-radius:8px;
+
+    cursor:pointer;
+
+}
+
+
+
+
+
+/* Dropdown */
+
+select{
+
+    background:#222;
+
+    color:white;
+
+    border:1px solid #444;
+
+}
+
+
+
+
+
+/* Activity */
+
+.activity-card{
+
+    margin-top:30px;
+
+    margin-bottom:30px;
+
+}
+
+
+
+
+
+/* Mobile */
+
+@media(max-width:900px){
+
+    .dashboard{
+
+        padding:30px;
+
+    }
+
+
+    .stats-container{
+
+        grid-template-columns:repeat(2,1fr);
+
+    }
+
+}
+
+
+
+@media(max-width:600px){
+
+
+    .dashboard{
+
+        padding:20px;
+
+    }
+
+
+    .stats-container{
+
+        grid-template-columns:1fr;
+
+    }
+
+
+    .search-bar{
+
+        width:100%;
+
+    }
+
+
+    .filters{
+
+        flex-direction:column;
+
+    }
 
 }

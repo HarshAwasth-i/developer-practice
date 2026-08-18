@@ -7,9 +7,7 @@ import "../styles/ProfileDropdown.css";
 
 function ProfileDropdown(){
 
-
     const {user}=useAuth();
-
 
     const [open,setOpen]=useState(false);
 
@@ -23,8 +21,6 @@ function ProfileDropdown(){
         progress:0
 
     });
-
-
 
 
 
@@ -43,9 +39,7 @@ function ProfileDropdown(){
                 const tasks = res.data.tasks;
 
 
-
                 const total = tasks.length;
-
 
 
                 const completed = tasks.filter(
@@ -56,9 +50,7 @@ function ProfileDropdown(){
 
 
 
-                const progress =
-
-                total===0
+                const progress = total===0
 
                 ?
 
@@ -90,9 +82,7 @@ function ProfileDropdown(){
 
             catch(err){
 
-
                 console.log(err);
-
 
             }
 
@@ -114,12 +104,9 @@ function ProfileDropdown(){
 
 
 
-
     return(
 
-
         <div className="profile-container">
-
 
 
             <button
@@ -130,10 +117,9 @@ function ProfileDropdown(){
 
             >
 
-                👤 {user?.name}
+                👤 {user?.name || "User"}
 
             </button>
-
 
 
 
@@ -147,12 +133,12 @@ function ProfileDropdown(){
                 <div className="profile-card">
 
 
-
                     <h3>
 
                         Profile
 
                     </h3>
+
 
 
 
@@ -163,7 +149,11 @@ function ProfileDropdown(){
 
                         <br/>
 
-                        {user?.name}
+                        <strong>
+
+                        {user?.name || "Not Available"}
+
+                        </strong>
 
                     </p>
 
@@ -177,7 +167,11 @@ function ProfileDropdown(){
 
                         <br/>
 
-                        {user?.email}
+                        <strong>
+
+                        {user?.email || "Not Available"}
+
+                        </strong>
 
                     </p>
 
@@ -224,7 +218,6 @@ function ProfileDropdown(){
 
 
 
-
                     <p>
 
                         📈 Progress:
@@ -248,9 +241,7 @@ function ProfileDropdown(){
 
         </div>
 
-
     )
-
 
 }
 

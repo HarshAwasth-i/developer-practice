@@ -18,7 +18,11 @@ export function AuthProvider({children}){
 
     const [user,setUser] = useState(
 
-        JSON.parse(localStorage.getItem("user"))
+        JSON.parse(
+
+            localStorage.getItem("user")
+
+        ) || null
 
     );
 
@@ -27,11 +31,10 @@ export function AuthProvider({children}){
 
 
 
+
     function login(userToken,userData){
-        console.log("TOKEN:", userToken);
 
-    console.log("USER DATA:", userData);
-
+        console.log("AUTH USER DATA:", userData);
 
         localStorage.setItem(
 
@@ -40,7 +43,6 @@ export function AuthProvider({children}){
             userToken
 
         );
-
 
 
         localStorage.setItem(
@@ -57,7 +59,6 @@ export function AuthProvider({children}){
 
 
         setUser(userData);
-
 
 
     }
@@ -95,7 +96,6 @@ export function AuthProvider({children}){
 
         <AuthContext.Provider
 
-
         value={{
 
             token,
@@ -106,18 +106,15 @@ export function AuthProvider({children}){
 
             logout,
 
-            isAuthenticated: !!token
+            isAuthenticated:!!token
 
         }}
-
 
         >
 
             {children}
 
-
         </AuthContext.Provider>
-
 
     )
 
@@ -128,12 +125,8 @@ export function AuthProvider({children}){
 
 
 
-
-
 export function useAuth(){
 
-
     return useContext(AuthContext);
-
 
 }

@@ -12,11 +12,29 @@
 
     border:none;
 
-    color:white;
+    color:black;
 
     font-size:16px;
 
     cursor:pointer;
+
+    font-weight:bold;
+
+}
+
+
+
+.app.dark .profile-button{
+
+    color:white;
+
+}
+
+
+
+.app.light .profile-button{
+
+    color:black;
 
 }
 

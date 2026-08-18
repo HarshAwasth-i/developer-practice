@@ -276,6 +276,90 @@ const highPriorityTasks = tasks.filter(
 task=>task.priority==="High"
 
 ).length;
+
+
+
+// Created Today
+
+const today = new Date().toLocaleDateString();
+
+
+const createdToday = tasks.filter((task)=>{
+
+    return new Date(task.createdAt)
+    .toLocaleDateString() === today;
+
+}).length;
+
+
+
+// Completed Today
+
+const completedToday = tasks.filter((task)=>{
+
+
+    return (
+
+        task.completed &&
+
+        new Date(task.updatedAt)
+        .toLocaleDateString() === today
+
+    );
+
+
+}).length;
+
+
+
+
+// Most Used Priority
+
+const priorityCount = {
+
+
+    Low:0,
+
+    Medium:0,
+
+    High:0
+
+};
+
+
+
+tasks.forEach((task)=>{
+
+
+    priorityCount[task.priority]++;
+
+
+});
+
+
+
+const mostUsedPriority = Object.keys(priorityCount)
+.sort(
+
+(a,b)=>
+
+priorityCount[b]-priorityCount[a]
+
+)[0];
+
+
+
+
+
+// Productivity Score
+
+const productivityScore = Math.round(
+
+(completedTasks / (totalTasks || 1)) * 100
+
+);
+
+
 const progressWidth = `${completionRate}%`;
 
 
@@ -442,7 +526,40 @@ title="High Priority"
 value={highPriorityTasks}
 
 />
+<StatCard
 
+title="Created Today"
+
+value={createdToday}
+
+/>
+
+
+<StatCard
+
+title="Completed Today"
+
+value={completedToday}
+
+/>
+
+
+<StatCard
+
+title="Top Priority"
+
+value={mostUsedPriority}
+
+/>
+
+
+<StatCard
+
+title="Productivity"
+
+value={`${productivityScore}%`}
+
+/>
 
 
 </div>

@@ -59,6 +59,7 @@ function Login() {
                 "/auth/login",
                 form
             );
+            console.log("LOGIN RESPONSE:", res.data);
 
 
 
