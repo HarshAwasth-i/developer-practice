@@ -1,6 +1,5 @@
 .chart-card{
 
-    background:#222;
 
     color:white;
 
@@ -26,5 +25,23 @@
     width:100%;
 
     margin-bottom:10px;
+
+}
+
+.app.dark .chart-card{
+
+    background:#222;
+
+    color:white;
+
+}
+
+
+
+.app.light .chart-card{
+
+    background:white;
+
+    color:black;
 
 }

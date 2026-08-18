@@ -1,9 +1,5 @@
 .activity-card{
 
-    background:#222;
-
-    color:white;
-
     padding:25px;
 
     border-radius:15px;
@@ -13,9 +9,12 @@
     height:350px;
 
     overflow-y:auto;
-     padding-right:15px;
+
+    padding-right:15px;
 
 }
+
+
 
 
 
@@ -24,6 +23,8 @@
     margin-bottom:20px;
 
 }
+
+
 
 
 
@@ -39,11 +40,40 @@
 
     margin-bottom:15px;
 
-    background:#1b1b1b;
-
     border-radius:12px;
 
 }
+
+
+
+
+
+/* Dark Activity Items */
+
+.app.dark .activity-item{
+
+    background:#1b1b1b;
+
+    color:white;
+
+}
+
+
+
+
+
+/* Light Activity Items */
+
+.app.light .activity-item{
+
+    background:#f5f5f5;
+
+    color:black;
+
+}
+
+
+
 
 
 .activity-icon{
@@ -51,6 +81,8 @@
     font-size:22px;
 
 }
+
+
 
 
 
@@ -64,6 +96,8 @@
 
 
 
+
+
 .activity-content p{
 
     margin:5px 0;
@@ -72,8 +106,97 @@
 
 
 
+
+
 .activity-content small{
 
     color:#aaa;
+
+}
+
+
+
+
+
+/* Card Theme */
+
+.app.dark .activity-card{
+
+    background:#222;
+
+    color:white;
+
+    border-color:#333;
+
+}
+
+
+
+
+
+.app.light .activity-card{
+
+    background:white;
+
+    color:black;
+
+    border-color:#ddd;
+
+}
+
+
+
+
+
+/* Heading Theme */
+
+.app.dark .activity-card h2{
+
+    color:white;
+
+}
+
+
+
+.app.light .activity-card h2{
+
+    color:black;
+
+}
+
+
+
+
+
+/* Text inheritance */
+
+.activity-content h3,
+.activity-content p,
+.activity-content small{
+
+    color:inherit;
+
+}
+
+
+
+
+
+@media(max-width:768px){
+
+    .activity-card{
+
+        height:auto;
+
+    }
+
+
+    .activity-item{
+
+        flex-direction:column;
+
+        align-items:flex-start;
+
+    }
 
 }
