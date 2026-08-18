@@ -1,129 +1,306 @@
 const Task = require("../models/Task");
 const Activity = require("../models/Activity");
 
+
 // Create Task
 exports.createTask = async (req, res) => {
+
     try {
-      const { title, description, priority } = req.body;
 
-      const task = await Task.create({
+        const { title, description, priority } = req.body;
 
-    title,
 
-    description,
+        const task = await Task.create({
 
-    priority,
+            title,
 
-    user:req.user.id
+            description,
 
-});
+            priority,
+
+            user: req.user.id
+
+        });
+
+
+
         await Activity.create({
 
-    user:req.user.id,
+            user: req.user.id,
 
-    action:"created",
+            action: "created",
 
-    taskTitle:title
+            taskTitle: title
 
-});
+        });
+
+
 
         res.status(201).json({
+
             success: true,
-            task,
+
+            task
+
         });
+
+
+
     } catch (error) {
+
+
         res.status(500).json({
-            success: false,
-            message: error.message,
+
+            success:false,
+
+            message:error.message
+
         });
+
+
     }
+
 };
+
+
+
+
 
 // Get All Tasks of Logged-in User
 exports.getTasks = async (req, res) => {
+
+
     try {
-        const tasks = await Task.find({ user: req.user.id });
+
+
+        const tasks = await Task.find({
+
+            user:req.user.id
+
+        });
+
+
 
         res.status(200).json({
-            success: true,
-            tasks,
+
+            success:true,
+
+            tasks
+
         });
-    } catch (error) {
+
+
+
+    } catch(error){
+
+
         res.status(500).json({
-            success: false,
-            message: error.message,
+
+            success:false,
+
+            message:error.message
+
         });
+
+
     }
+
+
 };
+
+
+
+
+
+
 
 // Update Task
 exports.updateTask = async (req, res) => {
+
+
     try {
+
+
         const task = await Task.findOneAndUpdate(
+
             {
-                _id: req.params.id,
-                user: req.user.id,
+
+                _id:req.params.id,
+
+                user:req.user.id
+
             },
+
             req.body,
-            { new: true }
+
+            {
+
+                new:true
+
+            }
+
         );
-        if(req.body.completed !== undefined){
 
-    await Activity.create({
 
-        user:req.user.id,
 
-        action:"deleted",
 
-        taskTitle:task.title
+        if(!task){
 
-    });
-    await Task.findByIdAndDelete(req.params.id);
 
-}
-
-        if (!task) {
             return res.status(404).json({
-                success: false,
-                message: "Task not found",
+
+                success:false,
+
+                message:"Task not found"
+
             });
+
+
         }
 
+
+
+
+
+        // Create activity only when status changes
+
+        if(req.body.completed !== undefined){
+
+
+            await Activity.create({
+
+                user:req.user.id,
+
+                action:
+
+                req.body.completed
+
+                ?
+
+                "completed"
+
+                :
+
+                "pending",
+
+
+                taskTitle:task.title
+
+            });
+
+
+        }
+
+
+
+
+
         res.json({
-            success: true,
-            task,
+
+            success:true,
+
+            task
+
         });
-    } catch (error) {
+
+
+
+    } catch(error){
+
+
         res.status(500).json({
-            success: false,
-            message: error.message,
+
+            success:false,
+
+            message:error.message
+
         });
+
+
     }
+
+
 };
+
+
+
+
+
+
 
 // Delete Task
 exports.deleteTask = async (req, res) => {
+
+
     try {
+
+
         const task = await Task.findOneAndDelete({
-            _id: req.params.id,
-            user: req.user.id,
+
+            _id:req.params.id,
+
+            user:req.user.id
+
         });
 
-        if (!task) {
+
+
+
+        if(!task){
+
+
             return res.status(404).json({
-                success: false,
-                message: "Task not found",
+
+                success:false,
+
+                message:"Task not found"
+
             });
+
+
         }
 
-        res.json({
-            success: true,
-            message: "Task deleted successfully",
+
+
+
+
+        await Activity.create({
+
+            user:req.user.id,
+
+            action:"deleted",
+
+            taskTitle:task.title
+
         });
-    } catch (error) {
+
+
+
+
+
+        res.json({
+
+            success:true,
+
+            message:"Task deleted successfully"
+
+        });
+
+
+
+    } catch(error){
+
+
         res.status(500).json({
-            success: false,
-            message: error.message,
-        }); 
+
+            success:false,
+
+            message:error.message
+
+        });
+
+
     }
+
+
 };

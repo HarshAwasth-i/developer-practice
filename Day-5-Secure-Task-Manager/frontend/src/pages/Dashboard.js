@@ -181,25 +181,20 @@ const deleteTask = async(id)=>{
 
 const toggleStatus = async(task)=>{
 
-
     try{
 
-
-        await API.put(
-
+        const res = await API.put(
             `/tasks/${task._id}`,
-
             {
-
-                completed:!task.completed
-
+                completed: !task.completed
             }
-
         );
 
 
-        fetchTasks();
+        console.log("UPDATED TASK:", res.data);
 
+
+        fetchTasks();
 
     }
     catch(err){
@@ -207,7 +202,6 @@ const toggleStatus = async(task)=>{
         console.log(err);
 
     }
-
 
 };
 
@@ -282,7 +276,7 @@ const highPriorityTasks = tasks.filter(
 task=>task.priority==="High"
 
 ).length;
-
+const progressWidth = `${completionRate}%`;
 
 
 
@@ -558,7 +552,60 @@ Low
 
 
 
+<div className="progress-section">
 
+
+<div className="progress-header">
+
+<h2>
+Task Progress
+</h2>
+
+
+<span>
+
+{completionRate}%
+
+</span>
+
+
+</div>
+
+
+
+
+
+<div className="progress-bar">
+
+
+<div
+
+className="progress-fill"
+
+style={{
+
+width:progressWidth
+
+}}
+
+/>
+
+
+</div>
+
+
+
+
+
+<p>
+
+{completedTasks} completed out of {totalTasks} tasks
+
+</p>
+
+
+
+</div>
 
 
 <h2>
