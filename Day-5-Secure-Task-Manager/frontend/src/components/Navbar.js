@@ -1,5 +1,6 @@
 import "../styles/Navbar.css";
 import { Link, NavLink, useNavigate } from "react-router-dom";
+import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import ProfileDropdown from "./ProfileDropdown";
 
@@ -7,13 +8,17 @@ import ProfileDropdown from "./ProfileDropdown";
 function Navbar({darkMode,setDarkMode}){
 
 
+    const [menuOpen,setMenuOpen] = useState(false);
+
+
     const navigate = useNavigate();
 
 
+
     const {
-    token,
-    logout
-} = useAuth();
+        token,
+        logout
+    } = useAuth();
 
 
 
@@ -21,12 +26,9 @@ function Navbar({darkMode,setDarkMode}){
 
     function handleLogout(){
 
-
         logout();
 
-
         navigate("/login");
-
 
     }
 
@@ -41,27 +43,44 @@ function Navbar({darkMode,setDarkMode}){
         <nav className="navbar">
 
 
-
-           <h2 className="logo">
-    ⚡ DevSync
-</h2>
-
+            <h2 className="logo">
+                ⚡ DevSync
+            </h2>
 
 
 
+            <button
 
-            <div className="nav-links">
+            className="menu-btn"
+
+            onClick={()=>setMenuOpen(!menuOpen)}
+
+            >
+                ☰
+            </button>
 
 
 
-               <NavLink 
-to="/"
-className={({isActive})=>
-isActive ? "active-link" : ""
-}
->
-    Home
-</NavLink>
+
+
+            <div className={`nav-links ${menuOpen ? "open" : ""}`}>
+
+
+                <NavLink
+
+                to="/"
+
+                onClick={()=>setMenuOpen(false)}
+
+                className={({isActive})=>
+                    isActive ? "active-link" : ""
+                }
+
+                >
+
+                    Home
+
+                </NavLink>
 
 
 
@@ -73,7 +92,14 @@ isActive ? "active-link" : ""
 
                     <>
 
-                    <Link to="/login">
+
+                    <Link 
+
+                    to="/login"
+
+                    onClick={()=>setMenuOpen(false)}
+
+                    >
 
                         Login
 
@@ -81,7 +107,15 @@ isActive ? "active-link" : ""
 
 
 
-                    <Link to="/register">
+
+
+                    <Link
+
+                    to="/register"
+
+                    onClick={()=>setMenuOpen(false)}
+
+                    >
 
                         Register
 
@@ -90,6 +124,7 @@ isActive ? "active-link" : ""
 
                     </>
 
+
                 }
 
 
@@ -98,24 +133,37 @@ isActive ? "active-link" : ""
 
 
 
+
                 {
+
                     token &&
 
                     <>
 
-                   <NavLink 
-to="/dashboard"
-className={({isActive})=>
-isActive ? "active-link" : ""
-}
->
-    Dashboard
-</NavLink>
+
+                    <NavLink
+
+                    to="/dashboard"
+
+                    onClick={()=>setMenuOpen(false)}
+
+                    className={({isActive})=>
+                        isActive ? "active-link" : ""
+                    }
+
+                    >
+
+                        Dashboard
+
+                    </NavLink>
 
 
 
 
-<ProfileDropdown/>
+
+                    <ProfileDropdown/>
+
+
 
 
 
@@ -123,13 +171,21 @@ isActive ? "active-link" : ""
 
                     <button
 
-                    onClick={handleLogout}
+                    onClick={()=>{
+
+                        setMenuOpen(false);
+
+                        handleLogout();
+
+                    }}
 
                     >
 
                         Logout
 
                     </button>
+
+
 
 
                     </>
@@ -142,24 +198,36 @@ isActive ? "active-link" : ""
 
 
 
+
+
                 <button
+
 
                 className="theme-btn"
 
+
                 onClick={()=>setDarkMode(!darkMode)}
+
 
                 >
 
                 {
+
                     darkMode
+
                     ?
+
                     "☀️"
+
                     :
+
                     "🌙"
+
                 }
 
 
                 </button>
+
 
 
 
@@ -174,7 +242,9 @@ isActive ? "active-link" : ""
     )
 
 
+
 }
+
 
 
 export default Navbar;

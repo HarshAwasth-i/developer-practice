@@ -109,17 +109,12 @@ function ProfileDropdown(){
         <div className="profile-container">
 
 
-            <button
-
-            className="profile-button"
-
-            onClick={()=>setOpen(!open)}
-
-            >
-
-                👤 {user?.name || "User"}
-
-            </button>
+         <button
+className="profile-button"
+onClick={()=>setOpen(!open)}
+>
+    👤 {user?.name || "User"}
+</button>
 
 
 

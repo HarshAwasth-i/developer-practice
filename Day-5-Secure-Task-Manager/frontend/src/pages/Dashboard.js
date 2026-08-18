@@ -1,59 +1,86 @@
 import { useEffect, useState } from "react";
 
+
 import API from "../api/axios";
+
 
 import AddTask from "../components/AddTask";
 import TaskCard from "../components/TaskCard";
 import StatCard from "../components/StatCard";
 import Loader from "../components/Loader";
 import EmptyState from "../components/EmptyState";
-
-import "../styles/Dashboard.css";
 import ActivityCard from "../components/ActivityCard";
 import TaskChart from "../components/TaskChart";
 import ConfirmModal from "../components/ConfirmModal";
-
 import AnalyticsCard from "../components/AnalyticsCard";
+
+
+import "../styles/Dashboard.css";
+
+
 
 function Dashboard(){
 
 
+
 const [tasks,setTasks] = useState([]);
+
 
 const [editingTask,setEditingTask] = useState(null);
 
+
 const [loading,setLoading] = useState(true);
 
-const hour = new Date().getHours();
+
 const [deleteId,setDeleteId] = useState(null);
 
 
-let greeting = "Good Morning";
+
+const [statusFilter,setStatusFilter] = useState("All");
+
+
+const [priorityFilter,setPriorityFilter] = useState("All");
+
+
+const [search,setSearch] = useState("");
+
+
+const [activities,setActivities] = useState([]);
+
+
+const [sortBy,setSortBy] = useState("Newest");
+
+
+
+
+
+// Greeting
+
+
+const hour = new Date().getHours();
+
+
+let greeting = "Good Morning 👋";
 
 
 if(hour >= 12 && hour < 17){
 
-    greeting = "Good Afternoon";
+    greeting = "Good Afternoon 👋";
 
 }
 
 else if(hour >= 17){
 
-    greeting = "Good Evening Harsh";
+    greeting = "Good Evening 👋";
 
 }
 
 
-const [statusFilter,setStatusFilter] = useState("All");
-
-const [priorityFilter,setPriorityFilter] = useState("All");
-
-const [search,setSearch] = useState("");
-const [activities,setActivities]=useState([]);
-const [sortBy,setSortBy] = useState("Newest");
 
 
 
+
+// Fetch Tasks
 
 const fetchTasks = async()=>{
 
@@ -86,13 +113,23 @@ const fetchTasks = async()=>{
 };
 
 
+
+
+
+
+// Fetch Activities
+
 const fetchActivities = async()=>{
+
 
     try{
 
+
         const res = await API.get("/activity");
 
+
         setActivities(res.data.activities);
+
 
     }
     catch(err){
@@ -101,14 +138,22 @@ const fetchActivities = async()=>{
 
     }
 
+
 };
+
+
+
+
+
 
 
 useEffect(()=>{
 
+
     fetchTasks();
 
     fetchActivities();
+
 
 },[]);
 
@@ -116,6 +161,10 @@ useEffect(()=>{
 
 
 
+
+
+
+// Add / Update Task
 
 
 const addTask = async(task)=>{
@@ -148,6 +197,7 @@ const addTask = async(task)=>{
 
 
         }
+
         else{
 
 
@@ -165,7 +215,10 @@ const addTask = async(task)=>{
         }
 
 
+
         fetchTasks();
+
+        fetchActivities();
 
 
     }
@@ -184,11 +237,21 @@ const addTask = async(task)=>{
 
 
 
+// Delete
+
+
 const deleteTask = (id)=>{
+
 
     setDeleteId(id);
 
+
 };
+
+
+
+
+
 
 const confirmDelete = async()=>{
 
@@ -204,6 +267,8 @@ const confirmDelete = async()=>{
 
         fetchTasks();
 
+        fetchActivities();
+
 
     }
     catch(err){
@@ -219,22 +284,35 @@ const confirmDelete = async()=>{
 
 
 
+
+
+// Complete / Pending
+
+
 const toggleStatus = async(task)=>{
+
 
     try{
 
-        const res = await API.put(
+
+        await API.put(
+
             `/tasks/${task._id}`,
+
             {
-                completed: !task.completed
+
+                completed:!task.completed
+
             }
+
         );
 
 
-        console.log("UPDATED TASK:", res.data);
-
 
         fetchTasks();
+
+        fetchActivities();
+
 
     }
     catch(err){
@@ -242,6 +320,7 @@ const toggleStatus = async(task)=>{
         console.log(err);
 
     }
+
 
 };
 
@@ -263,8 +342,6 @@ const editTask=(task)=>{
 
 
 
-
-
 const cancelEdit=()=>{
 
 
@@ -272,15 +349,11 @@ const cancelEdit=()=>{
 
 
 };
-
-
-
-
-
-
+// Statistics
 
 
 const totalTasks = tasks.length;
+
 
 
 const completedTasks = tasks.filter(
@@ -292,6 +365,7 @@ const completedTasks = tasks.filter(
 
 
 const pendingTasks = totalTasks - completedTasks;
+
 
 
 
@@ -311,6 +385,8 @@ Math.round(
 
 
 
+
+
 const highPriorityTasks = tasks.filter(
 
 task=>task.priority==="High"
@@ -319,21 +395,34 @@ task=>task.priority==="High"
 
 
 
+
+
+
 // Created Today
+
 
 const today = new Date().toLocaleDateString();
 
 
+
 const createdToday = tasks.filter((task)=>{
 
+
     return new Date(task.createdAt)
+
     .toLocaleDateString() === today;
+
 
 }).length;
 
 
 
+
+
+
+
 // Completed Today
+
 
 const completedToday = tasks.filter((task)=>{
 
@@ -343,6 +432,7 @@ const completedToday = tasks.filter((task)=>{
         task.completed &&
 
         new Date(task.updatedAt)
+
         .toLocaleDateString() === today
 
     );
@@ -353,10 +443,14 @@ const completedToday = tasks.filter((task)=>{
 
 
 
-// Most Used Priority
+
+
+
+
+// Top Priority
+
 
 const priorityCount = {
-
 
     Low:0,
 
@@ -378,7 +472,10 @@ tasks.forEach((task)=>{
 
 
 
+
+
 const mostUsedPriority = Object.keys(priorityCount)
+
 .sort(
 
 (a,b)=>
@@ -391,13 +488,19 @@ priorityCount[b]-priorityCount[a]
 
 
 
-// Productivity Score
+
+
+// Productivity
+
 
 const productivityScore = Math.round(
 
-(completedTasks / (totalTasks || 1)) * 100
+(completedTasks/(totalTasks || 1))*100
 
 );
+
+
+
 
 
 const progressWidth = `${completionRate}%`;
@@ -409,24 +512,35 @@ const progressWidth = `${completionRate}%`;
 
 
 
+
+// Filter + Sort
+
+
 const filteredTasks = tasks
 
 
 .filter((task)=>{
 
 
-return(
+return (
 
-task.title.toLowerCase().includes(search.toLowerCase())
+task.title.toLowerCase()
+
+.includes(search.toLowerCase())
+
 
 ||
 
-task.description.toLowerCase().includes(search.toLowerCase())
+task.description.toLowerCase()
+
+.includes(search.toLowerCase())
+
 
 );
 
 
 })
+
 
 
 
@@ -448,7 +562,10 @@ if(statusFilter==="Pending")
 return true;
 
 
+
 })
+
+
 
 
 
@@ -460,27 +577,93 @@ if(priorityFilter==="All")
     return true;
 
 
+
 return task.priority===priorityFilter;
+
 
 
 })
 
 
 
+
+
 .sort((a,b)=>{
 
-    const priorityOrder = {
-        High:3,
-        Medium:2,
-        Low:1
-    };
+
+if(sortBy==="Newest"){
+
+    return new Date(b.createdAt)-new Date(a.createdAt);
+
+}
 
 
-    return (
-        (priorityOrder[b.priority] || 0)
-        -
-        (priorityOrder[a.priority] || 0)
-    );
+
+if(sortBy==="Oldest"){
+
+    return new Date(a.createdAt)-new Date(b.createdAt);
+
+}
+
+
+
+if(sortBy==="High"){
+
+
+const order={
+
+High:3,
+
+Medium:2,
+
+Low:1
+
+};
+
+
+return order[b.priority]-order[a.priority];
+
+
+}
+
+
+
+
+
+if(sortBy==="Low"){
+
+
+const order={
+
+High:3,
+
+Medium:2,
+
+Low:1
+
+};
+
+
+return order[a.priority]-order[b.priority];
+
+
+}
+
+
+
+
+
+if(sortBy==="Completed"){
+
+    return Number(b.completed)-Number(a.completed);
+
+}
+
+
+
+return 0;
+
+
 
 });
 
@@ -498,18 +681,27 @@ return(
 <div className="dashboard">
 
 
+
 <div className="welcome-section">
 
-  <h1>
-{greeting} 
+
+<h1>
+
+{greeting}
+
 </h1>
 
 
-    <p>
-        Track your tasks, productivity and progress.
-    </p>
+<p>
+
+Track your tasks, productivity and progress.
+
+</p>
+
 
 </div>
+
+
 
 
 
@@ -518,90 +710,32 @@ return(
 <div className="stats-container">
 
 
-<StatCard
+<StatCard title="Total Tasks" value={totalTasks}/>
 
-title="Total Tasks"
+<StatCard title="Completed" value={completedTasks}/>
 
-value={totalTasks}
+<StatCard title="Pending" value={pendingTasks}/>
 
-/>
+<StatCard title="Completion Rate" value={`${completionRate}%`}/>
 
+<StatCard title="High Priority" value={highPriorityTasks}/>
 
+<StatCard title="Created Today" value={createdToday}/>
 
-<StatCard
+<StatCard title="Completed Today" value={completedToday}/>
 
-title="Completed"
+<StatCard title="Top Priority" value={mostUsedPriority}/>
 
-value={completedTasks}
-
-/>
-
-
-
-<StatCard
-
-title="Pending"
-
-value={pendingTasks}
-
-/>
-
-
-
-<StatCard
-
-title="Completion Rate"
-
-value={`${completionRate}%`}
-
-/>
-
-
-
-<StatCard
-
-title="High Priority"
-
-value={highPriorityTasks}
-
-/>
-<StatCard
-
-title="Created Today"
-
-value={createdToday}
-
-/>
-
-
-<StatCard
-
-title="Completed Today"
-
-value={completedToday}
-
-/>
-
-
-<StatCard
-
-title="Top Priority"
-
-value={mostUsedPriority}
-
-/>
-
-
-<StatCard
-
-title="Productivity"
-
-value={`${productivityScore}%`}
-
-/>
+<StatCard title="Productivity" value={`${productivityScore}%`}/>
 
 
 </div>
+
+
+
+
+
+
 
 
 <div className="analytics-summary">
@@ -613,9 +747,10 @@ title="Completion"
 
 value={`${completionRate}%`}
 
-icon="🚀"
+icon="⚡"
 
 />
+
 
 
 <AnalyticsCard
@@ -629,6 +764,7 @@ icon="📋"
 />
 
 
+
 <AnalyticsCard
 
 title="Completed"
@@ -638,6 +774,7 @@ value={completedTasks}
 icon="✅"
 
 />
+
 
 
 <AnalyticsCard
@@ -652,6 +789,10 @@ icon="⏳"
 
 
 </div>
+
+
+
+
 
 
 
@@ -693,7 +834,6 @@ onChange={(e)=>setSearch(e.target.value)}
 <div className="filters">
 
 
-
 <select
 
 value={statusFilter}
@@ -706,9 +846,11 @@ onChange={(e)=>setStatusFilter(e.target.value)}
 All Tasks
 </option>
 
+
 <option value="Completed">
 Completed
 </option>
+
 
 <option value="Pending">
 Pending
@@ -734,13 +876,16 @@ onChange={(e)=>setPriorityFilter(e.target.value)}
 All Priority
 </option>
 
+
 <option value="High">
 High
 </option>
 
+
 <option value="Medium">
 Medium
 </option>
+
 
 <option value="Low">
 Low
@@ -748,6 +893,11 @@ Low
 
 
 </select>
+
+
+
+
+
 
 <select
 
@@ -785,7 +935,11 @@ Completed First
 
 </select>
 
+
 </div>
+
+
+
 
 
 
@@ -795,15 +949,14 @@ Completed First
 
 <div className="progress-header">
 
+
 <h2>
 Task Progress
 </h2>
 
 
 <span>
-
 {completionRate}%
-
 </span>
 
 
@@ -834,7 +987,6 @@ width:progressWidth
 
 
 
-
 <p>
 
 {completedTasks} completed out of {totalTasks} tasks
@@ -842,31 +994,46 @@ width:progressWidth
 </p>
 
 
-
 </div>
+
+
+
+
+
+
+
+
 <div className="analytics-container">
 
 
-    <TaskChart
+<TaskChart
 
-    tasks={tasks}
+tasks={tasks}
 
-    />
+/>
 
 
-    <ActivityCard
 
-    activities={activities}
+<ActivityCard
 
-    />
+activities={activities}
+
+/>
 
 
 </div>
+
+
+
+
+
+
+
+
 
 <h2>
 My Tasks
 </h2>
-
 
 
 
@@ -880,12 +1047,14 @@ loading
 
 <Loader/>
 
-:
 
+:
 
 filteredTasks.length===0
 
+
 ?
+
 
 <EmptyState/>
 
@@ -895,9 +1064,11 @@ filteredTasks.length===0
 
 <div className="task-container">
 
+
 {
 
 filteredTasks.map((task)=>(
+
 
 <TaskCard
 
@@ -911,11 +1082,15 @@ editTask={editTask}
 
 toggleStatus={toggleStatus}
 
+
 />
+
 
 ))
 
+
 }
+
 
 </div>
 
@@ -924,15 +1099,28 @@ toggleStatus={toggleStatus}
 
 
 
+
+
+
+
+
+
 <ConfirmModal
 
-show={deleteId !== null}
+
+show={deleteId!==null}
+
 
 onCancel={()=>setDeleteId(null)}
 
+
 onConfirm={confirmDelete}
 
+
 />
+
+
+
 
 
 </div>
@@ -940,7 +1128,9 @@ onConfirm={confirmDelete}
 
 )
 
+
 }
+
 
 
 export default Dashboard;
