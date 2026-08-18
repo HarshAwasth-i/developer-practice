@@ -71,3 +71,16 @@
     font-weight:bold;
 
 }
+
+.stat-card{
+
+    animation:fadeIn 0.5s ease;
+
+}
+
+
+.stat-card:hover{
+
+    transform:translateY(-8px);
+
+}

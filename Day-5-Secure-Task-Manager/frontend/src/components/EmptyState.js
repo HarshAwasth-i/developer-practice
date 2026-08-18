@@ -7,14 +7,21 @@ function EmptyState(){
 
         <div className="empty-state">
 
-            <h3>
-                No Tasks Found 🚀
-            </h3>
+
+            <div className="empty-icon">
+                🎯
+            </div>
+
+
+            <h2>
+                No Tasks Yet
+            </h2>
 
 
             <p>
-                Create your first task and start working.
+                Start adding tasks and track your productivity.
             </p>
+
 
         </div>
 

@@ -11,7 +11,7 @@ import EmptyState from "../components/EmptyState";
 import "../styles/Dashboard.css";
 import ActivityCard from "../components/ActivityCard";
 import TaskChart from "../components/TaskChart";
-
+import ConfirmModal from "../components/ConfirmModal";
 
 function Dashboard(){
 
@@ -22,6 +22,25 @@ const [editingTask,setEditingTask] = useState(null);
 
 const [loading,setLoading] = useState(true);
 
+const hour = new Date().getHours();
+const [deleteId,setDeleteId] = useState(null);
+
+
+let greeting = "Good Morning";
+
+
+if(hour >= 12 && hour < 17){
+
+    greeting = "Good Afternoon";
+
+}
+
+else if(hour >= 17){
+
+    greeting = "Good Evening Harsh";
+
+}
+
 
 const [statusFilter,setStatusFilter] = useState("All");
 
@@ -29,6 +48,7 @@ const [priorityFilter,setPriorityFilter] = useState("All");
 
 const [search,setSearch] = useState("");
 const [activities,setActivities]=useState([]);
+const [sortBy,setSortBy] = useState("Newest");
 
 
 
@@ -162,19 +182,22 @@ const addTask = async(task)=>{
 
 
 
-const deleteTask = async(id)=>{
+const deleteTask = (id)=>{
 
+    setDeleteId(id);
 
-    if(!window.confirm("Delete this task?"))
+};
 
-        return;
-
+const confirmDelete = async()=>{
 
 
     try{
 
 
-        await API.delete(`/tasks/${id}`);
+        await API.delete(`/tasks/${deleteId}`);
+
+
+        setDeleteId(null);
 
 
         fetchTasks();
@@ -189,8 +212,6 @@ const deleteTask = async(id)=>{
 
 
 };
-
-
 
 
 
@@ -446,28 +467,18 @@ return task.priority===priorityFilter;
 
 .sort((a,b)=>{
 
-
-const order={
-
-High:3,
-
-Medium:2,
-
-Low:1
-
-};
+    const priorityOrder = {
+        High:3,
+        Medium:2,
+        Low:1
+    };
 
 
-return(
-
-(order[b.priority] || 2)
-
--
-
-(order[a.priority] || 2)
-
-);
-
+    return (
+        (priorityOrder[b.priority] || 0)
+        -
+        (priorityOrder[a.priority] || 0)
+    );
 
 });
 
@@ -485,9 +496,18 @@ return(
 <div className="dashboard">
 
 
-<h1>
-Dashboard
+<div className="welcome-section">
+
+  <h1>
+{greeting} 
 </h1>
+
+
+    <p>
+        Track your tasks, productivity and progress.
+    </p>
+
+</div>
 
 
 
@@ -680,6 +700,41 @@ Low
 
 </select>
 
+<select
+
+value={sortBy}
+
+onChange={(e)=>setSortBy(e.target.value)}
+
+>
+
+
+<option value="Newest">
+Newest
+</option>
+
+
+<option value="Oldest">
+Oldest
+</option>
+
+
+<option value="High">
+Highest Priority
+</option>
+
+
+<option value="Low">
+Lowest Priority
+</option>
+
+
+<option value="Completed">
+Completed First
+</option>
+
+
+</select>
 
 </div>
 
@@ -820,7 +875,15 @@ toggleStatus={toggleStatus}
 
 
 
+<ConfirmModal
 
+show={deleteId !== null}
+
+onCancel={()=>setDeleteId(null)}
+
+onConfirm={confirmDelete}
+
+/>
 
 
 </div>

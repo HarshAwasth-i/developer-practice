@@ -16,6 +16,8 @@
 
     transition:0.3s;
 
+     animation:slideUp 0.5s ease;
+
 }
 
 
@@ -287,5 +289,26 @@
     color:black;
 
     border-color:#ddd;
+
+}
+
+@keyframes slideUp{
+
+    from{
+
+        opacity:0;
+
+        transform:translateY(30px);
+
+    }
+
+
+    to{
+
+        opacity:1;
+
+        transform:translateY(0);
+
+    }
 
 }
