@@ -740,11 +740,24 @@ width:progressWidth
 
 
 </div>
-<TaskChart
+<div className="analytics-container">
+
+
+    <TaskChart
 
     tasks={tasks}
 
-/>
+    />
+
+
+    <ActivityCard
+
+    activities={activities}
+
+    />
+
+
+</div>
 
 <h2>
 My Tasks
@@ -776,8 +789,11 @@ filteredTasks.length===0
 :
 
 
-filteredTasks.map((task)=>(
+<div className="task-container">
 
+{
+
+filteredTasks.map((task)=>(
 
 <TaskCard
 
@@ -793,18 +809,17 @@ toggleStatus={toggleStatus}
 
 />
 
-
 ))
+
+}
+
+</div>
 
 
 }
 
 
-<ActivityCard
 
-activities={activities}
-
-/>
 
 
 

@@ -1,6 +1,5 @@
 import "../styles/TaskCard.css";
 
-
 function TaskCard({
     task,
     deleteTask,
@@ -49,6 +48,7 @@ function TaskCard({
 
 
 
+
             <div className="task-title">
 
 
@@ -57,12 +57,25 @@ function TaskCard({
                 </span>
 
 
-                <h3>
+                <h3
+
+                className={
+                    task.completed
+                    ?
+                    "completed-title"
+                    :
+                    ""
+                }
+
+                >
+
                     {task.title}
+
                 </h3>
 
 
             </div>
+
 
 
 
@@ -78,48 +91,51 @@ function TaskCard({
 
 
 
-            <span
 
-            className={`priority ${priorityClass}`}
-
-            >
-
-                {
-                    task.priority || "Medium"
-                }
-
-                {" "}Priority
+            <div className="task-meta">
 
 
-            </span>
+                <span
 
+                className={`priority ${priorityClass}`}
+
+                >
+
+                    {task.priority || "Medium"} Priority
+
+                </span>
 
 
 
 
 
-            <span
+                <span
 
-            className={
-                task.completed
-                ?
-                "completed"
-                :
-                "pending"
-            }
-
-            >
-
-                {
+                className={
                     task.completed
                     ?
-                    "✅ Completed"
+                    "completed"
                     :
-                    "🟡 Pending"
+                    "pending"
                 }
 
+                >
 
-            </span>
+                    {
+                        task.completed
+                        ?
+                        "✅ Completed"
+                        :
+                        "🟡 Pending"
+                    }
+
+
+                </span>
+
+
+            </div>
+
+
 
 
 
@@ -139,6 +155,7 @@ function TaskCard({
 
 
             </p>
+
 
 
 
@@ -183,6 +200,7 @@ function TaskCard({
 
 
 
+
                 <button
 
                 onClick={()=>deleteTask(task._id)}
@@ -196,6 +214,8 @@ function TaskCard({
 
 
             </div>
+
+
 
 
 

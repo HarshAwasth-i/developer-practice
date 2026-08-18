@@ -54,7 +54,7 @@ function TaskChart({tasks}){
 
 
 
-            <PieChart width={350} height={300}>
+            <PieChart width={400} height={350}>
 
 
                 <Pie
@@ -74,13 +74,25 @@ function TaskChart({tasks}){
                 >
 
 
-                {
-                    data.map((entry,index)=>(
+              {
+    data.map((entry,index)=>(
 
-                        <Cell key={index}/>
+        <Cell
 
-                    ))
-                }
+        key={index}
+
+        fill={
+            index === 0
+            ?
+            "#4ade80"
+            :
+            "#facc15"
+        }
+
+        />
+
+    ))
+}
 
 
                 </Pie>

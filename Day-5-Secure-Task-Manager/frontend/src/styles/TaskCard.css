@@ -1,9 +1,12 @@
 .task-card{
 
-
+ background:#222;
+ color:white;
     padding:25px;
 
     border-radius:16px;
+     min-height:260px;
+     width:100%;
 
     border:1px solid #333;
 
@@ -306,5 +309,35 @@
     background:#4ade80;
 
     color:#111;
+
+}
+
+.completed-card{
+
+    opacity:0.75;
+
+}
+
+
+
+.completed-title{
+
+    text-decoration:line-through;
+
+    color:#aaa;
+
+}
+
+
+
+.task-meta{
+
+    display:flex;
+
+    gap:15px;
+
+    align-items:center;
+
+    margin-top:15px;
 
 }

@@ -127,9 +127,22 @@
 
     display:grid;
 
-    grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+    grid-template-columns:repeat(2,1fr);
 
-    gap:20px;
+    gap:25px;
+
+    margin-top:25px;
+
+}
+
+
+@media(max-width:900px){
+
+    .task-container{
+
+        grid-template-columns:1fr;
+
+    }
 
 }
 
@@ -315,6 +328,30 @@ select{
     .filters{
 
         flex-direction:column;
+
+    }
+
+}
+
+.analytics-container{
+
+    display:grid;
+
+    grid-template-columns:1fr 1fr;
+
+    gap:30px;
+
+    margin-top:40px;
+
+}
+
+
+
+@media(max-width:900px){
+
+    .analytics-container{
+
+        grid-template-columns:1fr;
 
     }
 
