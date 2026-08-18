@@ -4,31 +4,7 @@ import "../styles/ActivityCard.css";
 function ActivityCard({activities}){
 
 
-    const getIcon=(action)=>{
-
-
-        if(action==="created")
-            return "📝";
-
-
-        if(action==="completed")
-            return "✅";
-
-
-        if(action==="deleted")
-            return "🗑️";
-
-
-        return "🔄";
-
-
-    };
-
-
-
-
     return(
-
 
         <div className="activity-card">
 
@@ -40,30 +16,26 @@ function ActivityCard({activities}){
 
 
             {
-                activities.length===0
+                activities.length === 0
 
                 ?
 
                 <p>
-                    No activity yet
+                    No recent activity
                 </p>
-
 
                 :
 
-
-                activities.map((activity)=>(
-
+                activities.map((item)=>(
 
 
                     <div
 
                     className="activity-item"
 
-                    key={activity._id}
+                    key={item._id}
 
                     >
-
 
 
                         <div className="activity-header">
@@ -71,7 +43,17 @@ function ActivityCard({activities}){
 
                             <span className="activity-icon">
 
-                                {getIcon(activity.action)}
+                            {
+                                item.action==="created"
+                                ?
+                                "🟢"
+                                :
+                                item.action==="completed"
+                                ?
+                                "✅"
+                                :
+                                "🗑️"
+                            }
 
                             </span>
 
@@ -79,14 +61,9 @@ function ActivityCard({activities}){
 
                             <h3>
 
-                                {
-                                    activity.action
-                                    .charAt(0)
-                                    .toUpperCase()
-                                    +
-                                    activity.action.slice(1)
-                                }
-
+                            {
+                                item.action
+                            }
 
                             </h3>
 
@@ -98,25 +75,23 @@ function ActivityCard({activities}){
 
                         <p>
 
-                            {activity.taskTitle}
+                        {
+                            item.taskTitle
+                        }
 
                         </p>
 
 
 
 
-
                         <small>
 
-
-                            {
-                                new Date(activity.createdAt)
-                                .toLocaleString()
-                            }
-
+                        {
+                            new Date(item.createdAt)
+                            .toLocaleString()
+                        }
 
                         </small>
-
 
 
 
@@ -128,9 +103,7 @@ function ActivityCard({activities}){
             }
 
 
-
         </div>
-
 
     )
 

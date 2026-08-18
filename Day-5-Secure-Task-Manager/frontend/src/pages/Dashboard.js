@@ -9,6 +9,7 @@ import Loader from "../components/Loader";
 import EmptyState from "../components/EmptyState";
 
 import "../styles/Dashboard.css";
+import ActivityCard from "../components/ActivityCard";
 
 
 function Dashboard(){
@@ -26,7 +27,7 @@ const [statusFilter,setStatusFilter] = useState("All");
 const [priorityFilter,setPriorityFilter] = useState("All");
 
 const [search,setSearch] = useState("");
-
+const [activities,setActivities]=useState([]);
 
 
 
@@ -62,14 +63,29 @@ const fetchTasks = async()=>{
 };
 
 
+const fetchActivities = async()=>{
 
+    try{
+
+        const res = await API.get("/activity");
+
+        setActivities(res.data.activities);
+
+    }
+    catch(err){
+
+        console.log(err);
+
+    }
+
+};
 
 
 useEffect(()=>{
 
-
     fetchTasks();
 
+    fetchActivities();
 
 },[]);
 
@@ -779,7 +795,11 @@ toggleStatus={toggleStatus}
 }
 
 
+<ActivityCard
 
+activities={activities}
+
+/>
 
 
 

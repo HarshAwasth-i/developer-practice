@@ -32,7 +32,13 @@ app.use(
 );
 
 app.use("/api/tasks", require("./routes/taskRoutes"));
+const activityRoutes = require("./routes/activityRoutes");
 
+
+app.use(
+    "/api/activity",
+    activityRoutes
+);
 
 
 // Error Middleware
