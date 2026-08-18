@@ -1,0 +1,23 @@
+.chart-card{
+
+    background:#222;
+
+    color:white;
+
+    padding:25px;
+
+    border-radius:15px;
+
+    border:1px solid #333;
+
+    margin-top:30px;
+
+}
+
+
+
+.chart-card h2{
+
+    margin-bottom:20px;
+
+}

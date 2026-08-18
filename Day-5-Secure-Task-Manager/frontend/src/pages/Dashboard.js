@@ -10,6 +10,7 @@ import EmptyState from "../components/EmptyState";
 
 import "../styles/Dashboard.css";
 import ActivityCard from "../components/ActivityCard";
+import TaskChart from "../components/TaskChart";
 
 
 function Dashboard(){
@@ -739,7 +740,11 @@ width:progressWidth
 
 
 </div>
+<TaskChart
 
+    tasks={tasks}
+
+/>
 
 <h2>
 My Tasks
