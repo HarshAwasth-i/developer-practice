@@ -7,9 +7,6 @@ import TaskCard from "../components/TaskCard";
 import StatCard from "../components/StatCard";
 import Loader from "../components/Loader";
 import EmptyState from "../components/EmptyState";
-import ActivityCard from "../components/ActivityCard";
-
-import toast from "react-hot-toast";
 
 import "../styles/Dashboard.css";
 
@@ -17,314 +14,130 @@ import "../styles/Dashboard.css";
 function Dashboard(){
 
 
-    const [tasks,setTasks] = useState([]);
-    const [statusFilter,setStatusFilter] = useState("All");
+const [tasks,setTasks] = useState([]);
+
+const [editingTask,setEditingTask] = useState(null);
+
+const [loading,setLoading] = useState(true);
+
+
+const [statusFilter,setStatusFilter] = useState("All");
 
 const [priorityFilter,setPriorityFilter] = useState("All");
+
 const [search,setSearch] = useState("");
-    const [activities,setActivities] = useState([]);
 
-    const [editingTask,setEditingTask] = useState(null);
 
-    const [loading,setLoading] = useState(true);
 
-    const [error,setError] = useState("");
 
 
+const fetchTasks = async()=>{
 
-    const fetchTasks = async()=>{
 
+    try{
 
-        try{
 
-            setLoading(true);
+        setLoading(true);
 
-            const res = await API.get("/tasks");
 
-            setTasks(res.data.tasks);
+        const res = await API.get("/tasks");
 
 
-        }
-        catch(err){
+        setTasks(res.data.tasks);
 
-            console.log(err);
 
-            setError("Failed to load tasks");
+    }
+    catch(err){
 
-        }
-        finally{
+        console.log(err);
 
-            setLoading(false);
+    }
+    finally{
 
-        }
+        setLoading(false);
 
+    }
 
-    };
 
+};
 
 
 
 
-    const fetchActivities = async()=>{
 
+useEffect(()=>{
 
-        try{
 
+    fetchTasks();
 
-            const res = await API.get("/activities");
 
+},[]);
 
-            setActivities(res.data.activities);
 
 
-        }
-        catch(err){
 
-            console.log(err);
 
-        }
 
 
-    };
+const addTask = async(task)=>{
 
 
+    try{
 
 
-
-
-    useEffect(()=>{
-
-
-        fetchTasks();
-
-        fetchActivities();
-
-
-    },[]);
-
-
-
-
-
-
-
-    const addTask = async(task)=>{
-
-
-        try{
-
-
-            if(editingTask){
-
-
-                await API.put(
-
-                    `/tasks/${editingTask._id}`,
-
-                    {
-
-                        title:task.title,
-
-                        description:task.description,
-
-                        priority:task.priority
-
-                    }
-
-                );
-
-
-                setEditingTask(null);
-
-
-
-                toast.success(
-                    "Task updated successfully"
-                );
-
-
-            }
-
-            else{
-
-
-                await API.post(
-
-                    "/tasks",
-
-                    {
-
-                        title:task.title,
-
-                        description:task.description,
-
-                        priority:task.priority
-
-                    }
-
-                );
-
-
-
-                toast.success(
-                    "Task created successfully"
-                );
-
-
-            }
-
-
-
-            fetchTasks();
-
-            fetchActivities();
-
-
-
-        }
-        catch(err){
-
-
-            console.log(err);
-
-            toast.error(
-                "Something went wrong"
-            );
-
-
-        }
-
-
-    };
-
-
-
-
-
-
-
-    const deleteTask = async(id)=>{
-
-
-        try{
-
-
-            await API.delete(`/tasks/${id}`);
-
-
-
-            toast.success(
-                "Task deleted successfully"
-            );
-
-
-
-            fetchTasks();
-
-            fetchActivities();
-
-
-        }
-        catch(err){
-
-
-            console.log(err);
-
-            toast.error(
-                "Something went wrong"
-            );
-
-
-        }
-
-
-    };
-
-
-
-
-
-
-
-
-    const toggleStatus = async(task)=>{
-
-
-        try{
+        if(editingTask){
 
 
             await API.put(
 
-                `/tasks/${task._id}`,
+                `/tasks/${editingTask._id}`,
 
                 {
 
-                    completed:!task.completed
+                    title:task.title,
+
+                    description:task.description,
+
+                    priority:task.priority
 
                 }
 
             );
 
 
-
-            toast.success(
-
-                task.completed
-
-                ?
-
-                "Task marked pending"
-
-                :
-
-                "Task completed 🎉"
-
-            );
-
-
-
-            fetchTasks();
-
-            fetchActivities();
+            setEditingTask(null);
 
 
         }
-        catch(err){
+        else{
 
 
-            console.log(err);
+            await API.post("/tasks",{
+
+                title:task.title,
+
+                description:task.description,
+
+                priority:task.priority
+
+            });
 
 
         }
 
 
-    };
+        fetchTasks();
 
 
+    }
+    catch(err){
+
+        console.log(err);
+
+    }
 
 
-
-
-    const editTask=(task)=>{
-
-
-        setEditingTask(task);
-
-
-    };
-
-
-
-
-
-
-    const cancelEdit=()=>{
-
-
-        setEditingTask(null);
-
-
-    };
+};
 
 
 
@@ -332,95 +145,233 @@ const [search,setSearch] = useState("");
 
 
 
-    const totalTasks = tasks.length;
+const deleteTask = async(id)=>{
 
 
-    const completedTasks = tasks.filter(
+    if(!window.confirm("Delete this task?"))
 
-        task=>task.completed
-
-    ).length;
+        return;
 
 
 
-    const pendingTasks = totalTasks - completedTasks;
+    try{
+
+
+        await API.delete(`/tasks/${id}`);
+
+
+        fetchTasks();
+
+
+    }
+    catch(err){
+
+        console.log(err);
+
+    }
+
+
+};
+
+
+
+
+
+
+
+const toggleStatus = async(task)=>{
+
+
+    try{
+
+
+        await API.put(
+
+            `/tasks/${task._id}`,
+
+            {
+
+                completed:!task.completed
+
+            }
+
+        );
+
+
+        fetchTasks();
+
+
+    }
+    catch(err){
+
+        console.log(err);
+
+    }
+
+
+};
+
+
+
+
+
+
+
+const editTask=(task)=>{
+
+
+    setEditingTask(task);
+
+
+};
+
+
+
+
+
+
+
+const cancelEdit=()=>{
+
+
+    setEditingTask(null);
+
+
+};
+
+
+
+
+
+
+
+
+const totalTasks = tasks.length;
+
+
+const completedTasks = tasks.filter(
+
+    task=>task.completed
+
+).length;
+
+
+
+const pendingTasks = totalTasks - completedTasks;
+
+
+
+const completionRate = totalTasks===0
+
+?
+
+0
+
+:
+
+Math.round(
+
+(completedTasks/totalTasks)*100
+
+);
+
+
+
+const highPriorityTasks = tasks.filter(
+
+task=>task.priority==="High"
+
+).length;
+
+
+
+
+
+
+
+
 
 const filteredTasks = tasks
+
+
 .filter((task)=>{
 
 
-    return (
+return(
 
-        task.title
-        .toLowerCase()
-        .includes(search.toLowerCase())
+task.title.toLowerCase().includes(search.toLowerCase())
 
-        ||
+||
 
-        task.description
-        .toLowerCase()
-        .includes(search.toLowerCase())
+task.description.toLowerCase().includes(search.toLowerCase())
 
-    );
+);
 
 
 })
 
+
+
 .filter((task)=>{
 
 
-    if(statusFilter==="Completed")
+if(statusFilter==="Completed")
 
-        return task.completed;
+    return task.completed;
 
 
-    if(statusFilter==="Pending")
 
-        return !task.completed;
+if(statusFilter==="Pending")
 
+    return !task.completed;
+
+
+
+return true;
+
+
+})
+
+
+
+.filter((task)=>{
+
+
+if(priorityFilter==="All")
 
     return true;
 
 
-})
-
-
-.filter((task)=>{
-
-
-    if(priorityFilter==="All")
-
-        return true;
-
-
-    return task.priority === priorityFilter;
+return task.priority===priorityFilter;
 
 
 })
+
+
 
 .sort((a,b)=>{
 
 
-    const priorityOrder = {
+const order={
 
-        High:3,
+High:3,
 
-        Medium:2,
+Medium:2,
 
-        Low:1
+Low:1
 
-    };
+};
 
 
-    return (
+return(
 
-        priorityOrder[b.priority || "Medium"]
+(order[b.priority] || 2)
 
-        -
+-
 
-        priorityOrder[a.priority || "Medium"]
+(order[a.priority] || 2)
 
-    );
+);
 
 
 });
@@ -429,86 +380,104 @@ const filteredTasks = tasks
 
 
 
-    return(
-
-
-        <div className="dashboard">
-
-
-
-            <h1>
-                Dashboard
-            </h1>
 
 
 
 
-            <div className="stats-container">
+return(
 
 
-                <StatCard
-
-                title="Total Tasks"
-
-                value={totalTasks}
-
-                />
+<div className="dashboard">
 
 
-
-                <StatCard
-
-                title="Completed"
-
-                value={completedTasks}
-
-                />
-
-
-
-                <StatCard
-
-                title="Pending"
-
-                value={pendingTasks}
-
-                />
-
-
-
-            </div>
+<h1>
+Dashboard
+</h1>
 
 
 
 
 
-
-            <ActivityCard
-
-            activities={activities}
-
-            />
+<div className="stats-container">
 
 
+<StatCard
+
+title="Total Tasks"
+
+value={totalTasks}
+
+/>
+
+
+
+<StatCard
+
+title="Completed"
+
+value={completedTasks}
+
+/>
+
+
+
+<StatCard
+
+title="Pending"
+
+value={pendingTasks}
+
+/>
+
+
+
+<StatCard
+
+title="Completion Rate"
+
+value={`${completionRate}%`}
+
+/>
+
+
+
+<StatCard
+
+title="High Priority"
+
+value={highPriorityTasks}
+
+/>
+
+
+
+</div>
 
 
 
 
-            <AddTask
 
-            addTask={addTask}
 
-            editingTask={editingTask}
 
-            cancelEdit={cancelEdit}
+<AddTask
 
-            />
+addTask={addTask}
+
+editingTask={editingTask}
+
+cancelEdit={cancelEdit}
+
+/>
+
+
+
+
+
+
 
 <input
 
 className="search-bar"
-
-type="text"
 
 placeholder="Search tasks..."
 
@@ -517,134 +486,143 @@ value={search}
 onChange={(e)=>setSearch(e.target.value)}
 
 />
+
+
+
+
+
+
+
 <div className="filters">
 
 
-    <select
 
-    value={statusFilter}
+<select
 
-    onChange={(e)=>setStatusFilter(e.target.value)}
+value={statusFilter}
 
-    >
+onChange={(e)=>setStatusFilter(e.target.value)}
 
-        <option value="All">
-            All Tasks
-        </option>
+>
 
-        <option value="Completed">
-            Completed
-        </option>
+<option value="All">
+All Tasks
+</option>
 
+<option value="Completed">
+Completed
+</option>
 
-        <option value="Pending">
-            Pending
-        </option>
-
-
-    </select>
+<option value="Pending">
+Pending
+</option>
 
 
+</select>
 
 
 
-    <select
-
-    value={priorityFilter}
-
-    onChange={(e)=>setPriorityFilter(e.target.value)}
-
-    >
 
 
-        <option value="All">
-            All Priority
-        </option>
+<select
+
+value={priorityFilter}
+
+onChange={(e)=>setPriorityFilter(e.target.value)}
+
+>
 
 
-        <option value="High">
-            High
-        </option>
+<option value="All">
+All Priority
+</option>
+
+<option value="High">
+High
+</option>
+
+<option value="Medium">
+Medium
+</option>
+
+<option value="Low">
+Low
+</option>
 
 
-        <option value="Medium">
-            Medium
-        </option>
-
-
-        <option value="Low">
-            Low
-        </option>
-
-
-    </select>
+</select>
 
 
 </div>
 
 
 
-            <h2>
-                My Tasks
-            </h2>
+
+
+
+
+<h2>
+My Tasks
+</h2>
 
 
 
 
 
-            {
 
-                loading
+{
 
-                ?
+loading
 
-                <Loader/>
+?
 
+<Loader/>
 
-                :
-
-
-                tasks.length===0
-
-                ?
-
-                <EmptyState/>
+:
 
 
-                :
+filteredTasks.length===0
+
+?
+
+<EmptyState/>
 
 
-                filteredTasks.map((task)=>(
+:
 
 
-                    <TaskCard
-
-                    key={task._id}
-
-                    task={task}
-
-                    deleteTask={deleteTask}
-
-                    editTask={editTask}
-
-                    toggleStatus={toggleStatus}
+filteredTasks.map((task)=>(
 
 
-                    />
+<TaskCard
+
+key={task._id}
+
+task={task}
+
+deleteTask={deleteTask}
+
+editTask={editTask}
+
+toggleStatus={toggleStatus}
+
+/>
 
 
-                ))
-
-            }
+))
 
 
+}
 
 
-        </div>
 
 
-    )
 
+
+</div>
+
+
+)
 
 }
 
