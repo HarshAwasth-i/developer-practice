@@ -33,7 +33,13 @@ app.use(
 
 app.use("/api/tasks", require("./routes/taskRoutes"));
 const activityRoutes = require("./routes/activityRoutes");
+const projectRoutes = require("./routes/projectRoutes");
 
+
+app.use(
+    "/api/projects",
+    projectRoutes
+);
 
 app.use(
     "/api/activity",

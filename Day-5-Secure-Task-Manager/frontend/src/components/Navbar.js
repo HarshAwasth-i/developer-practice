@@ -24,6 +24,7 @@ function Navbar({darkMode,setDarkMode}){
 
 
 
+
     function handleLogout(){
 
         logout();
@@ -37,15 +38,18 @@ function Navbar({darkMode,setDarkMode}){
 
 
 
+
     return(
 
 
         <nav className="navbar">
 
 
+
             <h2 className="logo">
                 ⚡ DevSync
             </h2>
+
 
 
 
@@ -56,14 +60,21 @@ function Navbar({darkMode,setDarkMode}){
             onClick={()=>setMenuOpen(!menuOpen)}
 
             >
+
                 ☰
+
             </button>
 
 
 
 
 
+
+
+
             <div className={`nav-links ${menuOpen ? "open" : ""}`}>
+
+
 
 
                 <NavLink
@@ -87,13 +98,17 @@ function Navbar({darkMode,setDarkMode}){
 
 
 
+
+
                 {
+
                     !token &&
+
 
                     <>
 
 
-                    <Link 
+                    <Link
 
                     to="/login"
 
@@ -122,6 +137,7 @@ function Navbar({darkMode,setDarkMode}){
                     </Link>
 
 
+
                     </>
 
 
@@ -134,9 +150,11 @@ function Navbar({darkMode,setDarkMode}){
 
 
 
+
                 {
 
                     token &&
+
 
                     <>
 
@@ -148,7 +166,9 @@ function Navbar({darkMode,setDarkMode}){
                     onClick={()=>setMenuOpen(false)}
 
                     className={({isActive})=>
+
                         isActive ? "active-link" : ""
+
                     }
 
                     >
@@ -156,6 +176,34 @@ function Navbar({darkMode,setDarkMode}){
                         Dashboard
 
                     </NavLink>
+
+
+
+
+
+
+
+                    <NavLink
+
+                    to="/projects"
+
+                    onClick={()=>setMenuOpen(false)}
+
+                    className={({isActive})=>
+
+                        isActive ? "active-link" : ""
+
+                    }
+
+                    >
+
+                        Projects
+
+                    </NavLink>
+
+
+
+
 
 
 
@@ -169,13 +217,18 @@ function Navbar({darkMode,setDarkMode}){
 
 
 
+
+
                     <button
 
+
                     onClick={()=>{
+
 
                         setMenuOpen(false);
 
                         handleLogout();
+
 
                     }}
 
@@ -188,10 +241,12 @@ function Navbar({darkMode,setDarkMode}){
 
 
 
+
                     </>
 
 
                 }
+
 
 
 
@@ -210,6 +265,7 @@ function Navbar({darkMode,setDarkMode}){
 
 
                 >
+
 
                 {
 
@@ -232,7 +288,12 @@ function Navbar({darkMode,setDarkMode}){
 
 
 
+
+
             </div>
+
+
+
 
 
 
@@ -240,7 +301,6 @@ function Navbar({darkMode,setDarkMode}){
 
 
     )
-
 
 
 }

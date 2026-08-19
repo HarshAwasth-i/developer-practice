@@ -10,6 +10,7 @@ import Home from "./components/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
+import Projects from "./pages/Projects";
 
 
 import { AuthProvider } from "./context/AuthContext";
@@ -19,11 +20,15 @@ import { AuthProvider } from "./context/AuthContext";
 function App(){
 
 
-    const [darkMode, setDarkMode] = useState(
+
+    const [darkMode,setDarkMode] = useState(
 
         localStorage.getItem("theme") === "dark"
 
     );
+
+
+
 
 
 
@@ -45,6 +50,8 @@ function App(){
 
 
 
+
+
     return(
 
 
@@ -57,73 +64,122 @@ function App(){
                 <div className={darkMode ? "app dark" : "app light"}>
 
 
+
                     <Navbar
 
-                        darkMode={darkMode}
+                    darkMode={darkMode}
 
-                        setDarkMode={setDarkMode}
+                    setDarkMode={setDarkMode}
 
                     />
+
+
+
+
 
 
 
                     <Routes>
 
 
+
                         <Route
 
-                            path="/"
+                        path="/"
 
-                            element={<Home/>}
+                        element={<Home/>}
 
                         />
 
 
 
-                        <Route
 
-                            path="/login"
-
-                            element={<Login/>}
-
-                        />
 
 
 
                         <Route
 
-                            path="/register"
+                        path="/projects"
 
-                            element={<Register/>}
+                        element={
+
+                            <ProtectedRoute>
+
+                                <Projects/>
+
+                            </ProtectedRoute>
+
+                        }
 
                         />
+
+
+
+
 
 
 
                         <Route
 
-                            path="/dashboard"
+                        path="/login"
 
-                            element={
-
-                                <ProtectedRoute>
-
-                                    <Dashboard/>
-
-                                </ProtectedRoute>
-
-                            }
+                        element={<Login/>}
 
                         />
+
+
+
+
+
+
+
+                        <Route
+
+                        path="/register"
+
+                        element={<Register/>}
+
+                        />
+
+
+
+
+
+
+
+                        <Route
+
+                        path="/dashboard"
+
+                        element={
+
+                            <ProtectedRoute>
+
+                                <Dashboard/>
+
+                            </ProtectedRoute>
+
+                        }
+
+                        />
+
+
+
 
 
                     </Routes>
 
 
+
+
+
                 </div>
 
 
+
+
             </BrowserRouter>
+
 
 
         </AuthProvider>
