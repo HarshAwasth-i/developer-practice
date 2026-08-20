@@ -131,7 +131,21 @@ function Navbar({ darkMode, setDarkMode }) {
 
                         </NavLink>
 
+<NavLink
 
+    to="/tasks"
+
+    onClick={() => setMenuOpen(false)}
+
+    className={({ isActive }) =>
+        isActive ? "active-link" : ""
+    }
+
+>
+
+    Tasks
+
+</NavLink>
 
                         <ProfileDropdown />
 

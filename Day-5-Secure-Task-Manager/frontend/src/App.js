@@ -15,7 +15,7 @@ import Projects from "./pages/Projects";
 
 import { AuthProvider } from "./context/AuthContext";
 
-
+import Tasks from "./pages/Tasks";
 
 function App(){
 
@@ -91,7 +91,10 @@ function App(){
 
                         />
 
-
+<Route
+    path="/tasks"
+    element={<Tasks/>}
+/>
 
 
 
