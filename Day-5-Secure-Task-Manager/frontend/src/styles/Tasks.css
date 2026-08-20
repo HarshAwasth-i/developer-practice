@@ -791,3 +791,12 @@
     }
 
 }
+
+.delete-task-btn {
+    background: #ef4444 !important;
+    color: white !important;
+}
+
+.delete-task-btn:hover {
+    background: #dc2626 !important;
+}

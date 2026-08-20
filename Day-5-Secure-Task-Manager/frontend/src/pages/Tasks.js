@@ -1,37 +1,30 @@
 import { useEffect, useState } from "react";
 import API from "../api/axios";
 import "../styles/Tasks.css";
+import ConfirmModal from "../components/ConfirmModal";
 
 
 function Tasks() {
 
     const [tasks, setTasks] = useState([]);
-
     const [loading, setLoading] = useState(true);
 
-
     // Search and filter states
-
     const [search, setSearch] = useState("");
-
     const [statusFilter, setStatusFilter] = useState("all");
-
     const [priorityFilter, setPriorityFilter] = useState("all");
 
+    // Delete state
+    const [deleteId, setDeleteId] = useState(null);
 
     // Add task form states
-
     const [showForm, setShowForm] = useState(false);
-
     const [title, setTitle] = useState("");
-
     const [description, setDescription] = useState("");
-
     const [priority, setPriority] = useState("medium");
 
 
     // Fetch tasks
-
     const fetchTasks = async () => {
 
         try {
@@ -65,11 +58,9 @@ function Tasks() {
 
 
     // Create task
-
     const handleCreateTask = async (e) => {
 
         e.preventDefault();
-
 
         if (!title.trim()) {
 
@@ -79,36 +70,26 @@ function Tasks() {
 
         }
 
-
         try {
 
             await API.post("/tasks", {
 
                 title: title,
-
                 description: description,
-
                 priority: priority
 
             });
 
 
             // Clear form
-
             setTitle("");
-
             setDescription("");
-
             setPriority("medium");
 
-
             // Close form
-
             setShowForm(false);
 
-
             // Fetch updated tasks
-
             fetchTasks();
 
         }
@@ -124,40 +105,67 @@ function Tasks() {
         }
 
     };
-const toggleStatus = async (task) => {
 
-    try {
 
-        await API.put(
-            `/tasks/${task._id}`,
-            {
-                completed: !task.completed
-            }
-        );
+    // Delete task
+    const handleDeleteTask = async () => {
 
-        fetchTasks();
+        try {
 
-    }
-    catch (err) {
+            await API.delete(`/tasks/${deleteId}`);
 
-        console.log(
-            "Error updating task:",
-            err
-        );
+            setDeleteId(null);
 
-    }
+            fetchTasks();
 
-};
+        }
+        catch (err) {
+
+            console.log(
+                "Error deleting task:",
+                err
+            );
+
+            alert("Failed to delete task");
+
+        }
+
+    };
+
+
+    // Toggle task status
+    const toggleStatus = async (task) => {
+
+        try {
+
+            await API.put(
+                `/tasks/${task._id}`,
+                {
+                    completed: !task.completed
+                }
+            );
+
+            fetchTasks();
+
+        }
+        catch (err) {
+
+            console.log(
+                "Error updating task:",
+                err
+            );
+
+        }
+
+    };
+
 
     // Filter tasks
-
     const filteredTasks = tasks.filter((task) => {
 
         const searchText = search.toLowerCase();
 
-
         const matchesSearch =
-
             task.title
                 ?.toLowerCase()
                 .includes(searchText)
@@ -170,7 +178,6 @@ const toggleStatus = async (task) => {
 
 
         const matchesStatus =
-
             statusFilter === "all"
 
             ||
@@ -179,7 +186,6 @@ const toggleStatus = async (task) => {
 
 
         const matchesPriority =
-
             priorityFilter === "all"
 
             ||
@@ -189,13 +195,9 @@ const toggleStatus = async (task) => {
 
 
         return (
-
             matchesSearch &&
-
             matchesStatus &&
-
             matchesPriority
-
         );
 
     });
@@ -224,19 +226,13 @@ const toggleStatus = async (task) => {
 
 
                 <button
-
                     className="add-task-btn"
-
                     onClick={() => setShowForm(true)}
-
                 >
-
                     + Add Task
-
                 </button>
 
             </div>
-
 
 
             {/* TOOLBAR */}
@@ -247,31 +243,22 @@ const toggleStatus = async (task) => {
                 {/* SEARCH */}
 
                 <input
-
                     type="text"
-
                     placeholder="Search tasks..."
-
                     value={search}
-
                     onChange={(e) =>
                         setSearch(e.target.value)
                     }
-
                 />
-
 
 
                 {/* STATUS FILTER */}
 
                 <select
-
                     value={statusFilter}
-
                     onChange={(e) =>
                         setStatusFilter(e.target.value)
                     }
-
                 >
 
                     <option value="all">
@@ -289,17 +276,13 @@ const toggleStatus = async (task) => {
                 </select>
 
 
-
                 {/* PRIORITY FILTER */}
 
                 <select
-
                     value={priorityFilter}
-
                     onChange={(e) =>
                         setPriorityFilter(e.target.value)
                     }
-
                 >
 
                     <option value="all">
@@ -323,17 +306,13 @@ const toggleStatus = async (task) => {
             </div>
 
 
-
             {/* CREATE TASK FORM */}
 
             {showForm && (
 
                 <form
-
                     className="task-form"
-
                     onSubmit={handleCreateTask}
-
                 >
 
                     <h2>
@@ -342,41 +321,29 @@ const toggleStatus = async (task) => {
 
 
                     <input
-
                         type="text"
-
                         placeholder="Task title"
-
                         value={title}
-
                         onChange={(e) =>
                             setTitle(e.target.value)
                         }
-
                     />
 
 
                     <textarea
-
                         placeholder="Task description"
-
                         value={description}
-
                         onChange={(e) =>
                             setDescription(e.target.value)
                         }
-
                     />
 
 
                     <select
-
                         value={priority}
-
                         onChange={(e) =>
                             setPriority(e.target.value)
                         }
-
                     >
 
                         <option value="low">
@@ -396,44 +363,28 @@ const toggleStatus = async (task) => {
 
                     <div className="task-form-buttons">
 
-
                         <button
-
                             type="submit"
-
                             className="add-task-btn"
-
                         >
-
                             Create Task
-
                         </button>
 
 
                         <button
-
                             type="button"
-
                             className="cancel-btn"
-
                             onClick={() => {
 
                                 setShowForm(false);
-
                                 setTitle("");
-
                                 setDescription("");
-
                                 setPriority("medium");
 
                             }}
-
                         >
-
                             Cancel
-
                         </button>
-
 
                     </div>
 
@@ -442,11 +393,9 @@ const toggleStatus = async (task) => {
             )}
 
 
-
             {/* TASK LIST */}
 
             <div className="tasks-list">
-
 
                 {loading ? (
 
@@ -485,83 +434,106 @@ const toggleStatus = async (task) => {
                     filteredTasks.map((task) => (
 
                         <div
-    className={`task-card ${
-        task.completed ? "completed-card" : ""
-    }`}
-    key={task._id}
->
+                            className={`task-card ${
+                                task.completed
+                                    ? "completed-card"
+                                    : ""
+                            }`}
+                            key={task._id}
+                        >
 
-    <div>
+                            <div>
 
-        <h3
-            className={
-                task.completed
-                    ? "completed-title"
-                    : ""
-            }
-        >
-            {task.title}
-        </h3>
-
-
-        <p>
-            {task.description}
-        </p>
+                                <h3
+                                    className={
+                                        task.completed
+                                            ? "completed-title"
+                                            : ""
+                                    }
+                                >
+                                    {task.title}
+                                </h3>
 
 
-        <div className="task-card-meta">
-
-            <span
-                className={`priority-badge ${
-                    task.priority?.toLowerCase()
-                }`}
-            >
-                {task.priority}
-            </span>
+                                <p>
+                                    {task.description}
+                                </p>
 
 
-            <span
-                className={
-                    task.completed
-                        ? "status-badge completed"
-                        : "status-badge pending"
-                }
-            >
+                                <div className="task-card-meta">
 
-                {task.completed
-                    ? "Completed"
-                    : "Pending"
-                }
-
-            </span>
-
-        </div>
-
-    </div>
+                                    <span
+                                        className={`priority-badge ${
+                                            task.priority?.toLowerCase()
+                                        }`}
+                                    >
+                                        {task.priority}
+                                    </span>
 
 
-    <div className="task-card-actions">
+                                    <span
+                                        className={
+                                            task.completed
+                                                ? "status-badge completed"
+                                                : "status-badge pending"
+                                        }
+                                    >
 
-        <button
-            onClick={() => toggleStatus(task)}
-        >
+                                        {task.completed
+                                            ? "Completed"
+                                            : "Pending"
+                                        }
 
-            {task.completed
-                ? "↩ Mark Pending"
-                : "✓ Complete"
-            }
+                                    </span>
 
-        </button>
+                                </div>
 
-    </div>
+                            </div>
 
-</div>
+
+                            {/* TASK ACTIONS */}
+
+                            <div className="task-card-actions">
+
+                                <button
+                                    onClick={() =>
+                                        toggleStatus(task)
+                                    }
+                                >
+                                    {task.completed
+                                        ? "↩ Mark Pending"
+                                        : "✓ Complete"
+                                    }
+                                </button>
+
+
+                                <button
+                                    className="delete-task-btn"
+                                    onClick={() =>
+                                        setDeleteId(task._id)
+                                    }
+                                >
+                                    🗑 Delete
+                                </button>
+
+                            </div>
+
+                        </div>
 
                     ))
 
                 )}
 
             </div>
+
+
+            {/* DELETE CONFIRMATION MODAL */}
+
+            <ConfirmModal
+                show={deleteId !== null}
+                onConfirm={handleDeleteTask}
+                onCancel={() => setDeleteId(null)}
+            />
 
 
         </div>

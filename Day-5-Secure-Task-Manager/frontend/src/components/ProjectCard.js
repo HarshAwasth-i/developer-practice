@@ -1,50 +1,131 @@
 import "../styles/ProjectCard.css";
 
 
-function ProjectCard({project}){
+function ProjectCard({ project }) {
 
 
-    return(
+    return (
 
         <div className="project-card">
 
 
-            <h2>
-                📁 {project.name}
-            </h2>
+            {/* PROJECT HEADER */}
+
+            <div className="project-card-header">
+
+                <h2>
+                    📁 {project.name}
+                </h2>
+
+                <span
+                    className={`project-status ${
+                        project.status
+                            ?.toLowerCase()
+                            .replace(" ", "-")
+                    }`}
+                >
+                    {project.status}
+                </span>
+
+            </div>
 
 
-            <p>
-                {project.description}
+            {/* DESCRIPTION */}
+
+            <p className="project-description">
+
+                {project.description ||
+                    "No description provided."}
+
             </p>
 
 
+            {/* PROJECT INFO */}
 
-            <span className="project-status">
-
-                {project.status}
-
-            </span>
+            <div className="project-info">
 
 
+                <div className="project-info-item">
 
-            <p className="project-date">
+                    <span className="project-info-label">
+                        Status
+                    </span>
 
-                Created:
+                    <strong>
+                        {project.status}
+                    </strong>
 
-                {" "}
+                </div>
 
-                {new Date(project.createdAt)
-                .toLocaleDateString()}
 
-            </p>
+                <div className="project-info-item">
 
+                    <span className="project-info-label">
+                        Created
+                    </span>
+
+                    <strong>
+
+                        {project.createdAt
+                            ? new Date(
+                                project.createdAt
+                              ).toLocaleDateString()
+                            : "Unknown"}
+
+                    </strong>
+
+                </div>
+
+
+            </div>
+
+
+            {/* PROJECT PROGRESS PLACEHOLDER */}
+
+            <div className="project-progress">
+
+
+                <div className="project-progress-header">
+
+                    <span>
+                        Project Progress
+                    </span>
+
+                    <span>
+                        {project.status === "Completed"
+                            ? "100%"
+                            : project.status === "In Progress"
+                            ? "50%"
+                            : "0%"
+                        }
+                    </span>
+
+                </div>
+
+
+                <div className="project-progress-bar">
+
+                    <div
+                        className="project-progress-fill"
+                        style={{
+                            width:
+                                project.status === "Completed"
+                                    ? "100%"
+                                    : project.status === "In Progress"
+                                    ? "50%"
+                                    : "0%"
+                        }}
+                    />
+
+                </div>
+
+
+            </div>
 
 
         </div>
 
-    )
-
+    );
 
 }
 

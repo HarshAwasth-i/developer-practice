@@ -7,238 +7,266 @@ import ProjectCard from "../components/ProjectCard";
 import "../styles/Projects.css";
 
 
+function Projects() {
 
-function Projects(){
+    const [projects, setProjects] = useState([]);
 
+    const [name, setName] = useState("");
 
-const [projects,setProjects] = useState([]);
+    const [description, setDescription] = useState("");
 
-const [name,setName] = useState("");
+    const [status, setStatus] = useState("Planning");
 
-const [description,setDescription] = useState("");
-
-const [status,setStatus] = useState("Planning");
-
-
+    const [loading, setLoading] = useState(true);
 
 
+    // Fetch projects
 
-const fetchProjects = async()=>{
+    const fetchProjects = async () => {
 
+        try {
 
-    try{
+            setLoading(true);
 
+            const res = await API.get("/projects");
 
-        const res = await API.get("/projects");
+            setProjects(res.data.projects);
 
+        }
+        catch (err) {
 
-        setProjects(res.data.projects);
+            console.log(
+                "Error fetching projects:",
+                err
+            );
 
+        }
+        finally {
 
-    }
-    catch(err){
+            setLoading(false);
 
-        console.log(err);
+        }
 
-    }
-
-
-};
-
-
-
-
-
-useEffect(()=>{
-
-    fetchProjects();
-
-},[]);
+    };
 
 
-
-
-
-
-
-
-const createProject = async()=>{
-
-
-    try{
-
-
-        await API.post("/projects",{
-
-            name,
-
-            description,
-
-            status
-
-        });
-
-
-
-        setName("");
-
-        setDescription("");
-
-        setStatus("Planning");
-
+    useEffect(() => {
 
         fetchProjects();
 
+    }, []);
 
-    }
-    catch(err){
 
-        console.log(err);
+    // Create project
 
-    }
+    const createProject = async () => {
 
+        if (!name.trim()) {
 
-};
+            alert("Project name is required");
 
+            return;
 
+        }
 
 
+        try {
 
+            await API.post("/projects", {
 
+                name,
 
-return(
+                description,
 
+                status
 
-<div className="projects-page">
+            });
 
 
+            // Reset form
 
-<h1>
-Projects
-</h1>
+            setName("");
 
+            setDescription("");
 
+            setStatus("Planning");
 
 
+            // Refresh projects
 
-<div className="project-form">
+            fetchProjects();
 
+        }
+        catch (err) {
 
+            console.log(
+                "Error creating project:",
+                err
+            );
 
-<input
+        }
 
-placeholder="Project name"
+    };
 
-value={name}
 
-onChange={(e)=>setName(e.target.value)}
+    return (
 
-/>
+        <div className="projects-page">
 
 
+            {/* HEADER */}
 
+            <div className="projects-header">
 
+                <div>
 
-<input
+                    <h1>
+                        Projects
+                    </h1>
 
-placeholder="Description"
+                    <p>
+                        Organize your work and track project progress.
+                    </p>
 
-value={description}
+                </div>
 
-onChange={(e)=>setDescription(e.target.value)}
+            </div>
 
-/>
 
 
+            {/* CREATE PROJECT */}
 
+            <div className="project-form">
 
 
-<select
+                <h2>
+                    Create New Project
+                </h2>
 
-value={status}
 
-onChange={(e)=>setStatus(e.target.value)}
+                <input
 
->
+                    placeholder="Project name"
 
+                    value={name}
 
-<option>
-Planning
-</option>
+                    onChange={(e) =>
+                        setName(e.target.value)
+                    }
 
+                />
 
-<option>
-In Progress
-</option>
 
+                <input
 
-<option>
-Completed
-</option>
+                    placeholder="Description"
 
+                    value={description}
 
-</select>
+                    onChange={(e) =>
+                        setDescription(e.target.value)
+                    }
 
+                />
 
 
+                <select
 
+                    value={status}
 
-<button onClick={createProject}>
+                    onChange={(e) =>
+                        setStatus(e.target.value)
+                    }
 
-Create Project
+                >
 
-</button>
+                    <option value="Planning">
+                        Planning
+                    </option>
 
+                    <option value="In Progress">
+                        In Progress
+                    </option>
 
+                    <option value="Completed">
+                        Completed
+                    </option>
 
+                </select>
 
-</div>
 
+                <button
+                    onClick={createProject}
+                >
+                    + Create Project
+                </button>
 
 
+            </div>
 
 
 
+            {/* PROJECT LIST */}
 
+            <div className="projects-container">
 
 
-<div className="projects-container">
+                {loading ? (
 
+                    <div className="projects-empty">
 
-{
+                        <div className="project-empty-icon">
+                            ⏳
+                        </div>
 
-projects.map((project)=>(
+                        <h2>
+                            Loading projects...
+                        </h2>
 
+                    </div>
 
-<ProjectCard
+                ) : projects.length === 0 ? (
 
-key={project._id}
+                    <div className="projects-empty">
 
-project={project}
+                        <div className="project-empty-icon">
+                            📁
+                        </div>
 
-/>
+                        <h2>
+                            No projects yet
+                        </h2>
 
+                        <p>
+                            Create your first project to get started.
+                        </p>
 
-))
+                    </div>
 
+                ) : (
+
+                    projects.map((project) => (
+
+                        <ProjectCard
+
+                            key={project._id}
+
+                            project={project}
+
+                        />
+
+                    ))
+
+                )}
+
+            </div>
+
+
+        </div>
+
+    );
 
 }
-
-
-</div>
-
-
-
-
-
-</div>
-
-
-)
-
-
-}
-
 
 
 export default Projects;

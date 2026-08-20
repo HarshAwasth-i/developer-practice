@@ -7,7 +7,12 @@ exports.createTask = async (req, res) => {
 
     try {
 
-        const { title, description, priority } = req.body;
+        const {
+            title,
+            description,
+            priority,
+            project
+        } = req.body;
 
 
         const task = await Task.create({
@@ -18,10 +23,11 @@ exports.createTask = async (req, res) => {
 
             priority,
 
+            project: project || null,
+
             user: req.user.id
 
         });
-
 
 
         await Activity.create({
@@ -35,7 +41,6 @@ exports.createTask = async (req, res) => {
         });
 
 
-
         res.status(201).json({
 
             success: true,
@@ -45,23 +50,19 @@ exports.createTask = async (req, res) => {
         });
 
 
-
     } catch (error) {
-
 
         res.status(500).json({
 
-            success:false,
+            success: false,
 
-            message:error.message
+            message: error.message
 
         });
-
 
     }
 
 };
-
 
 
 
@@ -302,5 +303,42 @@ exports.deleteTask = async (req, res) => {
 
     }
 
+
+};
+
+// Get Tasks for a Specific Project
+exports.getProjectTasks = async (req, res) => {
+
+    try {
+
+        const tasks = await Task.find({
+
+            project: req.params.projectId,
+
+            user: req.user.id
+
+        });
+
+
+        res.status(200).json({
+
+            success: true,
+
+            tasks
+
+        });
+
+    }
+    catch (error) {
+
+        res.status(500).json({
+
+            success: false,
+
+            message: error.message
+
+        });
+
+    }
 
 };
