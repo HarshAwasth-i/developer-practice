@@ -1,249 +1,505 @@
-.home{
+/* ============================= */
+/* HOME PAGE                     */
+/* ============================= */
 
-    padding:60px 80px;
+.home-page {
 
-}
+    min-height: calc(100vh - 70px);
 
+    display: flex;
 
+    align-items: center;
 
-.hero{
+    justify-content: space-between;
 
-    text-align:center;
+    gap: 60px;
 
-    padding:80px 20px;
+    padding: 70px;
 
-}
-
-
-
-.hero h1{
-
-    font-size:55px;
-
-    margin-bottom:20px;
+    transition: 0.3s;
 
 }
 
 
+/* ============================= */
+/* LIGHT MODE                    */
+/* ============================= */
 
-.hero p{
+.app.light .home-page {
 
-    font-size:22px;
+    background: white;
 
-    color:#666;
+    color: black;
 
-    max-width:700px;
+}
 
-    margin:auto;
+
+/* ============================= */
+/* DARK MODE                     */
+/* ============================= */
+
+.app.dark .home-page {
+
+    background: #111;
+
+    color: white;
 
 }
 
 
+/* ============================= */
+/* LEFT CONTENT                  */
+/* ============================= */
 
-.hero-buttons{
+.home-content {
 
-    margin-top:30px;
-
-    display:flex;
-
-    justify-content:center;
-
-    gap:20px;
+    max-width: 650px;
 
 }
 
+
+/* Badge */
+
+.home-badge {
+
+    display: inline-block;
+
+    padding: 8px 15px;
+
+    border-radius: 20px;
+
+    font-size: 14px;
+
+    font-weight: bold;
+
+    margin-bottom: 25px;
+
+}
+
+
+.app.light .home-badge {
+
+    background: #f1f1f1;
+
+    color: #333;
+
+}
+
+
+.app.dark .home-badge {
+
+    background: #222;
+
+    color: #ddd;
+
+}
+
+
+/* Heading */
+
+.home-content h1 {
+
+    font-size: 58px;
+
+    line-height: 1.1;
+
+    margin-bottom: 25px;
+
+}
+
+
+.app.light .home-content h1 {
+
+    color: #111;
+
+}
+
+
+.app.dark .home-content h1 {
+
+    color: white;
+
+}
+
+
+/* Highlight */
+
+.home-content h1 span {
+
+    color: #4ade80;
+
+}
+
+
+/* Description */
+
+.home-content p {
+
+    font-size: 19px;
+
+    line-height: 1.7;
+
+    max-width: 600px;
+
+    margin-bottom: 35px;
+
+}
+
+
+.app.light .home-content p {
+
+    color: #555;
+
+}
+
+
+.app.dark .home-content p {
+
+    color: #aaa;
+
+}
+
+
+/* ============================= */
+/* BUTTONS                       */
+/* ============================= */
+
+.home-buttons {
+
+    display: flex;
+
+    gap: 15px;
+
+    flex-wrap: wrap;
+
+}
 
 
 .primary-btn,
-.secondary-btn{
+.secondary-btn {
 
-    padding:14px 30px;
+    padding: 13px 22px;
 
-    border-radius:10px;
+    border-radius: 9px;
 
-    border:none;
+    text-decoration: none;
 
-    cursor:pointer;
+    font-weight: bold;
 
-    font-size:16px;
-
-}
-
-
-
-.primary-btn{
-
-    background:#111;
-
-    color:white;
+    transition: 0.2s;
 
 }
 
 
+.primary-btn {
 
-.secondary-btn{
+    background: #111;
 
-    background:#ddd;
-
-    color:black;
-
-}
-
-
-
-
-
-.features{
-
-    margin-top:50px;
-
-    text-align:center;
+    color: white;
 
 }
 
 
+.primary-btn:hover {
 
-.feature-grid{
+    transform: translateY(-2px);
 
-    display:grid;
-
-    grid-template-columns:repeat(3,1fr);
-
-    gap:25px;
-
-    margin-top:30px;
+    background: #333;
 
 }
 
 
+.secondary-btn {
 
-.feature-card{
+    border: 1px solid #ccc;
 
-    padding:30px;
+    color: #111;
 
-    border-radius:15px;
-
-    background:#222;
-
-    color:white;
+    background: white;
 
 }
 
 
+.secondary-btn:hover {
 
-.feature-card p{
-
-    color:#ccc;
-
-}
-
-
-
-
-
-.workflow{
-
-    margin-top:80px;
-
-    text-align:center;
+    transform: translateY(-2px);
 
 }
 
 
+.app.dark .primary-btn {
 
-.steps{
+    background: white;
 
-    display:flex;
-
-    justify-content:center;
-
-    gap:50px;
-
-    margin-top:40px;
+    color: #111;
 
 }
 
 
+.app.dark .primary-btn:hover {
 
-.steps span{
-
-    display:flex;
-
-    justify-content:center;
-
-    align-items:center;
-
-    margin:auto;
-
-    width:50px;
-
-    height:50px;
-
-    background:#111;
-
-    color:white;
-
-    border-radius:50%;
+    background: #ddd;
 
 }
 
 
+.app.dark .secondary-btn {
 
+    background: #222;
 
+    color: white;
 
-.cta{
-
-    margin-top:80px;
-
-    text-align:center;
-
-    padding:50px;
-
-    border-radius:20px;
-
-    background:#222;
-
-    color:white;
+    border-color: #444;
 
 }
 
 
+/* ============================= */
+/* PRODUCTIVITY CARD             */
+/* ============================= */
 
+.home-visual {
 
+    width: 430px;
 
-.app.light .feature-card,
-.app.light .cta{
+    display: flex;
 
-    background:#f5f5f5;
-
-    color:black;
+    justify-content: center;
 
 }
 
 
+.visual-card {
 
-@media(max-width:900px){
+    width: 100%;
+
+    padding: 30px;
+
+    border-radius: 20px;
+
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+
+    transition: 0.3s;
+
+}
 
 
-    .home{
+.app.light .visual-card {
 
-        padding:30px;
+    background: #f7f7f7;
+
+    border: 1px solid #ddd;
+
+}
+
+
+.app.dark .visual-card {
+
+    background: #1d1d1d;
+
+    border: 1px solid #333;
+
+}
+
+
+/* Card header */
+
+.visual-header {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    margin-bottom: 30px;
+
+}
+
+
+.visual-header span {
+
+    font-size: 25px;
+
+}
+
+
+.visual-header h3 {
+
+    margin: 0;
+
+    font-size: 20px;
+
+}
+
+
+/* Progress */
+
+.visual-progress {
+
+    width: 100%;
+
+    height: 14px;
+
+    background: #ddd;
+
+    border-radius: 20px;
+
+    overflow: hidden;
+
+    margin-bottom: 30px;
+
+}
+
+
+.app.dark .visual-progress {
+
+    background: #333;
+
+}
+
+
+.visual-progress-fill {
+
+    width: 85%;
+
+    height: 100%;
+
+    background: #4ade80;
+
+    border-radius: 20px;
+
+}
+
+
+/* Stats */
+
+.visual-stats {
+
+    display: grid;
+
+    grid-template-columns: repeat(3, 1fr);
+
+    gap: 15px;
+
+}
+
+
+.visual-stats div {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 5px;
+
+}
+
+
+.visual-stats strong {
+
+    font-size: 22px;
+
+}
+
+
+.visual-stats span {
+
+    font-size: 13px;
+
+}
+
+
+.app.light .visual-stats span {
+
+    color: #777;
+
+}
+
+
+.app.dark .visual-stats span {
+
+    color: #aaa;
+
+}
+
+
+/* ============================= */
+/* RESPONSIVE                    */
+/* ============================= */
+
+@media(max-width: 900px) {
+
+    .home-page {
+
+        flex-direction: column;
+
+        align-items: flex-start;
+
+        padding: 50px 30px;
 
     }
 
 
-    .feature-grid{
+    .home-content {
 
-        grid-template-columns:1fr;
+        max-width: 100%;
+
+    }
+
+
+    .home-content h1 {
+
+        font-size: 45px;
 
     }
 
 
-    .steps{
+    .home-visual {
 
-        flex-direction:column;
+        width: 100%;
+
+        max-width: 500px;
 
     }
 
+}
+
+
+@media(max-width: 600px) {
+
+    .home-page {
+
+        padding: 35px 20px;
+
+    }
+
+
+    .home-content h1 {
+
+        font-size: 38px;
+
+    }
+
+
+    .home-content p {
+
+        font-size: 16px;
+
+    }
+
+
+    .home-visual {
+
+        width: 100%;
+
+    }
+
+
+    .visual-stats {
+
+        grid-template-columns: 1fr;
+
+    }
 
 }

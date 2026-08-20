@@ -1,492 +1,561 @@
-.dashboard{
+/* ========================================= */
+/* DASHBOARD                                 */
+/* ========================================= */
 
-    width:100%;
+.dashboard {
 
-    padding:40px 70px;
+    width: 100%;
 
-    min-height:100vh;
+    min-height: 100vh;
 
-    box-sizing:border-box;
+    padding: 50px 70px;
 
-    overflow-x:hidden;
+    box-sizing: border-box;
 
-}
-
-
-/* Dashboard Heading */
-
-.dashboard h1{
-
-    margin-bottom:30px;
-
-    font-size:40px;
+    overflow-x: hidden;
 
 }
 
 
+/* ========================================= */
+/* WELCOME SECTION                           */
+/* ========================================= */
 
-/* Stats Cards */
+.welcome-section {
 
-.stats-container{
-
-    display:grid;
-
-    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-
-    gap:25px;
-
-    width:100%;
+    margin-bottom: 40px;
 
 }
 
 
+.welcome-section h1 {
 
+    font-size: 42px;
 
-
-/* Progress Section */
-
-.progress-section{
-
-    margin:30px 0;
+    margin: 0 0 10px;
 
 }
 
 
+.welcome-section p {
 
-.progress-header{
+    font-size: 18px;
 
-    width:100%;
-
-    display:flex;
-
-    justify-content:space-between;
-
-    align-items:center;
-
-    margin-bottom:20px;
+    margin: 0;
 
 }
 
 
+.app.light .welcome-section h1 {
 
-.progress-header span{
-
-    font-size:24px;
-
-    font-weight:bold;
+    color: #111;
 
 }
 
 
+.app.light .welcome-section p {
 
-.progress-bar{
-
-    width:100%;
-
-    height:18px;
-
-    background:#333;
-
-    border-radius:20px;
-
-    overflow:hidden;
+    color: #666;
 
 }
 
 
+.app.dark .welcome-section h1 {
 
-.progress-fill{
-
-    height:100%;
-
-    background:#4ade80;
-
-    border-radius:20px;
-
-    transition:width 0.5s ease;
+    color: white;
 
 }
 
 
+.app.dark .welcome-section p {
 
-.progress-section p{
-
-    margin-top:10px;
-
-    font-size:18px;
+    color: #aaa;
 
 }
 
 
+/* ========================================= */
+/* MAIN STATS                                */
+/* ========================================= */
 
+.stats-container {
 
+    display: grid;
 
-/* Task Container */
+    grid-template-columns:
+        repeat(auto-fit, minmax(220px, 1fr));
 
-.task-container{
+    gap: 22px;
 
-    display:grid;
-
-    grid-template-columns:repeat(2,1fr);
-
-    gap:25px;
-
-    margin-top:25px;
+    width: 100%;
 
 }
 
 
-@media(max-width:900px){
+/* ========================================= */
+/* ANALYTICS SUMMARY                         */
+/* ========================================= */
 
-    .task-container{
+.analytics-summary {
 
-        grid-template-columns:1fr;
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap: 20px;
+
+    margin: 30px 0;
+
+}
+
+
+/* ========================================= */
+/* PROGRESS SECTION                          */
+/* ========================================= */
+
+.progress-section {
+
+    margin: 35px 0;
+
+}
+
+
+.progress-header {
+
+    width: 100%;
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-bottom: 12px;
+
+}
+
+
+.progress-header span {
+
+    font-size: 18px;
+
+    font-weight: bold;
+
+}
+
+
+.progress-bar {
+
+    width: 100%;
+
+    height: 14px;
+
+    background: #333;
+
+    border-radius: 20px;
+
+    overflow: hidden;
+
+}
+
+
+.progress-fill {
+
+    height: 100%;
+
+    background: #4ade80;
+
+    border-radius: 20px;
+
+    transition: width 0.5s ease;
+
+}
+
+
+.progress-section p {
+
+    margin-top: 10px;
+
+    font-size: 14px;
+
+}
+
+
+/* ========================================= */
+/* ADD TASK                                  */
+/* ========================================= */
+
+.add-task {
+
+    display: flex;
+
+    gap: 12px;
+
+    margin: 30px 0 15px;
+
+    flex-wrap: wrap;
+
+}
+
+
+.add-task input {
+
+    padding: 12px 14px;
+
+    border-radius: 8px;
+
+    border: 1px solid #ccc;
+
+    outline: none;
+
+}
+
+
+.app.dark .add-task input {
+
+    background: #222;
+
+    color: white;
+
+    border-color: #444;
+
+}
+
+
+.app.light .add-task input {
+
+    background: white;
+
+    color: black;
+
+}
+
+
+/* Add task button */
+
+.add-task button {
+
+    padding: 12px 20px;
+
+    border: none;
+
+    border-radius: 8px;
+
+    cursor: pointer;
+
+    font-weight: bold;
+
+    transition: 0.2s;
+
+}
+
+
+.app.light .add-task button {
+
+    background: #111;
+
+    color: white;
+
+}
+
+
+.app.dark .add-task button {
+
+    background: white;
+
+    color: #111;
+
+}
+
+
+.add-task button:hover {
+
+    transform: translateY(-2px);
+
+}
+
+
+/* ========================================= */
+/* SEARCH                                    */
+/* ========================================= */
+
+.search-bar {
+
+    width: 320px;
+
+    max-width: 100%;
+
+    padding: 12px 14px;
+
+    border-radius: 8px;
+
+    border: 1px solid #ccc;
+
+    outline: none;
+
+    margin-bottom: 20px;
+
+}
+
+
+.app.dark .search-bar {
+
+    background: #222;
+
+    color: white;
+
+    border-color: #444;
+
+}
+
+
+.app.light .search-bar {
+
+    background: white;
+
+    color: black;
+
+}
+
+
+/* ========================================= */
+/* FILTERS                                   */
+/* ========================================= */
+
+.filters {
+
+    display: flex;
+
+    gap: 12px;
+
+    margin: 10px 0 30px;
+
+    flex-wrap: wrap;
+
+}
+
+
+.filters select {
+
+    padding: 10px 14px;
+
+    border-radius: 8px;
+
+    cursor: pointer;
+
+}
+
+
+.app.dark select {
+
+    background: #222;
+
+    color: white;
+
+    border: 1px solid #444;
+
+}
+
+
+.app.light select {
+
+    background: white;
+
+    color: black;
+
+    border: 1px solid #ccc;
+
+}
+
+
+/* ========================================= */
+/* TASK / ANALYTICS CONTAINER                */
+/* ========================================= */
+
+.analytics-container {
+
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 25px;
+
+    margin-top: 30px;
+
+}
+
+
+.task-container {
+
+    display: grid;
+
+    grid-template-columns: repeat(2, 1fr);
+
+    gap: 25px;
+
+    margin-top: 30px;
+
+}
+
+
+/* ========================================= */
+/* ACTIVITY                                  */
+/* ========================================= */
+
+.activity-card {
+
+    margin-top: 0;
+
+    margin-bottom: 30px;
+
+}
+
+
+/* ========================================= */
+/* ANIMATION                                 */
+/* ========================================= */
+
+@keyframes fadeIn {
+
+    from {
+
+        opacity: 0;
+
+        transform: translateY(15px);
+
+    }
+
+    to {
+
+        opacity: 1;
+
+        transform: translateY(0);
 
     }
 
 }
 
 
+.dashboard > * {
 
-
-
-/* Add Task */
-
-.add-task{
-
-    display:flex;
-
-    gap:10px;
-
-    margin:30px 0;
-
-    flex-wrap:wrap;
+    animation: fadeIn 0.45s ease;
 
 }
 
 
+/* ========================================= */
+/* RESPONSIVE - TABLET                      */
+/* ========================================= */
 
-.add-task input{
+@media(max-width: 1100px) {
 
-    padding:12px;
+    .dashboard {
 
-    border-radius:8px;
-
-    border:1px solid #444;
-
-    background:#222;
-
-    color:white;
-
-}
-
-
-
-.add-task button{
-
-    padding:12px 20px;
-
-    background:white;
-
-    color:black;
-
-    border:none;
-
-    border-radius:8px;
-
-    cursor:pointer;
-
-}
-
-
-
-
-
-/* Search */
-
-.search-bar{
-
-    width:300px;
-
-    padding:12px;
-
-    border-radius:8px;
-
-    border:1px solid #333;
-
-    margin-bottom:20px;
-
-}
-
-
-
-
-
-/* Filters */
-
-.filters{
-
-    display:flex;
-
-    gap:15px;
-
-    margin:25px 0;
-
-}
-
-
-
-.filters select{
-
-    padding:10px;
-
-    border-radius:8px;
-
-    cursor:pointer;
-
-}
-
-
-
-
-
-/* Dropdown */
-
-select{
-
-    background:#222;
-
-    color:white;
-
-    border:1px solid #444;
-
-}
-
-
-
-
-
-/* Activity */
-
-.activity-card{
-
-    margin-top:30px;
-
-    margin-bottom:30px;
-
-}
-
-
-
-
-
-/* Mobile */
-
-@media(max-width:900px){
-
-    .dashboard{
-
-        padding:30px;
+        padding: 40px;
 
     }
 
 
-    .stats-container{
+    .analytics-summary {
 
-        grid-template-columns:repeat(2,1fr);
+        grid-template-columns: repeat(2, 1fr);
+
+    }
+
+
+    .task-container {
+
+        grid-template-columns: 1fr;
 
     }
 
 }
 
 
+/* ========================================= */
+/* RESPONSIVE - MOBILE                      */
+/* ========================================= */
 
-@media(max-width:600px){
+@media(max-width: 700px) {
 
+    .dashboard {
 
-    .dashboard{
-
-        padding:20px;
-
-    }
-
-
-    .stats-container{
-
-        grid-template-columns:1fr;
+        padding: 30px 20px;
 
     }
 
 
-    .search-bar{
+    .welcome-section h1 {
 
-        width:100%;
-
-    }
-
-
-    .filters{
-
-        flex-direction:column;
-
-    }
-
-}
-
-.analytics-container{
-
-    display:grid;
-
-    grid-template-columns:1fr 1fr;
-
-    gap:30px;
-
-    margin-top:40px;
-
-}
-
-
-
-@media(max-width:900px){
-
-    .analytics-container{
-
-        grid-template-columns:1fr;
-
-    }
-
-}
-
-/* Welcome Section */
-
-.welcome-section{
-
-    margin-bottom:35px;
-
-}
-
-
-
-.welcome-section h1{
-
-    font-size:42px;
-
-    margin-bottom:10px;
-
-}
-
-
-
-.welcome-section p{
-
-    font-size:18px;
-
-    color:#888;
-
-}
-
-
-
-
-
-.app.dark .welcome-section h1{
-
-    color:white;
-
-}
-
-
-
-.app.dark .welcome-section p{
-
-    color:#aaa;
-
-}
-
-
-
-.app.light .welcome-section h1{
-
-    color:black;
-
-}
-
-
-
-.app.light .welcome-section p{
-
-    color:#555;
-
-}
-
-/* Dashboard Animation */
-
-@keyframes fadeIn{
-
-    from{
-
-        opacity:0;
-
-        transform:translateY(20px);
+        font-size: 34px;
 
     }
 
 
-    to{
+    .welcome-section p {
 
-        opacity:1;
-
-        transform:translateY(0);
+        font-size: 16px;
 
     }
 
-}
+
+    .stats-container {
+
+        grid-template-columns: 1fr;
+
+    }
 
 
+    .analytics-summary {
+
+        grid-template-columns: 1fr;
+
+    }
 
 
-.dashboard > *{
+    .analytics-container {
 
-    animation:fadeIn 0.5s ease;
+        grid-template-columns: 1fr;
 
-}
-.analytics-summary{
-
-
-display:grid;
+    }
 
 
-grid-template-columns:repeat(4,1fr);
+    .search-bar {
+
+        width: 100%;
+
+    }
 
 
-gap:20px;
+    .filters {
+
+        flex-direction: column;
+
+        align-items: stretch;
+
+    }
 
 
-margin:30px 0;
+    .filters select {
+
+        width: 100%;
+
+    }
 
 
-}
+    .add-task {
+
+        flex-direction: column;
+
+    }
 
 
+    .add-task input,
+    .add-task button {
 
-@media(max-width:1000px){
+        width: 100%;
 
-.analytics-summary{
-
-grid-template-columns:repeat(2,1fr);
-
-}
-
-}
-
-
-
-@media(max-width:600px){
-
-.analytics-summary{
-
-grid-template-columns:1fr;
-
-}
+    }
 
 }

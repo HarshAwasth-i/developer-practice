@@ -1,203 +1,125 @@
-import "../styles/Home.css";
 import { Link } from "react-router-dom";
+import "../styles/Home.css";
 
 
-function Home(){
+function Home() {
 
-    return(
+    return (
 
-        <div className="home">
+        <div className="home-page">
 
+            <div className="home-content">
 
-            {/* Hero Section */}
-
-            <section className="hero">
+                <div className="home-badge">
+                    ⚡ Personal Productivity Manager
+                </div>
 
 
                 <h1>
-                    Welcome to DevSync 💻
+                    Manage your tasks.
+                    <br />
+                    <span>Track your progress.</span>
                 </h1>
 
 
                 <p>
-                    Manage your tasks, track productivity,
-                    and organize your workflow in one place.
+                    TaskPulse helps you organize your tasks,
+                    monitor productivity, and stay focused on
+                    what matters most.
                 </p>
 
 
-                <div className="hero-buttons">
+                <div className="home-buttons">
 
-
-                    <Link to="/dashboard">
-
-                        <button className="primary-btn">
-                            Go To Dashboard
-                        </button>
-
+                    <Link
+                        to="/dashboard"
+                        className="primary-btn"
+                    >
+                        Go to Dashboard →
                     </Link>
 
 
-
-                    <Link to="/dashboard">
-
-                        <button className="secondary-btn">
-                            View Tasks
-                        </button>
-
+                    <Link
+                        to="/register"
+                        className="secondary-btn"
+                    >
+                        Get Started
                     </Link>
 
+                </div>
+
+            </div>
+
+
+            <div className="home-visual">
+
+                <div className="visual-card">
+
+                    <div className="visual-header">
+
+                        <span>
+                            📊
+                        </span>
+
+                        <h3>
+                            Productivity
+                        </h3>
+
+                    </div>
+
+
+                    <div className="visual-progress">
+
+                        <div
+                            className="visual-progress-fill"
+                        ></div>
+
+                    </div>
+
+
+                    <div className="visual-stats">
+
+                        <div>
+                            <strong>
+                                85%
+                            </strong>
+
+                            <span>
+                                Completion
+                            </span>
+                        </div>
+
+
+                        <div>
+                            <strong>
+                                12
+                            </strong>
+
+                            <span>
+                                Tasks
+                            </span>
+                        </div>
+
+
+                        <div>
+                            <strong>
+                                9
+                            </strong>
+
+                            <span>
+                                Completed
+                            </span>
+                        </div>
+
+                    </div>
 
                 </div>
 
-
-            </section>
-
-
-
-
-
-            {/* Features */}
-
-
-            <section className="features">
-
-
-                <h2>
-                    Everything you need
-                </h2>
-
-
-
-                <div className="feature-grid">
-
-
-                    <div className="feature-card">
-
-                        <h3>
-                            📋 Task Management
-                        </h3>
-
-                        <p>
-                            Create, update and organize
-                            your daily tasks easily.
-                        </p>
-
-                    </div>
-
-
-
-
-
-                    <div className="feature-card">
-
-                        <h3>
-                            📊 Analytics
-                        </h3>
-
-                        <p>
-                            Track completion rate,
-                            productivity and progress.
-                        </p>
-
-                    </div>
-
-
-
-
-
-                    <div className="feature-card">
-
-                        <h3>
-                            ⚡ Productivity
-                        </h3>
-
-                        <p>
-                            Improve your workflow with
-                            smart insights.
-                        </p>
-
-                    </div>
-
-
-                </div>
-
-
-            </section>
-
-
-
-
-
-            {/* Workflow Section */}
-
-
-            <section className="workflow">
-
-
-                <h2>
-                    How DevSync Works
-                </h2>
-
-
-                <div className="steps">
-
-
-                    <div>
-                        <span>1</span>
-                        <h3>Create Tasks</h3>
-                    </div>
-
-
-
-                    <div>
-                        <span>2</span>
-                        <h3>Track Progress</h3>
-                    </div>
-
-
-
-                    <div>
-                        <span>3</span>
-                        <h3>Complete Goals</h3>
-                    </div>
-
-
-                </div>
-
-
-            </section>
-
-
-
-
-
-            {/* CTA */}
-
-
-            <section className="cta">
-
-
-                <h2>
-                    Ready to boost productivity?
-                </h2>
-
-
-                <Link to="/dashboard">
-
-                    <button className="primary-btn">
-                        Start Now
-                    </button>
-
-                </Link>
-
-
-            </section>
-
-
+            </div>
 
         </div>
 
-    )
+    );
 
 }
 

@@ -1,85 +1,81 @@
-*{
-
-    margin:0;
-
-    padding:0;
-
-    box-sizing:border-box;
-
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
-
-
 
 html,
 body,
-#root{
+#root {
+    width: 100%;
+    min-height: 100%;
+    margin: 0;
+    padding: 0;
+}
 
-    min-height:100%;
-
+body {
+    font-family: Arial, sans-serif;
+    margin: 0 !important;
+    padding: 0 !important;
 }
 
 
+/* ========================= */
+/* APP                       */
+/* ========================= */
 
-body{
-
-    font-family:Arial, sans-serif;
-
+.app {
+    min-height: 100vh;
+    width: 100%;
+    transition: background 0.3s ease, color 0.3s ease;
 }
 
 
+/* ========================= */
+/* LIGHT MODE               */
+/* ========================= */
 
-.app{
-
-    min-height:100vh;
-
-    transition:0.3s;
-
+.app.light {
+    background: white;
+    color: black;
 }
 
 
+/* ========================= */
+/* DARK MODE                */
+/* ========================= */
 
-/* LIGHT MODE */
-
-.app.light{
-
-    background:white;
-
-    color:black;
-
+.app.dark {
+    background: #111;
+    color: white;
 }
 
 
-
-/* DARK MODE */
-
-.app.dark{
-
-    background:#111;
-
-    color:white;
-
-}
-
-
-
-/* all headings */
+/* ========================= */
+/* DARK MODE GLOBAL         */
+/* ========================= */
 
 .app.dark h1,
 .app.dark h2,
 .app.dark h3,
-.app.dark p{
-
-    color:white;
-
+.app.dark h4,
+.app.dark h5,
+.app.dark h6,
+.app.dark p {
+    color: white;
 }
 
 
+/* ========================= */
+/* LIGHT MODE GLOBAL        */
+/* ========================= */
 
 .app.light h1,
 .app.light h2,
 .app.light h3,
-.app.light p{
-
-    color:black;
-
+.app.light h4,
+.app.light h5,
+.app.light h6,
+.app.light p {
+    color: black;
 }

@@ -5,15 +5,11 @@ import { useAuth } from "../context/AuthContext";
 import ProfileDropdown from "./ProfileDropdown";
 
 
-function Navbar({darkMode,setDarkMode}){
+function Navbar({ darkMode, setDarkMode }) {
 
-
-    const [menuOpen,setMenuOpen] = useState(false);
-
+    const [menuOpen, setMenuOpen] = useState(false);
 
     const navigate = useNavigate();
-
-
 
     const {
         token,
@@ -21,11 +17,7 @@ function Navbar({darkMode,setDarkMode}){
     } = useAuth();
 
 
-
-
-
-
-    function handleLogout(){
+    function handleLogout() {
 
         logout();
 
@@ -34,58 +26,49 @@ function Navbar({darkMode,setDarkMode}){
     }
 
 
-
-
-
-
-
-    return(
-
+    return (
 
         <nav className="navbar">
 
 
+            {/* Logo */}
 
             <h2 className="logo">
-                ⚡ DevSync
+                ⚡ TaskPulse
             </h2>
 
 
 
+            {/* Mobile Menu */}
 
             <button
 
-            className="menu-btn"
+                className="menu-btn"
 
-            onClick={()=>setMenuOpen(!menuOpen)}
+                onClick={() => setMenuOpen(!menuOpen)}
 
             >
-
                 ☰
-
             </button>
 
 
 
+            <div
+                className={`nav-links ${menuOpen ? "open" : ""}`}
+            >
 
 
-
-
-
-            <div className={`nav-links ${menuOpen ? "open" : ""}`}>
-
-
-
+                {/* Home */}
 
                 <NavLink
 
-                to="/"
+                    to="/"
 
-                onClick={()=>setMenuOpen(false)}
+                    onClick={() => setMenuOpen(false)}
 
-                className={({isActive})=>
-                    isActive ? "active-link" : ""
-                }
+                    className={({ isActive }) =>
+                        isActive ? "active-link" : ""
+                    }
 
                 >
 
@@ -95,216 +78,110 @@ function Navbar({darkMode,setDarkMode}){
 
 
 
+                {/* Logged Out */}
 
-
-
-
-
-                {
-
-                    !token &&
-
+                {!token && (
 
                     <>
 
+                        <Link
+                            to="/login"
+                            onClick={() => setMenuOpen(false)}
+                        >
 
-                    <Link
+                            Login
 
-                    to="/login"
-
-                    onClick={()=>setMenuOpen(false)}
-
-                    >
-
-                        Login
-
-                    </Link>
+                        </Link>
 
 
+                        <Link
+                            to="/register"
+                            onClick={() => setMenuOpen(false)}
+                        >
 
+                            Register
 
-
-                    <Link
-
-                    to="/register"
-
-                    onClick={()=>setMenuOpen(false)}
-
-                    >
-
-                        Register
-
-                    </Link>
-
-
+                        </Link>
 
                     </>
 
-
-                }
-
+                )}
 
 
 
+                {/* Logged In */}
 
-
-
-
-
-                {
-
-                    token &&
-
+                {token && (
 
                     <>
 
+                        <NavLink
 
-                    <NavLink
+                            to="/dashboard"
 
-                    to="/dashboard"
+                            onClick={() => setMenuOpen(false)}
 
-                    onClick={()=>setMenuOpen(false)}
+                            className={({ isActive }) =>
+                                isActive ? "active-link" : ""
+                            }
 
-                    className={({isActive})=>
+                        >
 
-                        isActive ? "active-link" : ""
+                            Dashboard
 
-                    }
-
-                    >
-
-                        Dashboard
-
-                    </NavLink>
+                        </NavLink>
 
 
 
+                        <ProfileDropdown />
 
 
 
+                        <button
 
-                    <NavLink
+                            onClick={() => {
 
-                    to="/projects"
+                                setMenuOpen(false);
 
-                    onClick={()=>setMenuOpen(false)}
+                                handleLogout();
 
-                    className={({isActive})=>
+                            }}
 
-                        isActive ? "active-link" : ""
+                        >
 
-                    }
+                            Logout
 
-                    >
-
-                        Projects
-
-                    </NavLink>
-
-
-
-
-
-
-
-
-
-                    <ProfileDropdown/>
-
-
-
-
-
-
-
-
-
-                    <button
-
-
-                    onClick={()=>{
-
-
-                        setMenuOpen(false);
-
-                        handleLogout();
-
-
-                    }}
-
-                    >
-
-                        Logout
-
-                    </button>
-
-
-
-
+                        </button>
 
                     </>
 
-
-                }
-
+                )}
 
 
 
-
-
-
-
+                {/* Theme Toggle */}
 
                 <button
 
+                    className="theme-btn"
 
-                className="theme-btn"
-
-
-                onClick={()=>setDarkMode(!darkMode)}
-
+                    onClick={() => setDarkMode(!darkMode)}
 
                 >
 
-
-                {
-
-                    darkMode
-
-                    ?
-
-                    "☀️"
-
-                    :
-
-                    "🌙"
-
-                }
-
+                    {darkMode ? "☀️" : "🌙"}
 
                 </button>
-
-
-
-
-
 
 
             </div>
 
 
-
-
-
-
         </nav>
 
-
-    )
-
+    );
 
 }
-
 
 
 export default Navbar;
