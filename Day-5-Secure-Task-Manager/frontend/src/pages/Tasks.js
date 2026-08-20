@@ -1,26 +1,126 @@
 import { useEffect, useState } from "react";
+import API from "../api/axios";
 import "../styles/Tasks.css";
+
 
 function Tasks() {
 
     const [tasks, setTasks] = useState([]);
 
+    const [loading, setLoading] = useState(true);
+
+
+    // Search and filter states
+
+    const [search, setSearch] = useState("");
+
+    const [statusFilter, setStatusFilter] = useState("all");
+
+    const [priorityFilter, setPriorityFilter] = useState("all");
+
+
+    // Fetch tasks
+
+    const fetchTasks = async () => {
+
+        try {
+
+            setLoading(true);
+
+            const res = await API.get("/tasks");
+
+            setTasks(res.data.tasks);
+
+        }
+        catch (err) {
+
+            console.log("Error fetching tasks:", err);
+
+        }
+        finally {
+
+            setLoading(false);
+
+        }
+
+    };
+
+
     useEffect(() => {
 
-        // We will connect the backend here next
-        setTasks([]);
+        fetchTasks();
 
     }, []);
+
+
+    // Filter tasks
+
+    const filteredTasks = tasks.filter((task) => {
+
+        const searchText = search.toLowerCase();
+
+
+        const matchesSearch =
+
+            task.title
+                ?.toLowerCase()
+                .includes(searchText)
+
+            ||
+
+            task.description
+                ?.toLowerCase()
+                .includes(searchText);
+
+
+
+        const matchesStatus =
+
+            statusFilter === "all"
+
+            ||
+
+            task.status === statusFilter;
+
+
+
+        const matchesPriority =
+
+            priorityFilter === "all"
+
+            ||
+
+            task.priority?.toLowerCase() === priorityFilter;
+
+
+
+        return (
+
+            matchesSearch &&
+
+            matchesStatus &&
+
+            matchesPriority
+
+        );
+
+    });
+
 
     return (
 
         <div className="tasks-page">
 
+
+            {/* HEADER */}
+
             <div className="tasks-header">
 
                 <div>
 
-                    <h1>My Tasks</h1>
+                    <h1>
+                        My Tasks
+                    </h1>
 
                     <p>
                         Manage your tasks and stay productive.
@@ -28,21 +128,52 @@ function Tasks() {
 
                 </div>
 
+
                 <button className="add-task-btn">
+
                     + Add Task
+
                 </button>
 
             </div>
 
 
+
+            {/* TOOLBAR */}
+
             <div className="tasks-toolbar">
 
+
+                {/* SEARCH */}
+
                 <input
+
                     type="text"
+
                     placeholder="Search tasks..."
+
+                    value={search}
+
+                    onChange={(e) =>
+                        setSearch(e.target.value)
+                    }
+
                 />
 
-                <select>
+
+
+                {/* STATUS FILTER */}
+
+                <select
+
+                    value={statusFilter}
+
+                    onChange={(e) =>
+                        setStatusFilter(e.target.value)
+                    }
+
+                >
+
                     <option value="all">
                         All Tasks
                     </option>
@@ -54,10 +185,22 @@ function Tasks() {
                     <option value="completed">
                         Completed
                     </option>
+
                 </select>
 
 
-                <select>
+
+                {/* PRIORITY FILTER */}
+
+                <select
+
+                    value={priorityFilter}
+
+                    onChange={(e) =>
+                        setPriorityFilter(e.target.value)
+                    }
+
+                >
 
                     <option value="all">
                         All Priorities
@@ -80,44 +223,69 @@ function Tasks() {
             </div>
 
 
+
+            {/* TASK LIST */}
+
             <div className="tasks-list">
 
-                {tasks.length === 0 ? (
+
+                {loading ? (
 
                     <div className="empty-tasks">
 
                         <div className="empty-icon">
-                            📋
+                            ⏳
                         </div>
 
-                        <h2>No tasks found</h2>
+                        <h2>
+                            Loading tasks...
+                        </h2>
+
+                    </div>
+
+                ) : filteredTasks.length === 0 ? (
+
+                    <div className="empty-tasks">
+
+                        <div className="empty-icon">
+                            🔎
+                        </div>
+
+                        <h2>
+                            No tasks found
+                        </h2>
 
                         <p>
-                            Create your first task to get started.
+                            Try changing your search or filters.
                         </p>
-
-                        <button className="add-task-btn">
-                            + Create Task
-                        </button>
 
                     </div>
 
                 ) : (
 
-                    tasks.map((task) => (
+                    filteredTasks.map((task) => (
 
                         <div
+
                             className="task-card"
+
                             key={task._id}
+
                         >
 
                             <h3>
                                 {task.title}
                             </h3>
 
+
                             <p>
                                 {task.description}
                             </p>
+
+
+                            <span>
+                                {task.priority}
+                            </span>
 
                         </div>
 
@@ -127,9 +295,12 @@ function Tasks() {
 
             </div>
 
+
         </div>
 
     );
+
 }
+
 
 export default Tasks;
