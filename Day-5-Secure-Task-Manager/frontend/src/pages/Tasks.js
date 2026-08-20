@@ -19,6 +19,17 @@ function Tasks() {
     const [priorityFilter, setPriorityFilter] = useState("all");
 
 
+    // Add task form states
+
+    const [showForm, setShowForm] = useState(false);
+
+    const [title, setTitle] = useState("");
+
+    const [description, setDescription] = useState("");
+
+    const [priority, setPriority] = useState("medium");
+
+
     // Fetch tasks
 
     const fetchTasks = async () => {
@@ -53,6 +64,91 @@ function Tasks() {
     }, []);
 
 
+    // Create task
+
+    const handleCreateTask = async (e) => {
+
+        e.preventDefault();
+
+
+        if (!title.trim()) {
+
+            alert("Task title is required");
+
+            return;
+
+        }
+
+
+        try {
+
+            await API.post("/tasks", {
+
+                title: title,
+
+                description: description,
+
+                priority: priority
+
+            });
+
+
+            // Clear form
+
+            setTitle("");
+
+            setDescription("");
+
+            setPriority("medium");
+
+
+            // Close form
+
+            setShowForm(false);
+
+
+            // Fetch updated tasks
+
+            fetchTasks();
+
+        }
+        catch (err) {
+
+            console.log(
+                "Error creating task:",
+                err
+            );
+
+            alert("Failed to create task");
+
+        }
+
+    };
+const toggleStatus = async (task) => {
+
+    try {
+
+        await API.put(
+            `/tasks/${task._id}`,
+            {
+                completed: !task.completed
+            }
+        );
+
+        fetchTasks();
+
+    }
+    catch (err) {
+
+        console.log(
+            "Error updating task:",
+            err
+        );
+
+    }
+
+};
+
     // Filter tasks
 
     const filteredTasks = tasks.filter((task) => {
@@ -73,7 +169,6 @@ function Tasks() {
                 .includes(searchText);
 
 
-
         const matchesStatus =
 
             statusFilter === "all"
@@ -83,15 +178,14 @@ function Tasks() {
             task.status === statusFilter;
 
 
-
         const matchesPriority =
 
             priorityFilter === "all"
 
             ||
 
-            task.priority?.toLowerCase() === priorityFilter;
-
+            task.priority
+                ?.toLowerCase() === priorityFilter;
 
 
         return (
@@ -129,7 +223,13 @@ function Tasks() {
                 </div>
 
 
-                <button className="add-task-btn">
+                <button
+
+                    className="add-task-btn"
+
+                    onClick={() => setShowForm(true)}
+
+                >
 
                     + Add Task
 
@@ -224,6 +324,125 @@ function Tasks() {
 
 
 
+            {/* CREATE TASK FORM */}
+
+            {showForm && (
+
+                <form
+
+                    className="task-form"
+
+                    onSubmit={handleCreateTask}
+
+                >
+
+                    <h2>
+                        Create New Task
+                    </h2>
+
+
+                    <input
+
+                        type="text"
+
+                        placeholder="Task title"
+
+                        value={title}
+
+                        onChange={(e) =>
+                            setTitle(e.target.value)
+                        }
+
+                    />
+
+
+                    <textarea
+
+                        placeholder="Task description"
+
+                        value={description}
+
+                        onChange={(e) =>
+                            setDescription(e.target.value)
+                        }
+
+                    />
+
+
+                    <select
+
+                        value={priority}
+
+                        onChange={(e) =>
+                            setPriority(e.target.value)
+                        }
+
+                    >
+
+                        <option value="low">
+                            Low
+                        </option>
+
+                        <option value="medium">
+                            Medium
+                        </option>
+
+                        <option value="high">
+                            High
+                        </option>
+
+                    </select>
+
+
+                    <div className="task-form-buttons">
+
+
+                        <button
+
+                            type="submit"
+
+                            className="add-task-btn"
+
+                        >
+
+                            Create Task
+
+                        </button>
+
+
+                        <button
+
+                            type="button"
+
+                            className="cancel-btn"
+
+                            onClick={() => {
+
+                                setShowForm(false);
+
+                                setTitle("");
+
+                                setDescription("");
+
+                                setPriority("medium");
+
+                            }}
+
+                        >
+
+                            Cancel
+
+                        </button>
+
+
+                    </div>
+
+                </form>
+
+            )}
+
+
+
             {/* TASK LIST */}
 
             <div className="tasks-list">
@@ -266,28 +485,77 @@ function Tasks() {
                     filteredTasks.map((task) => (
 
                         <div
+    className={`task-card ${
+        task.completed ? "completed-card" : ""
+    }`}
+    key={task._id}
+>
 
-                            className="task-card"
+    <div>
 
-                            key={task._id}
-
-                        >
-
-                            <h3>
-                                {task.title}
-                            </h3>
-
-
-                            <p>
-                                {task.description}
-                            </p>
+        <h3
+            className={
+                task.completed
+                    ? "completed-title"
+                    : ""
+            }
+        >
+            {task.title}
+        </h3>
 
 
-                            <span>
-                                {task.priority}
-                            </span>
+        <p>
+            {task.description}
+        </p>
 
-                        </div>
+
+        <div className="task-card-meta">
+
+            <span
+                className={`priority-badge ${
+                    task.priority?.toLowerCase()
+                }`}
+            >
+                {task.priority}
+            </span>
+
+
+            <span
+                className={
+                    task.completed
+                        ? "status-badge completed"
+                        : "status-badge pending"
+                }
+            >
+
+                {task.completed
+                    ? "Completed"
+                    : "Pending"
+                }
+
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <div className="task-card-actions">
+
+        <button
+            onClick={() => toggleStatus(task)}
+        >
+
+            {task.completed
+                ? "↩ Mark Pending"
+                : "✓ Complete"
+            }
+
+        </button>
+
+    </div>
+
+</div>
 
                     ))
 
