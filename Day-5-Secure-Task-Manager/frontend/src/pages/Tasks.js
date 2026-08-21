@@ -23,6 +23,10 @@ function Tasks() {
     const [description, setDescription] = useState("");
     const [priority, setPriority] = useState("medium");
 
+    const [projects,setProjects] = useState([]);
+
+const [selectedProject,setSelectedProject] = useState("");
+
 
     // Fetch tasks
     const fetchTasks = async () => {
@@ -50,12 +54,32 @@ function Tasks() {
     };
 
 
-    useEffect(() => {
+ useEffect(()=>{
 
-        fetchTasks();
+    fetchTasks();
 
-    }, []);
+    fetchProjects();
 
+},[]);
+const fetchProjects = async()=>{
+
+    try{
+
+        const res = await API.get("/projects");
+
+        setProjects(res.data.projects);
+
+    }
+    catch(err){
+
+        console.log(
+            "Error fetching projects:",
+            err
+        );
+
+    }
+
+};
 
     // Create task
     const handleCreateTask = async (e) => {
@@ -72,13 +96,17 @@ function Tasks() {
 
         try {
 
-            await API.post("/tasks", {
+      await API.post("/tasks", {
 
-                title: title,
-                description: description,
-                priority: priority
+    title:title,
 
-            });
+    description:description,
+
+    priority:priority,
+
+    project:selectedProject || null
+
+});
 
 
             // Clear form
@@ -305,7 +333,40 @@ function Tasks() {
 
             </div>
 
+<select
 
+value={selectedProject}
+
+onChange={(e)=>setSelectedProject(e.target.value)}
+
+>
+
+<option value="">
+No Project
+</option>
+
+
+{
+
+projects.map((project)=>(
+
+<option
+
+key={project._id}
+
+value={project._id}
+
+>
+
+{project.name}
+
+</option>
+
+))
+
+}
+
+</select>
             {/* CREATE TASK FORM */}
 
             {showForm && (

@@ -1,7 +1,72 @@
+import { useEffect, useState } from "react";
+
+import API from "../api/axios";
+
 import "../styles/ProjectCard.css";
 
 
 function ProjectCard({ project }) {
+
+
+    const [tasks, setTasks] = useState([]);
+
+
+    const fetchProjectTasks = async()=>{
+
+        try{
+
+            const res = await API.get(
+                `/tasks/project/${project._id}`
+            );
+
+
+            setTasks(res.data.tasks);
+
+
+        }
+        catch(err){
+
+            console.log(
+                "Error fetching project tasks:",
+                err
+            );
+
+        }
+
+    };
+
+
+
+    useEffect(()=>{
+
+
+        fetchProjectTasks();
+
+
+    },[project._id]);
+
+
+
+
+    const totalTasks = tasks.length;
+
+
+    const completedTasks = tasks.filter(
+        task => task.completed
+    ).length;
+
+
+
+    const progress = totalTasks === 0
+        ?
+        0
+        :
+        Math.round(
+            (completedTasks / totalTasks) * 100
+        );
+
+
+
 
 
     return (
@@ -9,28 +74,34 @@ function ProjectCard({ project }) {
         <div className="project-card">
 
 
-            {/* PROJECT HEADER */}
+            {/* HEADER */}
 
             <div className="project-card-header">
+
 
                 <h2>
                     📁 {project.name}
                 </h2>
 
+
                 <span
                     className={`project-status ${
                         project.status
                             ?.toLowerCase()
-                            .replace(" ", "-")
+                            .replace(" ","-")
                     }`}
                 >
+
                     {project.status}
+
                 </span>
+
 
             </div>
 
 
-            {/* DESCRIPTION */}
+
+
 
             <p className="project-description">
 
@@ -40,92 +111,128 @@ function ProjectCard({ project }) {
             </p>
 
 
-            {/* PROJECT INFO */}
+
+
+
+            {/* PROJECT STATS */}
 
             <div className="project-info">
 
 
                 <div className="project-info-item">
 
-                    <span className="project-info-label">
-                        Status
+                    <span>
+                        Total Tasks
                     </span>
 
+
                     <strong>
-                        {project.status}
+                        {totalTasks}
                     </strong>
 
+
                 </div>
+
+
+
 
 
                 <div className="project-info-item">
 
-                    <span className="project-info-label">
-                        Created
+
+                    <span>
+                        Completed
                     </span>
 
+
                     <strong>
-
-                        {project.createdAt
-                            ? new Date(
-                                project.createdAt
-                              ).toLocaleDateString()
-                            : "Unknown"}
-
+                        {completedTasks}
                     </strong>
 
+
                 </div>
+
 
 
             </div>
 
 
-            {/* PROJECT PROGRESS PLACEHOLDER */}
+
+
+
+            {/* PROGRESS */}
+
 
             <div className="project-progress">
 
 
                 <div className="project-progress-header">
 
+
                     <span>
                         Project Progress
                     </span>
 
+
                     <span>
-                        {project.status === "Completed"
-                            ? "100%"
-                            : project.status === "In Progress"
-                            ? "50%"
-                            : "0%"
-                        }
+                        {progress}%
                     </span>
 
+
                 </div>
+
+
 
 
                 <div className="project-progress-bar">
 
+
                     <div
+
                         className="project-progress-fill"
+
                         style={{
-                            width:
-                                project.status === "Completed"
-                                    ? "100%"
-                                    : project.status === "In Progress"
-                                    ? "50%"
-                                    : "0%"
+                            width:`${progress}%`
                         }}
+
                     />
 
+
                 </div>
+
 
 
             </div>
 
 
+
+
+
+            <p className="project-date">
+
+                Created:
+
+                {" "}
+
+                {
+                    project.createdAt
+                    ?
+                    new Date(
+                        project.createdAt
+                    ).toLocaleDateString()
+                    :
+                    "Unknown"
+                }
+
+
+            </p>
+
+
+
         </div>
 
     );
+
 
 }
 
