@@ -444,7 +444,7 @@ value={project._id}
 
                             }}
                         >
-                            Cancel
+                            Cancel  
                         </button>
 
                     </div>
