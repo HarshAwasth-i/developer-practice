@@ -21,7 +21,7 @@ function Tasks() {
     const [showForm, setShowForm] = useState(false);
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
-    const [priority, setPriority] = useState("medium");
+const [priority,setPriority] = useState("Medium");
 
     const [projects,setProjects] = useState([]);
 
@@ -112,7 +112,7 @@ const fetchProjects = async()=>{
             // Clear form
             setTitle("");
             setDescription("");
-            setPriority("medium");
+            setPriority("Medium");
 
             // Close form
             setShowForm(false);
@@ -407,17 +407,17 @@ value={project._id}
                         }
                     >
 
-                        <option value="low">
-                            Low
-                        </option>
+                     <option value="Low">
+    Low
+</option>
 
-                        <option value="medium">
-                            Medium
-                        </option>
+<option value="Medium">
+    Medium
+</option>
 
-                        <option value="high">
-                            High
-                        </option>
+<option value="High">
+    High
+</option>
 
                     </select>
 
@@ -440,7 +440,7 @@ value={project._id}
                                 setShowForm(false);
                                 setTitle("");
                                 setDescription("");
-                                setPriority("medium");
+                                setPriority("Medium");
 
                             }}
                         >

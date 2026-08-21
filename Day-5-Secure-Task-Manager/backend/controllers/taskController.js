@@ -52,15 +52,17 @@ exports.createTask = async (req, res) => {
 
     } catch (error) {
 
-        res.status(500).json({
+    console.log("CREATE TASK ERROR:", error);
 
-            success: false,
+    res.status(500).json({
 
-            message: error.message
+        success:false,
 
-        });
+        message:error.message
 
-    }
+    });
+
+}
 
 };
 
