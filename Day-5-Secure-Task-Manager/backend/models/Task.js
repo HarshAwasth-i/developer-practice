@@ -32,7 +32,7 @@ const taskSchema = new mongoose.Schema({
     project:{
         type:mongoose.Schema.Types.ObjectId,
         ref:"Project",
-        default:null
+        default:null 
     },
 
 
