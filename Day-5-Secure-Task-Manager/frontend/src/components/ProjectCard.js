@@ -14,7 +14,6 @@ function ProjectCard({ project }) {
     const fetchProjectTasks = async()=>{
 
         try{
-
             const res = await API.get(
                 `/tasks/project/${project._id}`
             );

@@ -215,10 +215,6 @@ function TaskCard({
 
             </div>
 
-
-
-
-
         </div>
 
 
@@ -226,6 +222,4 @@ function TaskCard({
 
 
 }
-
-
 export default TaskCard;
