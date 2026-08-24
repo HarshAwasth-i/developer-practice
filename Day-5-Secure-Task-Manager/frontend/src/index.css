@@ -79,3 +79,32 @@ body {
 .app.light p {
     color: black;
 }
+:root{
+
+    --bg-color:#ffffff;
+
+    --card-color:#ffffff;
+
+    --text-color:#111111;
+
+    --secondary-text:#666;
+
+    --border-color:#ddd;
+
+}
+
+
+
+.dark{
+
+    --bg-color:#111111;
+
+    --card-color:#222222;
+
+    --text-color:#ffffff;
+
+    --secondary-text:#aaaaaa;
+
+    --border-color:#333333;
+
+}
