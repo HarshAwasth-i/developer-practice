@@ -1,0 +1,155 @@
+.project-details{
+
+    padding:50px;
+
+}
+
+
+.project-details h1{
+
+    font-size:40px;
+
+}
+
+
+
+.project-progress-box{
+
+    margin:30px 0;
+
+    padding:20px;
+
+    background:#222;
+
+    border-radius:15px;
+
+}
+
+
+
+.details-tasks{
+
+    display:grid;
+
+    grid-template-columns:repeat(2,1fr);
+
+    gap:20px;
+
+}
+
+
+
+.detail-task-card{
+
+    background:#222;
+
+    padding:25px;
+
+    border-radius:15px;
+
+}
+
+
+
+.detail-task-card span{
+
+    color:#4ade80;
+
+}
+
+
+
+@media(max-width:800px){
+
+.details-tasks{
+
+    grid-template-columns:1fr;
+
+}
+
+}
+
+.tasks-header{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+}
+
+
+.tasks-header button{
+
+    padding:12px 20px;
+
+    border:none;
+
+    border-radius:10px;
+
+    cursor:pointer;
+
+    background:#4ade80;
+
+    color:black;
+
+    font-weight:bold;
+
+}
+
+
+
+.project-task-form{
+
+    margin:20px 0;
+
+    padding:25px;
+
+    background:#222;
+
+    border-radius:15px;
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:15px;
+
+}
+
+
+
+.project-task-form input,
+.project-task-form textarea,
+.project-task-form select{
+
+    padding:12px;
+
+    border-radius:8px;
+
+    border:1px solid #444;
+
+    background:#111;
+
+    color:white;
+
+}
+
+
+
+.project-task-form button{
+
+    padding:12px;
+
+    border:none;
+
+    border-radius:8px;
+
+    background:#4ade80;
+
+    cursor:pointer;
+
+    font-weight:bold;
+
+}

@@ -1,76 +1,18 @@
-import { useEffect, useState } from "react";
-
-import API from "../api/axios";
-
 import "../styles/ProjectCard.css";
-
+import {useNavigate} from "react-router-dom";
 
 function ProjectCard({ project }) {
-
-
-    const [tasks, setTasks] = useState([]);
-
-
-    const fetchProjectTasks = async()=>{
-
-        try{
-            const res = await API.get(
-                `/tasks/project/${project._id}`
-            );
-
-
-            setTasks(res.data.tasks);
-
-
-        }
-        catch(err){
-
-            console.log(
-                "Error fetching project tasks:",
-                err
-            );
-
-        }
-
-    };
-
-
-
-    useEffect(()=>{
-
-
-        fetchProjectTasks();
-
-
-    },[project._id]);
-
-
-
-
-    const totalTasks = tasks.length;
-
-
-    const completedTasks = tasks.filter(
-        task => task.completed
-    ).length;
-
-
-
-    const progress = totalTasks === 0
-        ?
-        0
-        :
-        Math.round(
-            (completedTasks / totalTasks) * 100
-        );
-
-
-
-
+const navigate = useNavigate();
 
     return (
 
-        <div className="project-card">
+        <div
+
+className="project-card"
+
+onClick={()=>navigate(`/projects/${project._id}`)}
+
+>
 
 
             {/* HEADER */}
@@ -81,6 +23,7 @@ function ProjectCard({ project }) {
                 <h2>
                     📁 {project.name}
                 </h2>
+
 
 
                 <span
@@ -102,6 +45,8 @@ function ProjectCard({ project }) {
 
 
 
+            {/* DESCRIPTION */}
+
             <p className="project-description">
 
                 {project.description ||
@@ -120,13 +65,14 @@ function ProjectCard({ project }) {
 
                 <div className="project-info-item">
 
+
                     <span>
                         Total Tasks
                     </span>
 
 
                     <strong>
-                        {totalTasks}
+                        {project.totalTasks || 0}
                     </strong>
 
 
@@ -145,11 +91,12 @@ function ProjectCard({ project }) {
 
 
                     <strong>
-                        {completedTasks}
+                        {project.completedTasks || 0}
                     </strong>
 
 
                 </div>
+
 
 
 
@@ -174,11 +121,12 @@ function ProjectCard({ project }) {
 
 
                     <span>
-                        {progress}%
+                        {project.progress || 0}%
                     </span>
 
 
                 </div>
+
 
 
 
@@ -191,7 +139,7 @@ function ProjectCard({ project }) {
                         className="project-progress-fill"
 
                         style={{
-                            width:`${progress}%`
+                            width:`${project.progress || 0}%`
                         }}
 
                     />
@@ -207,19 +155,28 @@ function ProjectCard({ project }) {
 
 
 
+            {/* CREATED DATE */}
+
+
             <p className="project-date">
+
 
                 Created:
 
                 {" "}
 
+
                 {
                     project.createdAt
+
                     ?
+
                     new Date(
                         project.createdAt
                     ).toLocaleDateString()
+
                     :
+
                     "Unknown"
                 }
 
@@ -234,5 +191,6 @@ function ProjectCard({ project }) {
 
 
 }
+
 
 export default ProjectCard;

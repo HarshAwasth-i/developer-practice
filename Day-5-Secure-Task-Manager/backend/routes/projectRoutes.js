@@ -5,7 +5,8 @@ const router = express.Router();
 
 const {
     createProject,
-    getProjects
+    getProjects,
+    getProjectById
 } = require("../controllers/projectController");
 
 
@@ -31,6 +32,6 @@ router.get(
     getProjects
 );
 
-
+router.get("/:id", authMiddleware, getProjectById);
 
 module.exports = router;

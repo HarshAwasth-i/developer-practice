@@ -129,3 +129,112 @@ exports.getProjects = async(req,res)=>{
     }
 
 };
+
+// Get Single Project
+
+exports.getProjectById = async(req,res)=>{
+
+
+    try{
+
+
+        const project = await Project.findOne({
+
+            _id:req.params.id,
+
+            user:req.user.id
+
+        });
+
+
+
+        if(!project){
+
+
+            return res.status(404).json({
+
+                success:false,
+
+                message:"Project not found"
+
+            });
+
+
+        }
+
+
+
+
+        const tasks = await Task.find({
+
+            project:project._id
+
+        });
+
+
+
+        const completedTasks = tasks.filter(
+
+            task=>task.completed
+
+        ).length;
+
+
+
+
+        const progress = tasks.length === 0
+
+            ?
+
+            0
+
+            :
+
+            Math.round(
+
+                (completedTasks / tasks.length) * 100
+
+            );
+
+
+
+
+
+        res.json({
+
+            success:true,
+
+            project:{
+
+                ...project.toObject(),
+
+                totalTasks:tasks.length,
+
+                completedTasks,
+
+                progress
+
+            }
+
+        });
+
+
+
+    }
+
+    catch(error){
+
+
+        res.status(500).json({
+
+            success:false,
+
+            message:error.message
+
+        });
+
+
+    }
+
+
+};
