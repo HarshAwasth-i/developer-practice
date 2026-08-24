@@ -11,23 +11,24 @@ import "../styles/ProjectDetails.css";
 function ProjectDetails(){
 
 
-    const {id}=useParams();
+    const { id } = useParams();
 
 
 
-    const [project,setProject]=useState(null);
+    const [project,setProject] = useState(null);
 
-    const [tasks,setTasks]=useState([]);
+    const [tasks,setTasks] = useState([]);
 
 
 
-    const [showForm,setShowForm]=useState(false);
+    const [showForm,setShowForm] = useState(false);
 
-    const [title,setTitle]=useState("");
 
-    const [description,setDescription]=useState("");
+    const [title,setTitle] = useState("");
 
-    const [priority,setPriority]=useState("Medium");
+    const [description,setDescription] = useState("");
+
+    const [priority,setPriority] = useState("Medium");
 
 
 
@@ -42,16 +43,12 @@ function ProjectDetails(){
 
 
             const res = await API.get(
-
                 `/projects/${id}`
-
             );
 
 
             setProject(
-
                 res.data.project
-
             );
 
 
@@ -75,7 +72,8 @@ function ProjectDetails(){
 
 
 
-    // Fetch Project Tasks
+
+    // Fetch Tasks
 
     const fetchTasks = async()=>{
 
@@ -84,16 +82,12 @@ function ProjectDetails(){
 
 
             const res = await API.get(
-
                 `/tasks/project/${id}`
-
             );
 
 
             setTasks(
-
                 res.data.tasks
-
             );
 
 
@@ -117,6 +111,8 @@ function ProjectDetails(){
 
 
 
+
+
     // Create Task
 
     const createTask = async()=>{
@@ -124,7 +120,9 @@ function ProjectDetails(){
 
         if(!title.trim()){
 
-            alert("Task title required");
+            alert(
+                "Task title required"
+            );
 
             return;
 
@@ -135,20 +133,23 @@ function ProjectDetails(){
         try{
 
 
-            await API.post("/tasks",{
+            await API.post(
 
+                "/tasks",
 
-                title,
+                {
 
-                description,
+                    title,
 
-                priority,
+                    description,
 
-                project:id
+                    priority,
 
+                    project:id
 
-            });
+                }
 
+            );
 
 
 
@@ -164,6 +165,9 @@ function ProjectDetails(){
 
 
             fetchTasks();
+
+            fetchProject();
+
 
 
         }
@@ -192,6 +196,63 @@ function ProjectDetails(){
 
 
 
+
+
+    // Update Task Status
+
+    const updateTaskStatus = async(taskId,status)=>{
+
+
+        try{
+
+
+            await API.put(
+
+                `/tasks/${taskId}`,
+
+                {
+
+                    status
+
+                }
+
+            );
+
+
+
+            fetchTasks();
+
+            fetchProject();
+
+
+
+        }
+
+        catch(err){
+
+
+            console.log(
+
+                "Error updating task:",
+
+                err
+
+            );
+
+
+        }
+
+
+    };
+
+
+
+
+
+
+
+
+
     useEffect(()=>{
 
 
@@ -201,6 +262,7 @@ function ProjectDetails(){
 
 
     },[]);
+
 
 
 
@@ -226,7 +288,6 @@ function ProjectDetails(){
     return(
 
 
-
         <div className="project-details">
 
 
@@ -238,6 +299,7 @@ function ProjectDetails(){
                 📁 {project.name}
 
             </h1>
+
 
 
 
@@ -265,6 +327,8 @@ function ProjectDetails(){
 
 
             </div>
+
+
 
 
 
@@ -303,6 +367,8 @@ function ProjectDetails(){
 
 
 
+
+
             {
                 showForm && (
 
@@ -318,7 +384,9 @@ function ProjectDetails(){
                         value={title}
 
                         onChange={(e)=>
+
                             setTitle(e.target.value)
+
                         }
 
                         />
@@ -334,7 +402,9 @@ function ProjectDetails(){
                         value={description}
 
                         onChange={(e)=>
+
                             setDescription(e.target.value)
+
                         }
 
                         />
@@ -348,36 +418,30 @@ function ProjectDetails(){
                         value={priority}
 
                         onChange={(e)=>
+
                             setPriority(e.target.value)
+
                         }
 
                         >
 
 
                             <option value="Low">
-
                                 Low
-
                             </option>
 
 
                             <option value="Medium">
-
                                 Medium
-
                             </option>
 
 
                             <option value="High">
-
                                 High
-
                             </option>
 
 
-
                         </select>
-
 
 
 
@@ -392,7 +456,6 @@ function ProjectDetails(){
                             Create Task
 
                         </button>
-
 
 
 
@@ -411,6 +474,8 @@ function ProjectDetails(){
 
 
             <div className="details-tasks">
+
+
 
 
 
@@ -447,11 +512,14 @@ function ProjectDetails(){
 
 
 
+
                         <h3>
 
                             {task.title}
 
                         </h3>
+
+
 
 
 
@@ -465,11 +533,145 @@ function ProjectDetails(){
 
 
 
-                        <span>
 
-                            {task.priority}
 
-                        </span>
+
+                        <p className="task-priority">
+
+                            Priority:
+
+
+                            <span
+
+                            className={
+                                `priority-${
+                                    task.priority
+                                    ?.toLowerCase()
+                                }`
+                            }
+
+                            >
+
+                                {task.priority}
+
+                            </span>
+
+
+                        </p>
+
+
+
+
+
+
+
+
+
+                        <div className="task-status-row">
+
+
+                            <span>
+
+                                Status
+
+                            </span>
+
+
+
+
+                            <select
+
+
+                            value={
+                                task.status || "Todo"
+                            }
+
+
+
+                            onChange={(e)=>
+
+                                updateTaskStatus(
+
+                                    task._id,
+
+                                    e.target.value
+
+                                )
+
+                            }
+
+
+
+                            className={
+                                `status-${
+                                    task.status
+                                    ?.toLowerCase()
+                                    .replace(" ","-")
+                                }`
+                            }
+
+
+
+                            >
+
+
+
+                                <option value="Todo">
+
+                                    Todo
+
+                                </option>
+
+
+
+                                <option value="In Progress">
+
+                                    In Progress
+
+                                </option>
+
+
+
+                                <option value="Completed">
+
+                                    Completed
+
+                                </option>
+
+
+
+                            </select>
+
+
+
+                        </div>
+
+
+
+
+
+
+
+
+                        <p className="task-date">
+
+                            Created:
+
+                            {" "}
+
+                            {
+                                task.createdAt
+                                ?
+                                new Date(
+                                    task.createdAt
+                                ).toLocaleDateString()
+                                :
+                                "Unknown"
+                            }
+
+
+                        </p>
+
 
 
 
@@ -484,6 +686,8 @@ function ProjectDetails(){
 
 
 
+
+
             </div>
 
 
@@ -493,11 +697,10 @@ function ProjectDetails(){
         </div>
 
 
-    )
+    );
 
 
 }
-
 
 
 

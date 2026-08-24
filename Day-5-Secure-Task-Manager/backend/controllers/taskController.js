@@ -3,66 +3,116 @@ const Activity = require("../models/Activity");
 
 
 // Create Task
+
 exports.createTask = async (req, res) => {
+
 
     try {
 
+
         const {
+
             title,
+
             description,
+
             priority,
+
+            status,
+
             project
+
         } = req.body;
+
+
+
 
 
         const task = await Task.create({
 
+
             title,
+
 
             description,
 
+
             priority,
 
-            project: project || null,
+
+            status,
+
+
+            project,
+
 
             user: req.user.id
 
+
         });
+
+
+
+
+
 
 
         await Activity.create({
 
+
             user: req.user.id,
+
 
             action: "created",
 
+
             taskTitle: title
 
+
         });
+
+
+
+
+
 
 
         res.status(201).json({
 
+
             success: true,
 
+
             task
+
 
         });
 
 
-    } catch (error) {
 
-    console.log("CREATE TASK ERROR:", error);
 
-    res.status(500).json({
 
-        success:false,
+    }
 
-        message:error.message
 
-    });
+    catch (error) {
 
-}
+
+
+        res.status(500).json({
+
+
+            success: false,
+
+
+            message: error.message
+
+
+        });
+
+
+    }
+
 
 };
 
