@@ -71,3 +71,40 @@
 .app.dark .project-date {
     color: #aaa;
 }
+
+.project-task-summary{
+
+    display:flex;
+
+    gap:40px;
+
+    margin-top:25px;
+
+}
+
+
+.project-task-summary div{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:5px;
+
+}
+
+
+.project-task-summary span{
+
+    font-size:14px;
+
+    color:#888;
+
+}
+
+
+.project-task-summary strong{
+
+    font-size:22px;
+
+}
