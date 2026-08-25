@@ -9,6 +9,8 @@
 
     min-height:100vh;
 
+    color:var(--text-color);
+
 }
 
 
@@ -25,11 +27,12 @@
 
 .project-details > p{
 
-    color:#888;
+    color:var(--secondary-text);
 
     font-size:18px;
 
 }
+
 
 
 
@@ -42,15 +45,16 @@
 
 .project-progress-box{
 
-    background:white;
 
-    color:#111;
+    background:var(--card-bg);
+
+    color:var(--text-color);
 
     padding:20px;
 
     border-radius:15px;
 
-    border:1px solid #ddd;
+    border:1px solid var(--border-color);
 
     font-size:18px;
 
@@ -60,21 +64,9 @@
 
 }
 
-.task-status-row select{
 
-    min-width:130px;
 
-    padding:10px 15px;
 
-    border-radius:20px;
-
-    border:1px solid #ccc;
-
-    font-weight:bold;
-
-    cursor:pointer;
-
-}
 
 
 
@@ -106,6 +98,7 @@
 
 
 }
+
 
 
 
@@ -145,6 +138,10 @@
 
 
 
+
+
+
+
 /* =========================
    ADD TASK FORM
 ========================= */
@@ -153,7 +150,9 @@
 .project-task-form{
 
 
-    background:#222;
+    background:var(--card-bg);
+
+    border:1px solid var(--border-color);
 
     padding:25px;
 
@@ -172,16 +171,18 @@
 
 
 
+
+
 .project-task-form input,
 .project-task-form textarea,
 .project-task-form select{
 
 
-    background:#111;
+    background:var(--input-bg);
 
-    color:white;
+    color:var(--text-color);
 
-    border:1px solid #444;
+    border:1px solid var(--border-color);
 
     padding:14px;
 
@@ -194,6 +195,7 @@
 
 
 
+
 .project-task-form textarea{
 
 
@@ -203,6 +205,8 @@
 
 
 }
+
+
 
 
 
@@ -225,6 +229,8 @@
 
 
 }
+
+
 
 
 
@@ -255,6 +261,10 @@
 
 
 
+
+
+
+
 /* =========================
    TASK CARD
 ========================= */
@@ -262,21 +272,24 @@
 
 .detail-task-card{
 
-    background:var(--card-bg, #ffffff);
 
-    border:1px solid #ddd;
+    background:var(--card-bg);
+
+    border:1px solid var(--border-color);
 
     padding:25px;
 
     border-radius:18px;
 
-    color:var(--text-color,#111);
+    color:var(--text-color);
 
     box-shadow:0 5px 20px rgba(0,0,0,0.08);
 
     transition:0.3s;
 
+
 }
+
 
 
 
@@ -295,13 +308,16 @@
 
 .detail-task-card h3{
 
+
     font-size:24px;
 
     margin-bottom:12px;
 
-    color:var(--text-color,#111);
+    color:var(--text-color);
+
 
 }
+
 
 
 
@@ -309,12 +325,15 @@
 .detail-task-card p{
 
 
-        color:#666;
+    color:var(--secondary-text);
 
     line-height:1.5;
 
 
 }
+
+
+
 
 
 
@@ -342,6 +361,7 @@
 
 
 
+
 .task-priority span{
 
 
@@ -353,6 +373,7 @@
 
 
 }
+
 
 
 
@@ -368,6 +389,8 @@
 
 
 
+
+
 .priority-medium{
 
 
@@ -380,6 +403,8 @@
 
 
 
+
+
 .priority-low{
 
 
@@ -389,6 +414,7 @@
 
 
 }
+
 
 
 
@@ -418,67 +444,88 @@
 
 
 
+
+
 .task-status-row span{
 
-    color:#16a34a;
+
+    color:#22c55e;
 
     font-weight:600;
 
+
 }
+
+
 
 
 
 .task-status-row select{
 
 
+    min-width:130px;
+
     padding:8px 18px;
 
     border-radius:20px;
 
-    border:none;
+    border:1px solid var(--border-color);
 
     cursor:pointer;
 
     font-weight:bold;
 
+    background:var(--input-bg);
+
+    color:var(--text-color);
+
 
 }
+
+
+
 
 
 
 .status-todo{
 
 
-    background:#6b7280;
+    background:#6b7280 !important;
 
-    color:white;
+    color:white !important;
 
 
 }
+
 
 
 
 .status-in-progress{
 
 
-    background:#3b82f6;
+    background:#3b82f6 !important;
 
-    color:white;
+    color:white !important;
 
 
 }
+
+
 
 
 
 .status-completed{
 
 
-    background:#22c55e;
+    background:#22c55e !important;
 
-    color:white;
+    color:white !important;
 
 
 }
+
+
+
 
 
 
@@ -495,12 +542,14 @@
 
     margin-top:20px;
 
-    color:#888;
+    color:var(--secondary-text);
 
     font-size:14px;
 
 
 }
+
+
 
 
 
@@ -529,6 +578,9 @@
 
 
 
+
+
+
 @media(max-width:600px){
 
 
@@ -553,7 +605,5 @@
 
 
     }
-
-
 
 }
