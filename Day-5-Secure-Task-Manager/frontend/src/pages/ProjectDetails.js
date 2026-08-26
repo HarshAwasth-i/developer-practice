@@ -4,6 +4,8 @@ import { useParams } from "react-router-dom";
 
 import API from "../api/axios";
 
+import KanbanBoard from "../components/KanbanBoard";
+
 import "../styles/ProjectDetails.css";
 
 
@@ -22,6 +24,9 @@ function ProjectDetails(){
 
 
     const [showForm,setShowForm] = useState(false);
+
+    const [view,setView] = useState("list");
+
 
 
     const [title,setTitle] = useState("");
@@ -71,8 +76,6 @@ function ProjectDetails(){
 
 
 
-
-
     // Fetch Tasks
 
     const fetchTasks = async()=>{
@@ -104,7 +107,6 @@ function ProjectDetails(){
 
 
     };
-
 
 
 
@@ -159,7 +161,6 @@ function ProjectDetails(){
 
             setPriority("Medium");
 
-
             setShowForm(false);
 
 
@@ -169,18 +170,14 @@ function ProjectDetails(){
             fetchProject();
 
 
-
         }
 
         catch(err){
 
 
             console.log(
-
                 "Error creating task:",
-
                 err
-
             );
 
 
@@ -188,7 +185,6 @@ function ProjectDetails(){
 
 
     };
-
 
 
 
@@ -225,18 +221,14 @@ function ProjectDetails(){
             fetchProject();
 
 
-
         }
 
         catch(err){
 
 
             console.log(
-
                 "Error updating task:",
-
                 err
-
             );
 
 
@@ -270,6 +262,7 @@ function ProjectDetails(){
 
 
 
+
     if(!project){
 
 
@@ -277,6 +270,7 @@ function ProjectDetails(){
 
 
     }
+
 
 
 
@@ -316,6 +310,7 @@ function ProjectDetails(){
 
 
 
+
             <div className="project-progress-box">
 
 
@@ -336,6 +331,9 @@ function ProjectDetails(){
 
 
 
+            {/* TASK HEADER */}
+
+
             <div className="tasks-header">
 
 
@@ -347,16 +345,73 @@ function ProjectDetails(){
 
 
 
-                <button
+                <div className="task-view-controls">
 
-                onClick={()=>setShowForm(!showForm)}
 
-                >
+                    {/* LIST VIEW */}
 
-                    + Add Task
+                    <button
 
-                </button>
+                        className={
+                            view === "list"
+                                ? "active-view"
+                                : ""
+                        }
 
+                        onClick={() =>
+                            setView("list")
+                        }
+
+                    >
+
+                        List View
+
+                    </button>
+
+
+
+
+
+                    {/* KANBAN VIEW */}
+
+                    <button
+
+                        className={
+                            view === "kanban"
+                                ? "active-view"
+                                : ""
+                        }
+
+                        onClick={() =>
+                            setView("kanban")
+                        }
+
+                    >
+
+                        Kanban Board
+
+                    </button>
+
+
+
+
+
+                    {/* ADD TASK */}
+
+                    <button
+
+                        onClick={() =>
+                            setShowForm(!showForm)
+                        }
+
+                    >
+
+                        + Add Task
+
+                    </button>
+
+
+                </div>
 
 
             </div>
@@ -369,9 +424,12 @@ function ProjectDetails(){
 
 
 
-            {
-                showForm && (
+            {/* ADD TASK FORM */}
 
+
+            {
+
+                showForm && (
 
                     <div className="project-task-form">
 
@@ -379,15 +437,13 @@ function ProjectDetails(){
 
                         <input
 
-                        placeholder="Task title"
+                            placeholder="Task title"
 
-                        value={title}
+                            value={title}
 
-                        onChange={(e)=>
-
-                            setTitle(e.target.value)
-
-                        }
+                            onChange={(e)=>
+                                setTitle(e.target.value)
+                            }
 
                         />
 
@@ -397,15 +453,13 @@ function ProjectDetails(){
 
                         <textarea
 
-                        placeholder="Description"
+                            placeholder="Description"
 
-                        value={description}
+                            value={description}
 
-                        onChange={(e)=>
-
-                            setDescription(e.target.value)
-
-                        }
+                            onChange={(e)=>
+                                setDescription(e.target.value)
+                            }
 
                         />
 
@@ -415,29 +469,33 @@ function ProjectDetails(){
 
                         <select
 
-                        value={priority}
+                            value={priority}
 
-                        onChange={(e)=>
-
-                            setPriority(e.target.value)
-
-                        }
+                            onChange={(e)=>
+                                setPriority(e.target.value)
+                            }
 
                         >
 
 
                             <option value="Low">
+
                                 Low
+
                             </option>
 
 
                             <option value="Medium">
+
                                 Medium
+
                             </option>
 
 
                             <option value="High">
+
                                 High
+
                             </option>
 
 
@@ -449,7 +507,7 @@ function ProjectDetails(){
 
                         <button
 
-                        onClick={createTask}
+                            onClick={createTask}
 
                         >
 
@@ -461,8 +519,8 @@ function ProjectDetails(){
 
                     </div>
 
-
                 )
+
             }
 
 
@@ -473,224 +531,240 @@ function ProjectDetails(){
 
 
 
-            <div className="details-tasks">
-
-
-
+            {/* KANBAN VIEW */}
 
 
             {
 
-                tasks.length === 0 ?
+                view === "kanban" ? (
 
+                    <KanbanBoard
 
-                (
+                        tasks={tasks}
 
-                    <h3>
+                        onStatusChange={
+                            updateTaskStatus
+                        }
 
-                        No tasks yet
+                    />
 
-                    </h3>
+                ) : (
 
-                )
 
 
-                :
 
 
-                tasks.map(task=>(
+                    /* LIST VIEW */
 
 
+                    <div className="details-tasks">
 
-                    <div
 
-                    className="detail-task-card"
 
-                    key={task._id}
+                        {
 
-                    >
+                            tasks.length === 0 ? (
 
+                                <h3>
 
+                                    No tasks yet
 
+                                </h3>
 
-                        <h3>
+                            )
 
-                            {task.title}
+                            :
 
-                        </h3>
+                            tasks.map(task=>(
 
 
+                                <div
 
+                                    className="detail-task-card"
 
+                                    key={task._id}
 
+                                >
 
-                        <p>
 
-                            {task.description}
 
-                        </p>
+                                    <h3>
 
+                                        {task.title}
 
+                                    </h3>
 
 
 
 
 
-                        <p className="task-priority">
+                                    <p>
 
-                            Priority:
+                                        {task.description}
 
+                                    </p>
 
-                            <span
 
-                            className={
-                                `priority-${
-                                    task.priority
-                                    ?.toLowerCase()
-                                }`
-                            }
 
-                            >
 
-                                {task.priority}
 
-                            </span>
+                                    <p className="task-priority">
 
+                                        Priority:
 
-                        </p>
 
+                                        <span
 
+                                            className={
+                                                `priority-${
+                                                    task.priority
+                                                    ?.toLowerCase()
+                                                }`
+                                            }
 
+                                        >
 
+                                            {task.priority}
 
+                                        </span>
 
 
+                                    </p>
 
 
-                        <div className="task-status-row">
 
 
-                            <span>
 
-                                Status
+                                    <div className="task-status-row">
 
-                            </span>
 
+                                        <span>
 
+                                            Status
 
+                                        </span>
 
-                            <select
 
 
-                            value={
-                                task.status || "Todo"
-                            }
 
 
+                                        <select
 
-                            onChange={(e)=>
 
-                                updateTaskStatus(
+                                            value={
+                                                task.status ||
+                                                "Todo"
+                                            }
 
-                                    task._id,
 
-                                    e.target.value
+                                            onChange={(e)=>
 
-                                )
+                                                updateTaskStatus(
 
-                            }
+                                                    task._id,
 
+                                                    e.target.value
 
+                                                )
 
-                            className={
-                                `status-${
-                                    task.status
-                                    ?.toLowerCase()
-                                    .replace(" ","-")
-                                }`
-                            }
+                                            }
 
 
+                                            className={
 
-                            >
+                                                `status-${
+                                                    task.status
+                                                    ?.toLowerCase()
+                                                    .replace(
+                                                        " ",
+                                                        "-"
+                                                    )
+                                                }`
 
+                                            }
 
 
-                                <option value="Todo">
+                                        >
 
-                                    Todo
 
-                                </option>
 
+                                            <option value="Todo">
 
+                                                Todo
 
-                                <option value="In Progress">
+                                            </option>
 
-                                    In Progress
 
-                                </option>
 
+                                            <option value="In Progress">
 
+                                                In Progress
 
-                                <option value="Completed">
+                                            </option>
 
-                                    Completed
 
-                                </option>
 
+                                            <option value="Completed">
 
+                                                Completed
 
-                            </select>
+                                            </option>
 
 
+                                        </select>
 
-                        </div>
 
+                                    </div>
 
 
 
 
 
+                                    <p className="task-date">
 
 
-                        <p className="task-date">
+                                        Created:
 
-                            Created:
+                                        {" "}
 
-                            {" "}
 
-                            {
-                                task.createdAt
-                                ?
-                                new Date(
-                                    task.createdAt
-                                ).toLocaleDateString()
-                                :
-                                "Unknown"
-                            }
+                                        {
 
+                                            task.createdAt
 
-                        </p>
+                                            ?
 
+                                            new Date(
 
+                                                task.createdAt
+
+                                            ).toLocaleDateString()
+
+                                            :
+
+                                            "Unknown"
+
+                                        }
+
+
+                                    </p>
+
+
+
+                                </div>
+
+
+                            ))
+
+                        }
 
 
 
                     </div>
 
-
-
-                ))
+                )
 
             }
-
-
-
-
-
-            </div>
-
-
 
 
 
@@ -701,7 +775,6 @@ function ProjectDetails(){
 
 
 }
-
 
 
 export default ProjectDetails;
