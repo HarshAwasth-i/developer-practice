@@ -68,7 +68,6 @@ function KanbanBoard({
 
             />
 
-
         </div>
 
     );
