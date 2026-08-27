@@ -1121,8 +1121,6 @@ onConfirm={confirmDelete}
 
 
 
-
-
 </div>
 
 
@@ -1130,7 +1128,6 @@ onConfirm={confirmDelete}
 
 
 }
-
 
 
 export default Dashboard;

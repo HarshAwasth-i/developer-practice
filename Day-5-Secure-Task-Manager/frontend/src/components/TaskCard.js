@@ -135,13 +135,6 @@ function TaskCard({
 
             </div>
 
-
-
-
-
-
-
-
             <p className="date">
 
                 Created:
@@ -157,11 +150,6 @@ function TaskCard({
             </p>
 
 
-
-
-
-
-
             <div className="task-buttons">
 
 
@@ -170,7 +158,6 @@ function TaskCard({
                 onClick={()=>toggleStatus(task)}
 
                 >
-
                     {
                         task.completed
                         ?
