@@ -50,7 +50,7 @@ function KanbanBoard({
 
                 tasks={inProgressTasks}
 
-                onStatusChange={onStatusChange}
+                onStatusChange = {onStatusChange}
 
             />
 
