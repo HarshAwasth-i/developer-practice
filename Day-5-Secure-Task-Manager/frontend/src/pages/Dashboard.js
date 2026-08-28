@@ -1101,10 +1101,6 @@ toggleStatus={toggleStatus}
 
 
 
-
-
-
-
 <ConfirmModal
 
 
@@ -1125,7 +1121,6 @@ onConfirm={confirmDelete}
 
 
 )
-
 
 }
 

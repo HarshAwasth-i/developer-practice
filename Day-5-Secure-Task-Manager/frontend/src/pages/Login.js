@@ -24,9 +24,6 @@ function Login() {
 
     });
 
-
-
-
     const handleChange = (e)=>{
 
 
@@ -43,17 +40,11 @@ function Login() {
 
 
 
-
-
     const handleSubmit = async(e)=>{
 
 
         e.preventDefault();
-
-
-
         try{
-
 
             const res = await API.post(
                 "/auth/login",
@@ -76,8 +67,6 @@ function Login() {
 
             navigate("/dashboard");
 
-
-
         }
         catch(err){
 
@@ -87,15 +76,9 @@ function Login() {
  "Login Failed"
 );
 
-
         }
 
-
     };
-
-
-
-
 
 
     return(
