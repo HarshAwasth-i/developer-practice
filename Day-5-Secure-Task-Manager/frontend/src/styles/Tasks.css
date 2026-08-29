@@ -1,802 +1,909 @@
-/* ========================================= */
-/* TASKS PAGE                                */
-/* ========================================= */
+/* =========================================================
+   TASKS PAGE
+========================================================= */
 
 .tasks-page {
-
     min-height: 100vh;
+    padding: 42px 48px 60px;
 
-    padding: 50px 70px;
+    background: var(--bg-color, #111111);
+    color: var(--text-color, #ffffff);
 
     box-sizing: border-box;
-
 }
 
 
-/* ========================================= */
-/* HEADER                                    */
-/* ========================================= */
+/* =========================================================
+   HEADER
+========================================================= */
 
-.tasks-header {
-
+.tasks-page-header {
     display: flex;
-
     justify-content: space-between;
-
     align-items: center;
 
-    margin-bottom: 35px;
-
+    margin-bottom: 32px;
 }
 
-
-.tasks-header h1 {
-
-    font-size: 40px;
-
-    margin: 0 0 8px;
-
-}
-
-
-.tasks-header p {
-
-    font-size: 18px;
-
+.tasks-page-header h1 {
     margin: 0;
 
+    font-size: 38px;
+    font-weight: 800;
+    letter-spacing: -0.8px;
+}
+
+.tasks-page-header p {
+    margin: 8px 0 0;
+
+    color: var(--muted-text, #888888);
+
+    font-size: 16px;
 }
 
 
-.app.light .tasks-header p {
-
-    color: #777;
-
-}
-
-
-.app.dark .tasks-header p {
-
-    color: #aaa;
-
-}
-
-
-/* ========================================= */
-/* ADD TASK BUTTON                           */
-/* ========================================= */
+/* =========================================================
+   BUTTON
+========================================================= */
 
 .add-task-btn {
-
-    padding: 13px 22px;
+    background: #4ade80;
+    color: #07110a;
 
     border: none;
 
-    border-radius: 8px;
-
-    font-size: 15px;
-
-    font-weight: bold;
-
-    cursor: pointer;
-
-    transition: 0.2s;
-
-}
-
-
-.app.light .add-task-btn {
-
-    background: #111;
-
-    color: white;
-
-}
-
-
-.app.dark .add-task-btn {
-
-    background: white;
-
-    color: #111;
-
-}
-
-
-.add-task-btn:hover {
-
-    transform: translateY(-2px);
-
-}
-
-
-/* ========================================= */
-/* TOOLBAR                                   */
-/* ========================================= */
-
-.tasks-toolbar {
-
-    display: flex;
-
-    gap: 15px;
-
-    margin-bottom: 30px;
-
-    flex-wrap: wrap;
-
-}
-
-
-.tasks-toolbar input {
-
-    width: 300px;
-
-    padding: 13px;
-
-    border-radius: 8px;
-
-    border: 1px solid #ccc;
-
-    outline: none;
-
-    font-size: 15px;
-
-}
-
-
-.tasks-toolbar select {
-
-    padding: 13px;
-
-    border-radius: 8px;
-
-    cursor: pointer;
-
-}
-
-
-.app.light .tasks-toolbar input {
-
-    background: white;
-
-    color: black;
-
-}
-
-
-.app.dark .tasks-toolbar input {
-
-    background: #222;
-
-    color: white;
-
-    border-color: #444;
-
-}
-
-
-.app.light .tasks-toolbar select {
-
-    background: white;
-
-    color: black;
-
-    border: 1px solid #ccc;
-
-}
-
-
-.app.dark .tasks-toolbar select {
-
-    background: #222;
-
-    color: white;
-
-    border: 1px solid #444;
-
-}
-
-
-/* ========================================= */
-/* CREATE TASK FORM                          */
-/* ========================================= */
-
-.task-form {
-
-    padding: 25px;
-
-    border-radius: 15px;
-
-    margin-bottom: 30px;
-
-    display: flex;
-
-    flex-direction: column;
-
-    gap: 15px;
-
-}
-
-
-.app.light .task-form {
-
-    background: #f7f7f7;
-
-    border: 1px solid #ddd;
-
-}
-
-
-.app.dark .task-form {
-
-    background: #1f1f1f;
-
-    border: 1px solid #333;
-
-}
-
-
-.task-form h2 {
-
-    margin: 0 0 5px;
-
-}
-
-
-.task-form input,
-.task-form textarea,
-.task-form select {
-
-    padding: 13px;
-
-    border-radius: 8px;
-
-    border: 1px solid #ccc;
-
-    outline: none;
-
-    font-family: inherit;
-
-    font-size: 15px;
-
-}
-
-
-.task-form textarea {
-
-    min-height: 100px;
-
-    resize: vertical;
-
-}
-
-
-.app.light .task-form input,
-.app.light .task-form textarea,
-.app.light .task-form select {
-
-    background: white;
-
-    color: black;
-
-}
-
-
-.app.dark .task-form input,
-.app.dark .task-form textarea,
-.app.dark .task-form select {
-
-    background: #222;
-
-    color: white;
-
-    border-color: #444;
-
-}
-
-
-.task-form-buttons {
-
-    display: flex;
-
-    gap: 10px;
-
-    flex-wrap: wrap;
-
-}
-
-
-.cancel-btn {
-
     padding: 13px 22px;
 
-    border-radius: 8px;
+    border-radius: 11px;
+
+    font-size: 14px;
+    font-weight: 700;
 
     cursor: pointer;
-
-    font-weight: bold;
-
-}
-
-
-.app.light .cancel-btn {
-
-    background: white;
-
-    color: #111;
-
-    border: 1px solid #ccc;
-
-}
-
-
-.app.dark .cancel-btn {
-
-    background: #222;
-
-    color: white;
-
-    border: 1px solid #444;
-
-}
-
-
-/* ========================================= */
-/* TASK LIST                                 */
-/* ========================================= */
-
-.tasks-list {
-
-    display: grid;
-
-    grid-template-columns: repeat(2, 1fr);
-
-    gap: 22px;
-
-}
-
-
-/* ========================================= */
-/* TASK CARD                                 */
-/* ========================================= */
-
-.task-card {
-
-    min-height: 190px;
-
-    padding: 25px;
-
-    border-radius: 16px;
-
-    display: flex;
-
-    flex-direction: column;
-
-    justify-content: space-between;
-
-    box-sizing: border-box;
 
     transition:
         transform 0.2s ease,
         box-shadow 0.2s ease,
-        opacity 0.2s ease;
-
+        background 0.2s ease;
 }
 
+.add-task-btn:hover {
+    background: #5bea8c;
 
-.app.light .task-card {
-
-    background: white;
-
-    color: #111;
-
-    border: 1px solid #ddd;
+    transform: translateY(-2px);
 
     box-shadow:
-        0 4px 15px rgba(0, 0, 0, 0.05);
-
+        0 8px 25px rgba(74, 222, 128, 0.2);
 }
 
 
-.app.dark .task-card {
+/* =========================================================
+   TOOLBAR
+========================================================= */
 
-    background: #1f1f1f;
-
-    color: white;
-
-    border: 1px solid #333;
-
-    box-shadow:
-        0 4px 20px rgba(0, 0, 0, 0.25);
-
-}
-
-
-.task-card:hover {
-
-    transform: translateY(-4px);
-
-}
-
-
-.task-card h3 {
-
-    margin: 0 0 10px;
-
-    font-size: 21px;
-
-}
-
-
-.task-card p {
-
-    margin: 0;
-
-    line-height: 1.5;
-
-}
-
-
-.app.light .task-card p {
-
-    color: #666;
-
-}
-
-
-.app.dark .task-card p {
-
-    color: #aaa;
-
-}
-
-
-/* ========================================= */
-/* COMPLETED CARD                            */
-/* ========================================= */
-
-.completed-card {
-
-    opacity: 0.72;
-
-}
-
-
-.completed-title {
-
-    text-decoration: line-through;
-
-}
-
-
-.app.light .completed-title {
-
-    color: #888;
-
-}
-
-
-.app.dark .completed-title {
-
-    color: #777;
-
-}
-
-
-/* ========================================= */
-/* TASK META                                 */
-/* ========================================= */
-
-.task-card-meta {
-
+.tasks-toolbar {
     display: flex;
-
-    gap: 10px;
-
     align-items: center;
+    gap: 12px;
+
+    margin-bottom: 28px;
 
     flex-wrap: wrap;
+}
 
-    margin-top: 20px;
+.tasks-toolbar input,
+.tasks-toolbar select {
+    height: 44px;
 
+    background: var(--input-bg, #1b1b1b);
+
+    color: var(--text-color, #ffffff);
+
+    border: 1px solid var(--border-color, #333333);
+
+    border-radius: 10px;
+
+    padding: 0 14px;
+
+    font-size: 14px;
+
+    outline: none;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.tasks-toolbar input {
+    flex: 1;
+
+    min-width: 220px;
+}
+
+.tasks-toolbar select {
+    min-width: 150px;
+}
+
+.tasks-toolbar input:focus,
+.tasks-toolbar select:focus {
+    border-color: #4ade80;
+
+    box-shadow:
+        0 0 0 3px rgba(74, 222, 128, 0.1);
 }
 
 
-/* ========================================= */
-/* PRIORITY BADGES                           */
-/* ========================================= */
+/* =========================================================
+   VIEW TOGGLE
+========================================================= */
 
-.priority-badge {
-
-    display: inline-block;
-
-    padding: 6px 12px;
-
-    border-radius: 20px;
-
-    font-size: 13px;
-
-    font-weight: bold;
-
-    text-transform: capitalize;
-
-}
-
-
-.priority-badge.high {
-
-    background: #ef4444;
-
-    color: white;
-
-}
-
-
-.priority-badge.medium {
-
-    background: #facc15;
-
-    color: #111;
-
-}
-
-
-.priority-badge.low {
-
-    background: #4ade80;
-
-    color: #111;
-
-}
-
-
-/* ========================================= */
-/* STATUS BADGES                             */
-/* ========================================= */
-
-.status-badge {
-
-    display: inline-block;
-
-    padding: 6px 12px;
-
-    border-radius: 20px;
-
-    font-size: 13px;
-
-    font-weight: bold;
-
-}
-
-
-.status-badge.pending {
-
-    background: #e5e7eb;
-
-    color: #111;
-
-}
-
-
-.status-badge.completed {
-
-    background: #4ade80;
-
-    color: #111;
-
-}
-
-
-/* ========================================= */
-/* TASK ACTIONS                              */
-/* ========================================= */
-
-.task-card-actions {
-
+.view-toggle {
     display: flex;
 
-    gap: 10px;
+    margin-left: auto;
 
-    margin-top: 20px;
+    background: var(--input-bg, #1b1b1b);
 
+    border: 1px solid var(--border-color, #333333);
+
+    padding: 4px;
+
+    border-radius: 11px;
 }
 
-
-.task-card-actions button {
-
-    padding: 9px 14px;
-
+.view-toggle button {
     border: none;
+
+    background: transparent;
+
+    color: var(--muted-text, #999999);
+
+    padding: 9px 15px;
 
     border-radius: 8px;
 
+    font-size: 13px;
+    font-weight: 700;
+
     cursor: pointer;
 
-    font-weight: bold;
+    transition: 0.2s ease;
+}
 
-    transition: 0.2s;
+.view-toggle button:hover {
+    color: var(--text-color, #ffffff);
+}
 
+.view-toggle button.active {
+    background: #4ade80;
+
+    color: #07110a;
+
+    box-shadow:
+        0 3px 10px rgba(74, 222, 128, 0.15);
 }
 
 
-.app.light .task-card-actions button {
+/* =========================================================
+   CREATE TASK FORM
+========================================================= */
 
-    background: #111;
+.task-form {
+    background: var(--card-bg, #181818);
 
-    color: white;
+    border: 1px solid var(--border-color, #333333);
 
+    border-radius: 16px;
+
+    padding: 25px;
+
+    margin-bottom: 30px;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 15px;
+
+    box-shadow:
+        0 15px 40px rgba(0, 0, 0, 0.2);
+}
+
+.form-header {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: flex-start;
+}
+
+.form-header h2 {
+    margin: 0;
+
+    font-size: 21px;
+}
+
+.form-header p {
+    margin: 5px 0 0;
+
+    color: var(--muted-text, #888888);
+
+    font-size: 14px;
+}
+
+.close-form-btn {
+    background: transparent;
+
+    border: none;
+
+    color: #888888;
+
+    font-size: 27px;
+
+    cursor: pointer;
+
+    line-height: 1;
+}
+
+.close-form-btn:hover {
+    color: #ffffff;
+}
+
+.task-form input,
+.task-form textarea,
+.task-form select {
+    width: 100%;
+
+    box-sizing: border-box;
+
+    background: var(--input-bg, #101010);
+
+    color: var(--text-color, #ffffff);
+
+    border: 1px solid var(--border-color, #333333);
+
+    padding: 13px 14px;
+
+    border-radius: 10px;
+
+    font-size: 14px;
+
+    outline: none;
+}
+
+.task-form input:focus,
+.task-form textarea:focus,
+.task-form select:focus {
+    border-color: #4ade80;
+}
+
+.task-form textarea {
+    min-height: 100px;
+
+    resize: vertical;
+}
+
+.task-form-buttons {
+    display: flex;
+
+    gap: 10px;
+}
+
+.cancel-btn {
+    border: 1px solid var(--border-color, #444444);
+
+    background: transparent;
+
+    color: var(--text-color, #ffffff);
+
+    padding: 12px 20px;
+
+    border-radius: 10px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+}
+
+.cancel-btn:hover {
+    background: rgba(255, 255, 255, 0.06);
 }
 
 
-.app.dark .task-card-actions button {
+/* =========================================================
+   LIST VIEW
+========================================================= */
 
-    background: white;
+.tasks-list {
+    display: grid;
 
-    color: #111;
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
 
+    gap: 20px;
 }
 
 
-.task-card-actions button:hover {
+/* =========================================================
+   TASK CARD
+========================================================= */
 
-    transform: scale(1.03);
+.task-card {
+    background: var(--card-bg, #181818);
 
+    border: 1px solid var(--border-color, #303030);
+
+    border-radius: 16px;
+
+    padding: 21px;
+
+    cursor: grab;
+
+    transition:
+        transform 0.2s ease,
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+
+    box-sizing: border-box;
+}
+
+.task-card:hover {
+    transform: translateY(-3px);
+
+    border-color: #4ade80;
+
+    box-shadow:
+        0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.task-card:active {
+    cursor: grabbing;
+}
+
+.completed-card {
+    opacity: 0.82;
+}
+
+.task-card-content {
+    min-width: 0;
+}
+
+.task-card-top {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: flex-start;
+
+    gap: 12px;
+}
+
+.task-card h3 {
+    margin: 0;
+
+    font-size: 19px;
+
+    font-weight: 750;
+
+    line-height: 1.3;
+
+    color: var(--text-color, #ffffff);
+}
+
+.completed-title {
+    text-decoration: line-through;
+
+    opacity: 0.65;
+}
+
+.task-menu-btn {
+    width: 30px;
+    height: 30px;
+
+    border: none;
+
+    background: transparent;
+
+    color: #888888;
+
+    font-size: 22px;
+
+    border-radius: 7px;
+
+    cursor: pointer;
+}
+
+.task-menu-btn:hover {
+    background: rgba(255, 255, 255, 0.06);
+
+    color: #ffffff;
+}
+
+.task-description {
+    color: var(--muted-text, #999999);
+
+    font-size: 14px;
+
+    line-height: 1.55;
+
+    margin: 10px 0 18px;
+
+    min-height: 21px;
 }
 
 
-/* ========================================= */
-/* EMPTY STATE                               */
-/* ========================================= */
+/* =========================================================
+   TASK META
+========================================================= */
+
+.task-card-meta {
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    flex-wrap: wrap;
+}
+
+.priority-badge,
+.status-badge {
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 5px 11px;
+
+    border-radius: 20px;
+
+    font-size: 12px;
+
+    font-weight: 750;
+}
+
+
+/* Priority */
+
+.priority-badge.high {
+    background: #ef4444;
+
+    color: #ffffff;
+}
+
+.priority-badge.medium {
+    background: #facc15;
+
+    color: #111111;
+}
+
+.priority-badge.low {
+    background: #4ade80;
+
+    color: #07110a;
+}
+
+
+/* Status */
+
+.status-badge.todo {
+    background: #6b7280;
+
+    color: #ffffff;
+}
+
+.status-badge.in-progress {
+    background: #3b82f6;
+
+    color: #ffffff;
+}
+
+.status-badge.completed {
+    background: #22c55e;
+
+    color: #07110a;
+}
+
+.status-badge.pending {
+    background: #6b7280;
+
+    color: #ffffff;
+}
+
+
+/* =========================================================
+   TASK CARD BOTTOM
+========================================================= */
+
+.task-card-bottom {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 12px;
+
+    margin-top: 20px;
+
+    padding-top: 15px;
+
+    border-top: 1px solid var(--border-color, #2c2c2c);
+}
+
+.task-card-bottom select {
+    background: var(--input-bg, #101010);
+
+    color: var(--text-color, #ffffff);
+
+    border: 1px solid var(--border-color, #333333);
+
+    padding: 8px 12px;
+
+    border-radius: 8px;
+
+    font-size: 12px;
+
+    font-weight: 650;
+
+    cursor: pointer;
+
+    outline: none;
+}
+
+.task-card-bottom select:focus {
+    border-color: #4ade80;
+}
+
+.delete-task-btn {
+    border: none;
+
+    background: transparent;
+
+    color: #f87171;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+}
+
+.delete-task-btn:hover {
+    color: #ff5f5f;
+}
+
+
+/* =========================================================
+   KANBAN BOARD
+========================================================= */
+
+.kanban-board {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, minmax(0, 1fr));
+
+    gap: 18px;
+
+    align-items: start;
+}
+
+
+/* =========================================================
+   KANBAN COLUMN
+========================================================= */
+
+.kanban-column {
+    min-height: 560px;
+
+    background: var(--column-bg, #151515);
+
+    border: 1px solid var(--border-color, #2e2e2e);
+
+    border-radius: 17px;
+
+    padding: 15px;
+
+    transition:
+        border-color 0.2s ease,
+        background 0.2s ease;
+}
+
+.kanban-column:hover {
+    border-color: #444444;
+}
+
+
+/* =========================================================
+   KANBAN HEADER
+========================================================= */
+
+.kanban-column-header {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    padding: 5px 4px 15px;
+
+    border-bottom: 1px solid var(--border-color, #292929);
+
+    margin-bottom: 15px;
+}
+
+.kanban-column-header > div {
+    display: flex;
+
+    align-items: center;
+
+    gap: 9px;
+}
+
+.kanban-column-header h2 {
+    margin: 0;
+
+    font-size: 15px;
+
+    font-weight: 750;
+}
+
+.column-dot {
+    width: 9px;
+    height: 9px;
+
+    border-radius: 50%;
+
+    display: inline-block;
+}
+
+.todo-dot {
+    background: #9ca3af;
+}
+
+.progress-dot {
+    background: #3b82f6;
+}
+
+.completed-dot {
+    background: #22c55e;
+}
+
+.task-count {
+    min-width: 24px;
+
+    height: 24px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 7px;
+
+    background: rgba(255, 255, 255, 0.07);
+
+    color: #999999;
+
+    font-size: 11px;
+
+    font-weight: 750;
+}
+
+
+/* =========================================================
+   DROP AREA
+========================================================= */
+
+.kanban-drop-area {
+    min-height: 470px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 12px;
+}
+
+.kanban-drop-area .task-card {
+    width: 100%;
+}
+
+.kanban-empty {
+    min-height: 130px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border: 1px dashed #3a3a3a;
+
+    border-radius: 12px;
+
+    color: #666666;
+
+    font-size: 13px;
+
+    text-align: center;
+}
+
+
+/* =========================================================
+   EMPTY STATE
+========================================================= */
 
 .empty-tasks {
+    min-height: 320px;
 
-    grid-column: 1 / -1;
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
 
     text-align: center;
 
-    padding: 80px 20px;
+    border: 1px dashed var(--border-color, #333333);
 
-    border-radius: 15px;
+    border-radius: 16px;
 
+    background: var(--card-bg, #181818);
 }
-
-
-.app.light .empty-tasks {
-
-    border: 1px dashed #ccc;
-
-}
-
-
-.app.dark .empty-tasks {
-
-    border: 1px dashed #444;
-
-}
-
 
 .empty-icon {
+    font-size: 38px;
 
-    font-size: 50px;
-
-    margin-bottom: 15px;
-
+    margin-bottom: 12px;
 }
-
 
 .empty-tasks h2 {
+    margin: 0;
 
-    margin-bottom: 10px;
-
+    font-size: 20px;
 }
-
 
 .empty-tasks p {
+    margin: 8px 0 0;
 
-    margin-bottom: 20px;
-
+    color: var(--muted-text, #888888);
 }
 
 
-.app.light .empty-tasks p {
+/* =========================================================
+   LIGHT MODE
+========================================================= */
 
-    color: #777;
+body.light .tasks-page,
+[data-theme="light"] .tasks-page {
+    --bg-color: #f7f8fa;
 
+    --text-color: #171717;
+
+    --muted-text: #6b7280;
+
+    --card-bg: #ffffff;
+
+    --column-bg: #f1f3f5;
+
+    --input-bg: #ffffff;
+
+    --border-color: #e1e4e8;
+}
+
+body.light .task-card,
+[data-theme="light"] .task-card {
+    box-shadow:
+        0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+body.light .kanban-column,
+[data-theme="light"] .kanban-column {
+    box-shadow:
+        0 4px 15px rgba(0, 0, 0, 0.04);
 }
 
 
-.app.dark .empty-tasks p {
+/* =========================================================
+   RESPONSIVE
+========================================================= */
 
-    color: #aaa;
+@media (max-width: 1100px) {
 
-}
-
-
-/* ========================================= */
-/* RESPONSIVE                                */
-/* ========================================= */
-
-@media(max-width: 900px) {
-
-    .tasks-page {
-
-        padding: 40px;
-
+    .kanban-board {
+        grid-template-columns: 1fr;
     }
 
+    .kanban-column {
+        min-height: auto;
+    }
+
+    .kanban-drop-area {
+        min-height: 180px;
+    }
+
+}
+
+
+@media (max-width: 900px) {
 
     .tasks-list {
-
         grid-template-columns: 1fr;
-
     }
 
 }
 
 
-@media(max-width: 600px) {
+@media (max-width: 700px) {
 
     .tasks-page {
-
-        padding: 25px 20px;
-
+        padding: 28px 20px 45px;
     }
 
-
-    .tasks-header {
-
+    .tasks-page-header {
         flex-direction: column;
 
         align-items: flex-start;
 
-        gap: 20px;
-
+        gap: 18px;
     }
 
+    .tasks-page-header h1 {
+        font-size: 32px;
+    }
 
     .tasks-toolbar {
-
-        flex-direction: column;
-
+        align-items: stretch;
     }
-
 
     .tasks-toolbar input {
-
         width: 100%;
 
-        box-sizing: border-box;
-
+        flex-basis: 100%;
     }
-
 
     .tasks-toolbar select {
-
-        width: 100%;
-
+        flex: 1;
     }
 
+    .view-toggle {
+        width: 100%;
 
-    .task-form-buttons {
+        margin-left: 0;
+    }
+
+    .view-toggle button {
+        flex: 1;
+    }
+
+}
+
+
+@media (max-width: 450px) {
+
+    .tasks-page {
+        padding: 22px 15px 35px;
+    }
+
+    .tasks-toolbar select {
+        width: 100%;
+
+        flex-basis: 100%;
+    }
+
+    .task-card-bottom {
+        align-items: stretch;
 
         flex-direction: column;
-
     }
 
-
-    .task-form-buttons button {
-
+    .task-card-bottom select {
         width: 100%;
-
     }
 
-}
-
-.delete-task-btn {
-    background: #ef4444 !important;
-    color: white !important;
-}
-
-.delete-task-btn:hover {
-    background: #dc2626 !important;
 }

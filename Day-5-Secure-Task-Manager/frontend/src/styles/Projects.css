@@ -1,13 +1,37 @@
+/* =========================
+   PROJECTS PAGE
+========================= */
+
 .projects-page {
     padding: 40px;
+    min-height: 100vh;
 }
 
+
+/* =========================
+   PAGE TITLE
+========================= */
 
 .projects-page h1 {
     font-size: 40px;
     margin-bottom: 30px;
+    color: var(--text-color);
 }
 
+
+/* =========================
+   DESCRIPTION
+========================= */
+
+.projects-page > p {
+    color: var(--secondary-text);
+    margin-bottom: 5px;
+}
+
+
+/* =========================
+   CREATE PROJECT FORM
+========================= */
 
 .project-form {
     display: flex;
@@ -16,37 +40,38 @@
     flex-wrap: wrap;
 }
 
-
 .project-form input,
 .project-form select {
-    padding: 12px;
+    padding: 12px 14px;
 
     border-radius: 8px;
 
-    border: 1px solid #444;
+    border: 1px solid var(--border-color);
 
     outline: none;
+
+    background: var(--input-bg);
+
+    color: var(--text-color);
+
+    font-size: 14px;
+
+    transition: 0.2s;
+}
+
+.project-form input::placeholder {
+    color: var(--secondary-text);
+}
+
+.project-form input:focus,
+.project-form select:focus {
+    border-color: #4ade80;
 }
 
 
-/* DARK MODE */
-
-.app.dark .project-form input,
-.app.dark .project-form select {
-    background: #222;
-    color: white;
-}
-
-
-/* LIGHT MODE */
-
-.app.light .project-form input,
-.app.light .project-form select {
-    background: white;
-    color: black;
-    border: 1px solid #aaa;
-}
-
+/* =========================
+   CREATE PROJECT BUTTON
+========================= */
 
 .project-form button {
     padding: 12px 20px;
@@ -56,25 +81,25 @@
     border-radius: 8px;
 
     cursor: pointer;
-}
 
-
-.app.dark .project-form button {
-    background: white;
-    color: black;
-}
-
-
-.app.light .project-form button {
     background: #111;
-    color: white;
-}
 
+    color: white;
+
+    font-weight: bold;
+
+    transition: 0.3s;
+}
 
 .project-form button:hover {
-    opacity: 0.85;
+    transform: translateY(-2px);
+    opacity: 0.9;
 }
 
+
+/* =========================
+   PROJECT GRID
+========================= */
 
 .projects-container {
     display: grid;
@@ -86,17 +111,33 @@
 }
 
 
+/* =========================
+   NO PROJECTS MESSAGE
+========================= */
+
+.no-projects {
+    color: var(--secondary-text);
+    margin-top: 20px;
+}
+
+
+/* =========================
+   RESPONSIVE
+========================= */
+
 @media (max-width: 768px) {
 
     .projects-page {
         padding: 20px;
     }
 
+    .projects-page h1 {
+        font-size: 32px;
+    }
 
     .project-form {
         flex-direction: column;
     }
-
 
     .project-form input,
     .project-form select,

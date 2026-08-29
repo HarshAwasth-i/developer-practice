@@ -1,34 +1,53 @@
 import { useEffect, useState } from "react";
+
 import API from "../api/axios";
+
 import "../styles/Tasks.css";
+
 import ConfirmModal from "../components/ConfirmModal";
 
 
 function Tasks() {
 
     const [tasks, setTasks] = useState([]);
+
     const [loading, setLoading] = useState(true);
 
-    // Search and filter states
+
+    // View
+    const [viewMode, setViewMode] = useState("list");
+
+
+    // Search and filters
     const [search, setSearch] = useState("");
+
     const [statusFilter, setStatusFilter] = useState("all");
+
     const [priorityFilter, setPriorityFilter] = useState("all");
 
-    // Delete state
+
+    // Delete
     const [deleteId, setDeleteId] = useState(null);
 
-    // Add task form states
+
+    // Add task
     const [showForm, setShowForm] = useState(false);
+
     const [title, setTitle] = useState("");
+
     const [description, setDescription] = useState("");
-const [priority,setPriority] = useState("Medium");
 
-    const [projects,setProjects] = useState([]);
-
-const [selectedProject,setSelectedProject] = useState("");
+    const [priority, setPriority] = useState("medium");
 
 
-    // Fetch tasks
+    // Dragged task
+    const [draggedTask, setDraggedTask] = useState(null);
+
+
+    // =========================
+    // FETCH TASKS
+    // =========================
+
     const fetchTasks = async () => {
 
         try {
@@ -40,11 +59,16 @@ const [selectedProject,setSelectedProject] = useState("");
             setTasks(res.data.tasks);
 
         }
+
         catch (err) {
 
-            console.log("Error fetching tasks:", err);
+            console.log(
+                "Error fetching tasks:",
+                err
+            );
 
         }
+
         finally {
 
             setLoading(false);
@@ -54,37 +78,21 @@ const [selectedProject,setSelectedProject] = useState("");
     };
 
 
- useEffect(()=>{
+    useEffect(() => {
 
-    fetchTasks();
+        fetchTasks();
 
-    fetchProjects();
+    }, []);
 
-},[]);
-const fetchProjects = async()=>{
 
-    try{
+    // =========================
+    // CREATE TASK
+    // =========================
 
-        const res = await API.get("/projects");
-
-        setProjects(res.data.projects);
-
-    }
-    catch(err){
-
-        console.log(
-            "Error fetching projects:",
-            err
-        );
-
-    }
-
-};
-
-    // Create task
     const handleCreateTask = async (e) => {
 
         e.preventDefault();
+
 
         if (!title.trim()) {
 
@@ -94,33 +102,32 @@ const fetchProjects = async()=>{
 
         }
 
+
         try {
 
-      await API.post("/tasks", {
-
-    title:title,
-
-    description:description,
-
-    priority:priority,
-
-    project:selectedProject || null
-
-});
+            await API.post(
+                "/tasks",
+                {
+                    title,
+                    description,
+                    priority
+                }
+            );
 
 
-            // Clear form
             setTitle("");
-            setDescription("");
-            setPriority("Medium");
 
-            // Close form
+            setDescription("");
+
+            setPriority("medium");
+
             setShowForm(false);
 
-            // Fetch updated tasks
+
             fetchTasks();
 
         }
+
         catch (err) {
 
             console.log(
@@ -135,18 +142,25 @@ const fetchProjects = async()=>{
     };
 
 
-    // Delete task
+    // =========================
+    // DELETE TASK
+    // =========================
+
     const handleDeleteTask = async () => {
 
         try {
 
-            await API.delete(`/tasks/${deleteId}`);
+            await API.delete(
+                `/tasks/${deleteId}`
+            );
+
 
             setDeleteId(null);
 
             fetchTasks();
 
         }
+
         catch (err) {
 
             console.log(
@@ -161,21 +175,31 @@ const fetchProjects = async()=>{
     };
 
 
-    // Toggle task status
-    const toggleStatus = async (task) => {
+    // =========================
+    // UPDATE TASK
+    // =========================
+
+    const updateTaskStatus = async (
+        taskId,
+        newStatus
+    ) => {
 
         try {
 
             await API.put(
-                `/tasks/${task._id}`,
+                `/tasks/${taskId}`,
                 {
-                    completed: !task.completed
+                    status: newStatus,
+                    completed:
+                        newStatus === "Completed"
                 }
             );
+
 
             fetchTasks();
 
         }
+
         catch (err) {
 
             console.log(
@@ -188,47 +212,328 @@ const fetchProjects = async()=>{
     };
 
 
-    // Filter tasks
-    const filteredTasks = tasks.filter((task) => {
+    // =========================
+    // DRAG START
+    // =========================
 
-        const searchText = search.toLowerCase();
+    const handleDragStart = (
+        e,
+        task
+    ) => {
 
-        const matchesSearch =
-            task.title
-                ?.toLowerCase()
-                .includes(searchText)
+        setDraggedTask(task);
 
-            ||
+        e.dataTransfer.effectAllowed = "move";
 
-            task.description
-                ?.toLowerCase()
-                .includes(searchText);
-
-
-        const matchesStatus =
-            statusFilter === "all"
-
-            ||
-
-            task.status === statusFilter;
+    };
 
 
-        const matchesPriority =
-            priorityFilter === "all"
+    // =========================
+    // DRAG OVER
+    // =========================
 
-            ||
+    const handleDragOver = (e) => {
 
-            task.priority
-                ?.toLowerCase() === priorityFilter;
+        e.preventDefault();
+
+        e.dataTransfer.dropEffect = "move";
+
+    };
+
+
+    // =========================
+    // DROP
+    // =========================
+
+    const handleDrop = async (
+        e,
+        newStatus
+    ) => {
+
+        e.preventDefault();
+
+
+        if (!draggedTask) {
+
+            return;
+
+        }
+
+
+        if (
+            draggedTask.status === newStatus
+        ) {
+
+            setDraggedTask(null);
+
+            return;
+
+        }
+
+
+        await updateTaskStatus(
+            draggedTask._id,
+            newStatus
+        );
+
+
+        setDraggedTask(null);
+
+    };
+
+
+    // =========================
+    // FILTER TASKS
+    // =========================
+
+    const filteredTasks = tasks.filter(
+        (task) => {
+
+            const searchText =
+                search.toLowerCase();
+
+
+            const matchesSearch =
+
+                task.title
+                    ?.toLowerCase()
+                    .includes(searchText)
+
+                ||
+
+                task.description
+                    ?.toLowerCase()
+                    .includes(searchText);
+
+
+            const taskStatus =
+                task.status ||
+                (
+                    task.completed
+                        ? "Completed"
+                        : "Todo"
+                );
+
+
+            const matchesStatus =
+
+                statusFilter === "all"
+
+                ||
+
+                (
+                    statusFilter === "pending"
+                        ? taskStatus !== "Completed"
+                        : statusFilter === "completed"
+                            ? taskStatus === "Completed"
+                            : taskStatus === statusFilter
+                );
+
+
+            const matchesPriority =
+
+                priorityFilter === "all"
+
+                ||
+
+                task.priority
+                    ?.toLowerCase() ===
+                    priorityFilter;
+
+
+            return (
+
+                matchesSearch &&
+
+                matchesStatus &&
+
+                matchesPriority
+
+            );
+
+        }
+    );
+
+
+    // =========================
+    // KANBAN COLUMNS
+    // =========================
+
+    const todoTasks =
+        filteredTasks.filter(
+            (task) =>
+                (
+                    task.status ||
+                    (
+                        task.completed
+                            ? "Completed"
+                            : "Todo"
+                    )
+                ) === "Todo"
+        );
+
+
+    const progressTasks =
+        filteredTasks.filter(
+            (task) =>
+                task.status === "In Progress"
+        );
+
+
+    const completedTasks =
+        filteredTasks.filter(
+            (task) =>
+                (
+                    task.status ||
+                    (
+                        task.completed
+                            ? "Completed"
+                            : "Todo"
+                    )
+                ) === "Completed"
+        );
+
+
+    // =========================
+    // TASK CARD
+    // =========================
+
+    const renderTaskCard = (task) => {
+
+        const currentStatus =
+            task.status ||
+            (
+                task.completed
+                    ? "Completed"
+                    : "Todo"
+            );
 
 
         return (
-            matchesSearch &&
-            matchesStatus &&
-            matchesPriority
+
+            <div
+                className={`task-card ${
+                    task.completed
+                        ? "completed-card"
+                        : ""
+                }`}
+                key={task._id}
+                draggable
+                onDragStart={(e) =>
+                    handleDragStart(
+                        e,
+                        task
+                    )
+                }
+            >
+
+                <div className="task-card-content">
+
+                    <div className="task-card-top">
+
+                        <h3
+                            className={
+                                task.completed
+                                    ? "completed-title"
+                                    : ""
+                            }
+                        >
+                            {task.title}
+                        </h3>
+
+                        <button
+                            className="task-menu-btn"
+                            onClick={() =>
+                                setDeleteId(
+                                    task._id
+                                )
+                            }
+                        >
+                            ⋮
+                        </button>
+
+                    </div>
+
+
+                    <p className="task-description">
+
+                        {task.description ||
+                            "No description"}
+
+                    </p>
+
+
+                    <div className="task-card-meta">
+
+                        <span
+                            className={`priority-badge ${
+                                task.priority?.toLowerCase()
+                            }`}
+                        >
+                            {task.priority}
+                        </span>
+
+
+                        <span
+                            className={`status-badge ${
+                                currentStatus
+                                    .toLowerCase()
+                                    .replace(" ", "-")
+                            }`}
+                        >
+                            {currentStatus}
+                        </span>
+
+                    </div>
+
+
+                    <div className="task-card-bottom">
+
+                        <select
+                            value={currentStatus}
+                            onChange={(e) =>
+                                updateTaskStatus(
+                                    task._id,
+                                    e.target.value
+                                )
+                            }
+                        >
+
+                            <option value="Todo">
+                                Todo
+                            </option>
+
+                            <option value="In Progress">
+                                In Progress
+                            </option>
+
+                            <option value="Completed">
+                                Completed
+                            </option>
+
+                        </select>
+
+
+                        <button
+                            className="delete-task-btn"
+                            onClick={() =>
+                                setDeleteId(
+                                    task._id
+                                )
+                            }
+                        >
+                            Delete
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
         );
 
-    });
+    };
 
 
     return (
@@ -236,18 +541,20 @@ const fetchProjects = async()=>{
         <div className="tasks-page">
 
 
-            {/* HEADER */}
+            {/* =========================
+                HEADER
+            ========================= */}
 
-            <div className="tasks-header">
+            <div className="tasks-page-header">
 
                 <div>
 
                     <h1>
-                        My Tasks
+                        Tasks
                     </h1>
 
                     <p>
-                        Manage your tasks and stay productive.
+                        Manage your tasks and track your progress.
                     </p>
 
                 </div>
@@ -255,7 +562,9 @@ const fetchProjects = async()=>{
 
                 <button
                     className="add-task-btn"
-                    onClick={() => setShowForm(true)}
+                    onClick={() =>
+                        setShowForm(true)
+                    }
                 >
                     + Add Task
                 </button>
@@ -263,12 +572,12 @@ const fetchProjects = async()=>{
             </div>
 
 
-            {/* TOOLBAR */}
+            {/* =========================
+                TOOLBAR
+            ========================= */}
 
             <div className="tasks-toolbar">
 
-
-                {/* SEARCH */}
 
                 <input
                     type="text"
@@ -280,12 +589,12 @@ const fetchProjects = async()=>{
                 />
 
 
-                {/* STATUS FILTER */}
-
                 <select
                     value={statusFilter}
                     onChange={(e) =>
-                        setStatusFilter(e.target.value)
+                        setStatusFilter(
+                            e.target.value
+                        )
                     }
                 >
 
@@ -293,23 +602,27 @@ const fetchProjects = async()=>{
                         All Tasks
                     </option>
 
-                    <option value="pending">
-                        Pending
+                    <option value="Todo">
+                        Todo
                     </option>
 
-                    <option value="completed">
+                    <option value="In Progress">
+                        In Progress
+                    </option>
+
+                    <option value="Completed">
                         Completed
                     </option>
 
                 </select>
 
 
-                {/* PRIORITY FILTER */}
-
                 <select
                     value={priorityFilter}
                     onChange={(e) =>
-                        setPriorityFilter(e.target.value)
+                        setPriorityFilter(
+                            e.target.value
+                        )
                     }
                 >
 
@@ -331,54 +644,79 @@ const fetchProjects = async()=>{
 
                 </select>
 
+
+                <div className="view-toggle">
+
+                    <button
+                        className={
+                            viewMode === "list"
+                                ? "active"
+                                : ""
+                        }
+                        onClick={() =>
+                            setViewMode("list")
+                        }
+                    >
+                        List View
+                    </button>
+
+
+                    <button
+                        className={
+                            viewMode === "kanban"
+                                ? "active"
+                                : ""
+                        }
+                        onClick={() =>
+                            setViewMode("kanban")
+                        }
+                    >
+                        Kanban Board
+                    </button>
+
+                </div>
+
             </div>
 
-<select
 
-value={selectedProject}
-
-onChange={(e)=>setSelectedProject(e.target.value)}
-
->
-
-<option value="">
-No Project
-</option>
-
-
-{
-
-projects.map((project)=>(
-
-<option
-
-key={project._id}
-
-value={project._id}
-
->
-
-{project.name}
-
-</option>
-
-))
-
-}
-
-</select>
-            {/* CREATE TASK FORM */}
+            {/* =========================
+                CREATE TASK FORM
+            ========================= */}
 
             {showForm && (
 
                 <form
                     className="task-form"
-                    onSubmit={handleCreateTask}
+                    onSubmit={
+                        handleCreateTask
+                    }
                 >
 
-                    <h2>
-                        Create New Task
-                    </h2>
+                    <div className="form-header">
+
+                        <div>
+
+                            <h2>
+                                Create New Task
+                            </h2>
+
+                            <p>
+                                Add a task to your workspace.
+                            </p>
+
+                        </div>
+
+                        <button
+                            type="button"
+                            className="close-form-btn"
+                            onClick={() =>
+                                setShowForm(false)
+                            }
+                        >
+                            ×
+                        </button>
+
+                    </div>
 
 
                     <input
@@ -386,7 +724,9 @@ value={project._id}
                         placeholder="Task title"
                         value={title}
                         onChange={(e) =>
-                            setTitle(e.target.value)
+                            setTitle(
+                                e.target.value
+                            )
                         }
                     />
 
@@ -395,7 +735,9 @@ value={project._id}
                         placeholder="Task description"
                         value={description}
                         onChange={(e) =>
-                            setDescription(e.target.value)
+                            setDescription(
+                                e.target.value
+                            )
                         }
                     />
 
@@ -403,21 +745,23 @@ value={project._id}
                     <select
                         value={priority}
                         onChange={(e) =>
-                            setPriority(e.target.value)
+                            setPriority(
+                                e.target.value
+                            )
                         }
                     >
 
-                     <option value="Low">
-    Low
-</option>
+                        <option value="low">
+                            Low
+                        </option>
 
-<option value="Medium">
-    Medium
-</option>
+                        <option value="medium">
+                            Medium
+                        </option>
 
-<option value="High">
-    High
-</option>
+                        <option value="high">
+                            High
+                        </option>
 
                     </select>
 
@@ -435,16 +779,11 @@ value={project._id}
                         <button
                             type="button"
                             className="cancel-btn"
-                            onClick={() => {
-
-                                setShowForm(false);
-                                setTitle("");
-                                setDescription("");
-                                setPriority("Medium");
-
-                            }}
+                            onClick={() =>
+                                setShowForm(false)
+                            }
                         >
-                            Cancel  
+                            Cancel
                         </button>
 
                     </div>
@@ -454,148 +793,246 @@ value={project._id}
             )}
 
 
-            {/* TASK LIST */}
+            {/* =========================
+                TASK CONTENT
+            ========================= */}
 
-            <div className="tasks-list">
+            {loading ? (
 
-                {loading ? (
+                <div className="empty-tasks">
 
-                    <div className="empty-tasks">
-
-                        <div className="empty-icon">
-                            ⏳
-                        </div>
-
-                        <h2>
-                            Loading tasks...
-                        </h2>
-
+                    <div className="empty-icon">
+                        ⏳
                     </div>
 
-                ) : filteredTasks.length === 0 ? (
+                    <h2>
+                        Loading tasks...
+                    </h2>
 
-                    <div className="empty-tasks">
+                </div>
 
-                        <div className="empty-icon">
-                            🔎
-                        </div>
+            ) : filteredTasks.length === 0 ? (
 
-                        <h2>
-                            No tasks found
-                        </h2>
+                <div className="empty-tasks">
 
-                        <p>
-                            Try changing your search or filters.
-                        </p>
-
+                    <div className="empty-icon">
+                        📋
                     </div>
 
-                ) : (
+                    <h2>
+                        No tasks found
+                    </h2>
 
-                    filteredTasks.map((task) => (
+                    <p>
+                        Create a task or change your filters.
+                    </p>
 
-                        <div
-                            className={`task-card ${
-                                task.completed
-                                    ? "completed-card"
-                                    : ""
-                            }`}
-                            key={task._id}
-                        >
+                </div>
+
+            ) : viewMode === "list" ? (
+
+                <div className="tasks-list">
+
+                    {filteredTasks.map(
+                        renderTaskCard
+                    )}
+
+                </div>
+
+            ) : (
+
+                <div className="kanban-board">
+
+
+                    {/* TODO */}
+
+                    <div
+                        className="kanban-column todo-column"
+                        onDragOver={
+                            handleDragOver
+                        }
+                        onDrop={(e) =>
+                            handleDrop(
+                                e,
+                                "Todo"
+                            )
+                        }
+                    >
+
+                        <div className="kanban-column-header">
 
                             <div>
 
-                                <h3
-                                    className={
-                                        task.completed
-                                            ? "completed-title"
-                                            : ""
-                                    }
-                                >
-                                    {task.title}
-                                </h3>
+                                <span className="column-dot todo-dot"></span>
 
-
-                                <p>
-                                    {task.description}
-                                </p>
-
-
-                                <div className="task-card-meta">
-
-                                    <span
-                                        className={`priority-badge ${
-                                            task.priority?.toLowerCase()
-                                        }`}
-                                    >
-                                        {task.priority}
-                                    </span>
-
-
-                                    <span
-                                        className={
-                                            task.completed
-                                                ? "status-badge completed"
-                                                : "status-badge pending"
-                                        }
-                                    >
-
-                                        {task.completed
-                                            ? "Completed"
-                                            : "Pending"
-                                        }
-
-                                    </span>
-
-                                </div>
+                                <h2>
+                                    Todo
+                                </h2>
 
                             </div>
 
-
-                            {/* TASK ACTIONS */}
-
-                            <div className="task-card-actions">
-
-                                <button
-                                    onClick={() =>
-                                        toggleStatus(task)
-                                    }
-                                >
-                                    {task.completed
-                                        ? "↩ Mark Pending"
-                                        : "✓ Complete"
-                                    }
-                                </button>
-
-
-                                <button
-                                    className="delete-task-btn"
-                                    onClick={() =>
-                                        setDeleteId(task._id)
-                                    }
-                                >
-                                    🗑 Delete
-                                </button>
-
-                            </div>
+                            <span className="task-count">
+                                {todoTasks.length}
+                            </span>
 
                         </div>
 
-                    ))
 
-                )}
+                        <div className="kanban-drop-area">
 
-            </div>
+                            {todoTasks.length === 0 ? (
+
+                                <div className="kanban-empty">
+                                    Drop tasks here
+                                </div>
+
+                            ) : (
+
+                                todoTasks.map(
+                                    renderTaskCard
+                                )
+
+                            )}
+
+                        </div>
+
+                    </div>
 
 
-            {/* DELETE CONFIRMATION MODAL */}
+                    {/* IN PROGRESS */}
+
+                    <div
+                        className="kanban-column progress-column"
+                        onDragOver={
+                            handleDragOver
+                        }
+                        onDrop={(e) =>
+                            handleDrop(
+                                e,
+                                "In Progress"
+                            )
+                        }
+                    >
+
+                        <div className="kanban-column-header">
+
+                            <div>
+
+                                <span className="column-dot progress-dot"></span>
+
+                                <h2>
+                                    In Progress
+                                </h2>
+
+                            </div>
+
+                            <span className="task-count">
+                                {progressTasks.length}
+                            </span>
+
+                        </div>
+
+
+                        <div className="kanban-drop-area">
+
+                            {progressTasks.length === 0 ? (
+
+                                <div className="kanban-empty">
+                                    Drop tasks here
+                                </div>
+
+                            ) : (
+
+                                progressTasks.map(
+                                    renderTaskCard
+                                )
+
+                            )}
+
+                        </div>
+
+                    </div>
+
+
+                    {/* COMPLETED */}
+
+                    <div
+                        className="kanban-column completed-column"
+                        onDragOver={
+                            handleDragOver
+                        }
+                        onDrop={(e) =>
+                            handleDrop(
+                                e,
+                                "Completed"
+                            )
+                        }
+                    >
+
+                        <div className="kanban-column-header">
+
+                            <div>
+
+                                <span className="column-dot completed-dot"></span>
+
+                                <h2>
+                                    Completed
+                                </h2>
+
+                            </div>
+
+                            <span className="task-count">
+                                {completedTasks.length}
+                            </span>
+
+                        </div>
+
+
+                        <div className="kanban-drop-area">
+
+                            {completedTasks.length === 0 ? (
+
+                                <div className="kanban-empty">
+                                    Drop tasks here
+                                </div>
+
+                            ) : (
+
+                                completedTasks.map(
+                                    renderTaskCard
+                                )
+
+                            )}
+
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+            )}
+
+
+            {/* =========================
+                DELETE MODAL
+            ========================= */}
 
             <ConfirmModal
-                show={deleteId !== null}
-                onConfirm={handleDeleteTask}
-                onCancel={() => setDeleteId(null)}
-            />
 
+                show={
+                    deleteId !== null
+                }
+
+                onConfirm={
+                    handleDeleteTask
+                }
+
+                onCancel={() =>
+                    setDeleteId(null)
+                }
+
+            />
 
         </div>
 
