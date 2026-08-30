@@ -628,8 +628,6 @@ return order[b.priority]-order[a.priority];
 
 
 
-
-
 if(sortBy==="Low"){
 
 
