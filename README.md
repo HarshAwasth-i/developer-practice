@@ -12,10 +12,10 @@ This repository contains my daily backend development practice using **Node.js**
 |------|---------|--------|
 | Day 01 | Express Task API | ✅ Completed |
 | Day 02 | MVC Task API | ✅ Completed |
-| Day 03 | MongoDB & Mongoose | ⏳ Coming Soon |
-| Day 04 | JWT Authentication | ⏳ Coming Soon |
-| Day 05 | User Authentication System | ⏳ Coming Soon |
-| Day 06+ | More Backend Projects | ⏳ Coming Soon |
+| Day 03 | MongoDB & Mongoose | Done |
+| Day 04 | JWT Authentication | Done |
+| Day 05 | User Authentication System | Doing |
+
 
 ---
 
