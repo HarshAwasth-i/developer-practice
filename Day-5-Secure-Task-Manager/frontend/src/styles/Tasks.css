@@ -757,23 +757,6 @@
    LIGHT MODE
 ========================================================= */
 
-body.light .tasks-page,
-[data-theme="light"] .tasks-page {
-    --bg-color: #f7f8fa;
-
-    --text-color: #171717;
-
-    --muted-text: #6b7280;
-
-    --card-bg: #ffffff;
-
-    --column-bg: #f1f3f5;
-
-    --input-bg: #ffffff;
-
-    --border-color: #e1e4e8;
-}
-
 body.light .task-card,
 [data-theme="light"] .task-card {
     box-shadow:
