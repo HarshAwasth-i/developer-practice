@@ -100,7 +100,6 @@ function Dashboard() {
     const totalTasks = tasks.length;
     const completedTasks = tasks.filter(t => t.status === "Completed" || t.completed).length;
     const inProgressTasks = tasks.filter(t => t.status === "In Progress").length;
-    const todoTasks = tasks.filter(t => t.status === "Todo" || (!t.status && !t.completed)).length;
 
     const now = new Date();
     const overdueTasks = tasks.filter(t => 

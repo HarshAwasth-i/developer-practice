@@ -7,7 +7,7 @@ import ProfileDropdown from "./ProfileDropdown";
 function Navbar({ darkMode, setDarkMode }) {
     const [menuOpen, setMenuOpen] = useState(false);
     const navigate = useNavigate();
-    const { token, logout, user } = useAuth();
+    const { token, logout } = useAuth();
 
     function handleLogout() {
         logout();
