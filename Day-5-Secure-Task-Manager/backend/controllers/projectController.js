@@ -18,7 +18,7 @@ exports.createProject = async (req, res) => {
             name: name.trim(),
             description: description || "",
             status: status || "Planning",
-            color: color || "#4f46e5",
+            color: color || "#2563eb",
             category: category || "General",
             dueDate: dueDate || null,
             user: req.user.id

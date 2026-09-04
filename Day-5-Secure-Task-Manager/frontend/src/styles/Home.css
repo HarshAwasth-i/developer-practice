@@ -32,7 +32,7 @@
     font-weight: 700;
     padding: 6px 14px;
     border-radius: var(--radius-full);
-    border: 1px solid rgba(99, 102, 241, 0.25);
+    border: 1px solid rgba(37, 99, 235, 0.25);
     width: fit-content;
 }
 
@@ -40,8 +40,8 @@
     width: 8px;
     height: 8px;
     border-radius: 50%;
-    background: var(--primary);
-    box-shadow: 0 0 8px var(--primary);
+    background: var(--accent-cyan);
+    box-shadow: 0 0 8px var(--accent-cyan);
 }
 
 .hero-title {
@@ -53,7 +53,7 @@
 }
 
 .hero-title span {
-    background: linear-gradient(135deg, var(--primary) 0%, var(--accent-cyan) 100%);
+    background: linear-gradient(135deg, #2563eb 0%, #0ea5e9 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
@@ -75,7 +75,7 @@
 
 .cta-primary-btn {
     padding: 14px 28px;
-    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-hover) 100%);
+    background: linear-gradient(135deg, #2563eb 0%, #0284c7 100%);
     color: #ffffff;
     font-size: 1.05rem;
     font-weight: 700;
@@ -226,7 +226,7 @@
     height: 6px;
     border-radius: 50%;
 }
-.dot-todo { background: #94a3b8; }
+.dot-todo { background: #64748b; }
 .dot-prog { background: var(--primary); }
 .dot-done { background: var(--accent-emerald); }
 
@@ -258,7 +258,7 @@
 
 .tag-dev { background: var(--primary-light); color: var(--primary); }
 .tag-urgent { background: rgba(244, 63, 94, 0.12); color: var(--accent-rose); }
-.tag-design { background: rgba(168, 85, 247, 0.12); color: var(--accent-purple); }
+.tag-design { background: rgba(14, 165, 233, 0.12); color: var(--accent-cyan); }
 
 .prev-progress {
     width: 100%;
@@ -366,8 +366,8 @@
 }
 
 .icon-indigo { background: var(--primary-light); color: var(--primary); }
-.icon-purple { background: rgba(168, 85, 247, 0.15); color: var(--accent-purple); }
-.icon-cyan { background: rgba(6, 182, 212, 0.15); color: var(--accent-cyan); }
+.icon-purple { background: rgba(14, 165, 233, 0.15); color: var(--accent-cyan); }
+.icon-cyan { background: rgba(2, 132, 199, 0.15); color: #0284c7; }
 .icon-emerald { background: rgba(16, 185, 129, 0.15); color: var(--accent-emerald); }
 .icon-amber { background: rgba(245, 158, 11, 0.15); color: var(--accent-amber); }
 .icon-rose { background: rgba(244, 63, 94, 0.15); color: var(--accent-rose); }

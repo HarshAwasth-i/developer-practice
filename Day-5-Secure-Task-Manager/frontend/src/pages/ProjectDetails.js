@@ -134,7 +134,7 @@ function ProjectDetails() {
     if (loading) return <Loader />;
     if (!project) return null;
 
-    const color = project.color || "#6366f1";
+    const color = project.color || "#2563eb";
     const todoTasks = tasks.filter(t => t.status === "Todo");
     const inProgressTasks = tasks.filter(t => t.status === "In Progress");
     const completedTasks = tasks.filter(t => t.status === "Completed");

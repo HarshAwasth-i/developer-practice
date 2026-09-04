@@ -1,29 +1,32 @@
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
 
 /* ==========================================================================
-   TaskPulse Core Design System & Tokens
+   TaskPulse Core Design System - Sleek Ocean Blue & Slate Theme
    ========================================================================== */
 
 :root {
     --font-main: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     --font-mono: 'JetBrains Mono', monospace;
     
-    /* Primary brand palette */
-    --primary: #6366f1;
-    --primary-hover: #4f46e5;
-    --primary-light: rgba(99, 102, 241, 0.12);
-    --primary-glow: rgba(99, 102, 241, 0.35);
+    /* Primary Brand Palette - Crisp Electric Blue & Sky Cyan */
+    --primary: #2563eb;
+    --primary-hover: #1d4ed8;
+    --primary-light: rgba(37, 99, 235, 0.1);
+    --primary-glow: rgba(37, 99, 235, 0.28);
     
-    --accent-cyan: #06b6d4;
-    --accent-purple: #a855f7;
+    --brand-gradient: linear-gradient(135deg, #2563eb 0%, #0ea5e9 100%);
+    --brand-gradient-hover: linear-gradient(135deg, #1d4ed8 0%, #0284c7 100%);
+    
+    --accent-cyan: #0ea5e9;
     --accent-emerald: #10b981;
     --accent-amber: #f59e0b;
     --accent-rose: #f43f5e;
+    --accent-slate: #64748b;
     
     --radius-sm: 8px;
     --radius-md: 12px;
-    --radius-lg: 18px;
-    --radius-xl: 24px;
+    --radius-lg: 16px;
+    --radius-xl: 22px;
     --radius-full: 9999px;
     
     --transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
@@ -52,29 +55,29 @@ body {
 }
 
 /* ==========================================================================
-   Theme Variables (Light & Dark)
+   Theme Variables (Clean Slate Light & Deep Obsidian Dark)
    ========================================================================== */
 
 .app.light {
     --bg-page: #f8fafc;
     --bg-surface: #ffffff;
     --bg-surface-elevated: #ffffff;
-    --bg-surface-translucent: rgba(255, 255, 255, 0.82);
+    --bg-surface-translucent: rgba(255, 255, 255, 0.88);
     --bg-subtle: #f1f5f9;
     --bg-hover: #e2e8f0;
     
     --border-subtle: #e2e8f0;
     --border-medium: #cbd5e1;
-    --border-highlight: rgba(99, 102, 241, 0.3);
+    --border-highlight: rgba(37, 99, 235, 0.25);
     
     --text-primary: #0f172a;
     --text-secondary: #475569;
     --text-muted: #94a3b8;
     
-    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-    --shadow-md: 0 4px 6px -1px rgba(15, 23, 42, 0.08), 0 2px 4px -2px rgba(15, 23, 42, 0.05);
-    --shadow-lg: 0 12px 24px -4px rgba(15, 23, 42, 0.08), 0 4px 6px -2px rgba(15, 23, 42, 0.03);
-    --shadow-glow: 0 0 20px rgba(99, 102, 241, 0.2);
+    --shadow-sm: 0 1px 3px 0 rgba(15, 23, 42, 0.06);
+    --shadow-md: 0 4px 12px -2px rgba(15, 23, 42, 0.08);
+    --shadow-lg: 0 12px 28px -4px rgba(15, 23, 42, 0.1);
+    --shadow-glow: 0 0 20px rgba(37, 99, 235, 0.2);
     
     --kanban-col-bg: #f1f5f9;
     --kanban-card-bg: #ffffff;
@@ -82,29 +85,29 @@ body {
 }
 
 .app.dark {
-    --bg-page: #0a0e17;
+    --bg-page: #0b0f19;
     --bg-surface: #111827;
-    --bg-surface-elevated: #1a2234;
-    --bg-surface-translucent: rgba(17, 24, 39, 0.85);
-    --bg-subtle: #1e293b;
-    --bg-hover: #334155;
+    --bg-surface-elevated: #161f30;
+    --bg-surface-translucent: rgba(17, 24, 39, 0.88);
+    --bg-subtle: #1a2336;
+    --bg-hover: #243048;
     
     --border-subtle: rgba(255, 255, 255, 0.08);
-    --border-medium: rgba(255, 255, 255, 0.15);
-    --border-highlight: rgba(99, 102, 241, 0.45);
+    --border-medium: rgba(255, 255, 255, 0.14);
+    --border-highlight: rgba(14, 165, 233, 0.35);
     
     --text-primary: #f8fafc;
     --text-secondary: #cbd5e1;
     --text-muted: #64748b;
     
-    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
-    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.35);
-    --shadow-lg: 0 16px 32px rgba(0, 0, 0, 0.45);
-    --shadow-glow: 0 0 25px rgba(99, 102, 241, 0.3);
+    --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 4px 14px rgba(0, 0, 0, 0.35);
+    --shadow-lg: 0 16px 36px rgba(0, 0, 0, 0.5);
+    --shadow-glow: 0 0 24px rgba(14, 165, 233, 0.25);
     
-    --kanban-col-bg: #111827;
-    --kanban-card-bg: #1a2234;
-    --modal-overlay: rgba(0, 0, 0, 0.75);
+    --kanban-col-bg: #101624;
+    --kanban-card-bg: #161f30;
+    --modal-overlay: rgba(0, 0, 0, 0.8);
 }
 
 .app {
@@ -182,10 +185,10 @@ button:active {
 
 @keyframes pulseGlow {
     0%, 100% {
-        box-shadow: 0 0 10px rgba(99, 102, 241, 0.3);
+        box-shadow: 0 0 10px rgba(37, 99, 235, 0.25);
     }
     50% {
-        box-shadow: 0 0 25px rgba(99, 102, 241, 0.65);
+        box-shadow: 0 0 22px rgba(14, 165, 233, 0.5);
     }
 }
 

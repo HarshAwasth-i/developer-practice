@@ -34,7 +34,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(135deg, var(--primary) 0%, var(--accent-purple) 100%);
+    background: linear-gradient(135deg, #2563eb 0%, #0ea5e9 100%);
     color: #ffffff;
     font-size: 1.25rem;
     border-radius: var(--radius-md);
@@ -50,7 +50,7 @@
 }
 
 .brand-text span {
-    background: linear-gradient(135deg, var(--primary) 0%, var(--accent-cyan) 100%);
+    background: linear-gradient(135deg, #2563eb 0%, #0ea5e9 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
@@ -148,7 +148,7 @@
     font-weight: 600;
     color: #ffffff;
     text-decoration: none;
-    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-hover) 100%);
+    background: linear-gradient(135deg, #2563eb 0%, #0284c7 100%);
     box-shadow: 0 4px 12px var(--primary-glow);
     transition: all var(--transition-fast);
 }

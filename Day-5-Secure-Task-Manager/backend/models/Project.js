@@ -18,7 +18,7 @@ const projectSchema = new mongoose.Schema(
         },
         color: {
             type: String,
-            default: "#4f46e5", // Default Indigo
+            default: "#2563eb", // Default Electric Blue
         },
         category: {
             type: String,

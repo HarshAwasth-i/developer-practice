@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 function ProjectCard({ project, onEdit, onDelete }) {
     const navigate = useNavigate();
 
-    const color = project.color || "#6366f1";
+    const color = project.color || "#2563eb";
     const statusClass = project.status ? project.status.toLowerCase().replace(" ", "-") : "planning";
 
     return (

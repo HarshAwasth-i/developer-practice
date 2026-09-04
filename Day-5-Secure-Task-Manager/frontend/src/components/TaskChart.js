@@ -10,8 +10,8 @@ import "../styles/TaskChart.css";
 
 const STATUS_COLORS = {
     "Completed": "#10b981",
-    "In Progress": "#6366f1",
-    "Todo": "#94a3b8"
+    "In Progress": "#2563eb",
+    "Todo": "#64748b"
 };
 
 const PRIORITY_COLORS = {
@@ -76,7 +76,7 @@ function TaskChart({ tasks = [] }) {
                                 {statusData.map((entry, index) => (
                                     <Cell
                                         key={`cell-${index}`}
-                                        fill={STATUS_COLORS[entry.name] || "#6366f1"}
+                                        fill={STATUS_COLORS[entry.name] || "#2563eb"}
                                     />
                                 ))}
                             </Pie>

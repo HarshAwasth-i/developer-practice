@@ -9,12 +9,12 @@ import Loader from "../components/Loader";
 import "../styles/Projects.css";
 
 const COLOR_PALETTE = [
-    { label: "Indigo", value: "#6366f1" },
-    { label: "Violet", value: "#8b5cf6" },
-    { label: "Cyan", value: "#06b6d4" },
+    { label: "Electric Blue", value: "#2563eb" },
+    { label: "Sky Cyan", value: "#0ea5e9" },
     { label: "Emerald", value: "#10b981" },
     { label: "Amber", value: "#f59e0b" },
-    { label: "Rose", value: "#f43f5e" }
+    { label: "Rose", value: "#f43f5e" },
+    { label: "Slate", value: "#64748b" }
 ];
 
 const CATEGORIES = [
@@ -47,7 +47,7 @@ function Projects() {
         description: "",
         status: "Planning",
         category: "Development",
-        color: "#6366f1",
+        color: "#2563eb",
         dueDate: ""
     });
 
@@ -75,7 +75,7 @@ function Projects() {
             description: "",
             status: "Planning",
             category: "Development",
-            color: "#6366f1",
+            color: "#2563eb",
             dueDate: ""
         });
         setShowModal(true);
@@ -88,7 +88,7 @@ function Projects() {
             description: project.description || "",
             status: project.status || "Planning",
             category: project.category || "General",
-            color: project.color || "#6366f1",
+            color: project.color || "#2563eb",
             dueDate: project.dueDate ? new Date(project.dueDate).toISOString().split("T")[0] : ""
         });
         setShowModal(true);
