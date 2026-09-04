@@ -590,29 +590,7 @@
 }
 
 
-/* =========================================================
-   KANBAN COLUMN
-========================================================= */
 
-.kanban-column {
-    min-height: 560px;
-
-    background: var(--column-bg, #151515);
-
-    border: 1px solid var(--border-color, #2e2e2e);
-
-    border-radius: 17px;
-
-    padding: 15px;
-
-    transition:
-        border-color 0.2s ease,
-        background 0.2s ease;
-}
-
-.kanban-column:hover {
-    border-color: #444444;
-}
 
 
 /* =========================================================

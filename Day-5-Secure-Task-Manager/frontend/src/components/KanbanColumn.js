@@ -1,79 +1,52 @@
 import KanbanCard from "./KanbanCard";
 
-
 function KanbanColumn({
     title,
     status,
     tasks,
     onStatusChange
 }) {
-
-
     return (
-
         <div className="kanban-column">
-
-
-            {/* COLUMN HEADER */}
 
             <div className="kanban-column-header">
 
-                <h2>
+                <h3>
                     {title}
-                </h2>
+                </h3>
 
-                <span>
+                <span className="kanban-column-count">
                     {tasks.length}
                 </span>
 
             </div>
 
+            <div className="kanban-column-content">
 
+                {tasks.length === 0 ? (
 
-            {/* TASKS */}
+                    <div className="kanban-empty">
+                        No tasks
+                    </div>
 
-            <div className="kanban-column-tasks">
+                ) : (
 
-                {
+                    tasks.map(task => (
 
-                    tasks.length === 0 ? (
+                        <KanbanCard
+                            key={task._id}
+                            task={task}
+                            onStatusChange={onStatusChange}
+                        />
 
-                        <div className="kanban-empty">
+                    ))
 
-                            No tasks
-
-                        </div>
-
-                    ) : (
-
-                        tasks.map(task => (
-
-                            <KanbanCard
-
-                                key={task._id}
-
-                                task={task}
-
-                                onStatusChange={
-                                    onStatusChange
-                                }
-
-                            />
-
-                        ))
-
-                    )
-
-                }
+                )}
 
             </div>
 
-
         </div>
-
     );
-
 }
-
 
 export default KanbanColumn;

@@ -27,7 +27,7 @@
 
     border: 1px solid var(--border-color);
 
-    background: var(--column-bg);
+    background: var(--card-bg);
 
     transition:
         background 0.2s ease,
@@ -87,36 +87,6 @@
     font-size: 14px;
 
     padding: 15px 0;
-}
-
-
-/* =========================
-   DARK MODE
-========================= */
-
-.app.dark .kanban-board {
-    --column-bg: #1f1f1f;
-
-    --text-color: #f5f5f5;
-
-    --muted-text: #a1a1aa;
-
-    --border-color: #333;
-}
-
-
-/* =========================
-   LIGHT MODE
-========================= */
-
-.app.light .kanban-board {
-    --column-bg: #ffffff;
-
-    --text-color: #111827;
-
-    --muted-text: #6b7280;
-
-    --border-color: #e5e7eb;
 }
 
 
