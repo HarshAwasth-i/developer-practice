@@ -1,870 +1,437 @@
-/* =========================================================
-   TASKS PAGE
-========================================================= */
-
 .tasks-page {
-    min-height: 100vh;
-    padding: 42px 48px 60px;
-
-    background: var(--bg-color, #111111);
-    color: var(--text-color, #ffffff);
-
-    box-sizing: border-box;
+    max-width: 1350px;
+    margin: 0 auto;
+    padding: 32px 24px 60px;
 }
 
-
-/* =========================================================
-   HEADER
-========================================================= */
-
-.tasks-page-header {
+/* Page Header */
+.tasks-header {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-
-    margin-bottom: 32px;
+    justify-content: space-between;
+    gap: 20px;
+    margin-bottom: 28px;
+    flex-wrap: wrap;
 }
 
-.tasks-page-header h1 {
-    margin: 0;
-
-    font-size: 38px;
+.tasks-title-group h1 {
+    font-size: 2rem;
     font-weight: 800;
-    letter-spacing: -0.8px;
+    letter-spacing: -0.5px;
+    color: var(--text-primary);
+    margin-bottom: 6px;
 }
 
-.tasks-page-header p {
-    margin: 8px 0 0;
-
-    color: var(--muted-text, #888888);
-
-    font-size: 16px;
+.tasks-title-group p {
+    font-size: 0.95rem;
+    color: var(--text-secondary);
 }
 
+.tasks-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
 
-/* =========================================================
-   BUTTON
-========================================================= */
+.export-btn {
+    padding: 10px 18px;
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-primary);
+    font-size: 0.9rem;
+    font-weight: 600;
+    border-radius: var(--radius-md);
+    transition: all var(--transition-fast);
+}
 
-.add-task-btn {
-    background: #4ade80;
-    color: #07110a;
+.export-btn:hover {
+    background: var(--bg-hover);
+    border-color: var(--border-medium);
+}
 
-    border: none;
-
-    padding: 13px 22px;
-
-    border-radius: 11px;
-
-    font-size: 14px;
+.create-task-primary-btn {
+    padding: 10px 22px;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-hover) 100%);
+    color: #ffffff;
+    font-size: 0.925rem;
     font-weight: 700;
-
-    cursor: pointer;
-
-    transition:
-        transform 0.2s ease,
-        box-shadow 0.2s ease,
-        background 0.2s ease;
+    border-radius: var(--radius-md);
+    box-shadow: 0 4px 14px var(--primary-glow);
+    transition: all var(--transition-fast);
 }
 
-.add-task-btn:hover {
-    background: #5bea8c;
-
-    transform: translateY(-2px);
-
-    box-shadow:
-        0 8px 25px rgba(74, 222, 128, 0.2);
+.create-task-primary-btn:hover {
+    box-shadow: 0 6px 20px var(--primary-glow);
+    transform: translateY(-1px);
 }
 
-
-/* =========================================================
-   TOOLBAR
-========================================================= */
-
+/* Toolbar & Filters */
 .tasks-toolbar {
     display: flex;
     align-items: center;
-    gap: 12px;
-
+    justify-content: space-between;
+    gap: 16px;
     margin-bottom: 28px;
-
     flex-wrap: wrap;
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    padding: 14px 18px;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
 }
 
-.tasks-toolbar input,
-.tasks-toolbar select {
-    height: 44px;
-
-    background: var(--input-bg, #1b1b1b);
-
-    color: var(--text-color, #ffffff);
-
-    border: 1px solid var(--border-color, #333333);
-
-    border-radius: 10px;
-
-    padding: 0 14px;
-
-    font-size: 14px;
-
-    outline: none;
-
-    transition:
-        border-color 0.2s ease,
-        box-shadow 0.2s ease;
-}
-
-.tasks-toolbar input {
+.search-bar-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+    min-width: 240px;
     flex: 1;
-
-    min-width: 220px;
+    max-width: 380px;
 }
 
-.tasks-toolbar select {
-    min-width: 150px;
+.search-icon {
+    position: absolute;
+    left: 12px;
+    font-size: 0.9rem;
+    pointer-events: none;
+    opacity: 0.6;
 }
 
-.tasks-toolbar input:focus,
-.tasks-toolbar select:focus {
-    border-color: #4ade80;
-
-    box-shadow:
-        0 0 0 3px rgba(74, 222, 128, 0.1);
-}
-
-
-/* =========================================================
-   VIEW TOGGLE
-========================================================= */
-
-.view-toggle {
-    display: flex;
-
-    margin-left: auto;
-
-    background: var(--input-bg, #1b1b1b);
-
-    border: 1px solid var(--border-color, #333333);
-
-    padding: 4px;
-
-    border-radius: 11px;
-}
-
-.view-toggle button {
-    border: none;
-
-    background: transparent;
-
-    color: var(--muted-text, #999999);
-
-    padding: 9px 15px;
-
-    border-radius: 8px;
-
-    font-size: 13px;
-    font-weight: 700;
-
-    cursor: pointer;
-
-    transition: 0.2s ease;
-}
-
-.view-toggle button:hover {
-    color: var(--text-color, #ffffff);
-}
-
-.view-toggle button.active {
-    background: #4ade80;
-
-    color: #07110a;
-
-    box-shadow:
-        0 3px 10px rgba(74, 222, 128, 0.15);
-}
-
-
-/* =========================================================
-   CREATE TASK FORM
-========================================================= */
-
-.task-form {
-    background: var(--card-bg, #181818);
-
-    border: 1px solid var(--border-color, #333333);
-
-    border-radius: 16px;
-
-    padding: 25px;
-
-    margin-bottom: 30px;
-
-    display: flex;
-    flex-direction: column;
-
-    gap: 15px;
-
-    box-shadow:
-        0 15px 40px rgba(0, 0, 0, 0.2);
-}
-
-.form-header {
-    display: flex;
-
-    justify-content: space-between;
-
-    align-items: flex-start;
-}
-
-.form-header h2 {
-    margin: 0;
-
-    font-size: 21px;
-}
-
-.form-header p {
-    margin: 5px 0 0;
-
-    color: var(--muted-text, #888888);
-
-    font-size: 14px;
-}
-
-.close-form-btn {
-    background: transparent;
-
-    border: none;
-
-    color: #888888;
-
-    font-size: 27px;
-
-    cursor: pointer;
-
-    line-height: 1;
-}
-
-.close-form-btn:hover {
-    color: #ffffff;
-}
-
-.task-form input,
-.task-form textarea,
-.task-form select {
+.search-input {
     width: 100%;
-
-    box-sizing: border-box;
-
-    background: var(--input-bg, #101010);
-
-    color: var(--text-color, #ffffff);
-
-    border: 1px solid var(--border-color, #333333);
-
-    padding: 13px 14px;
-
-    border-radius: 10px;
-
-    font-size: 14px;
-
-    outline: none;
+    padding-left: 36px;
+    padding-right: 32px;
+    font-size: 0.875rem;
 }
 
-.task-form input:focus,
-.task-form textarea:focus,
-.task-form select:focus {
-    border-color: #4ade80;
-}
-
-.task-form textarea {
-    min-height: 100px;
-
-    resize: vertical;
-}
-
-.task-form-buttons {
-    display: flex;
-
-    gap: 10px;
-}
-
-.cancel-btn {
-    border: 1px solid var(--border-color, #444444);
-
+.clear-search-btn {
+    position: absolute;
+    right: 10px;
     background: transparent;
-
-    color: var(--text-color, #ffffff);
-
-    padding: 12px 20px;
-
-    border-radius: 10px;
-
-    font-weight: 700;
-
-    cursor: pointer;
-}
-
-.cancel-btn:hover {
-    background: rgba(255, 255, 255, 0.06);
-}
-
-
-/* =========================================================
-   LIST VIEW
-========================================================= */
-
-.tasks-list {
-    display: grid;
-
-    grid-template-columns:
-        repeat(2, minmax(0, 1fr));
-
-    gap: 20px;
-}
-
-
-/* =========================================================
-   TASK CARD
-========================================================= */
-
-.task-card {
-    background: var(--card-bg, #181818);
-
-    border: 1px solid var(--border-color, #303030);
-
-    border-radius: 16px;
-
-    padding: 21px;
-
-    cursor: grab;
-
-    transition:
-        transform 0.2s ease,
-        border-color 0.2s ease,
-        box-shadow 0.2s ease;
-
-    box-sizing: border-box;
-}
-
-.task-card:hover {
-    transform: translateY(-3px);
-
-    border-color: #4ade80;
-
-    box-shadow:
-        0 10px 30px rgba(0, 0, 0, 0.2);
-}
-
-.task-card:active {
-    cursor: grabbing;
-}
-
-.completed-card {
-    opacity: 0.82;
-}
-
-.task-card-content {
-    min-width: 0;
-}
-
-.task-card-top {
-    display: flex;
-
-    justify-content: space-between;
-
-    align-items: flex-start;
-
-    gap: 12px;
-}
-
-.task-card h3 {
-    margin: 0;
-
-    font-size: 19px;
-
-    font-weight: 750;
-
-    line-height: 1.3;
-
-    color: var(--text-color, #ffffff);
-}
-
-.completed-title {
-    text-decoration: line-through;
-
-    opacity: 0.65;
-}
-
-.task-menu-btn {
-    width: 30px;
-    height: 30px;
-
     border: none;
-
-    background: transparent;
-
-    color: #888888;
-
-    font-size: 22px;
-
-    border-radius: 7px;
-
+    font-size: 0.8rem;
     cursor: pointer;
+    color: var(--text-muted);
 }
 
-.task-menu-btn:hover {
-    background: rgba(255, 255, 255, 0.06);
-
-    color: #ffffff;
-}
-
-.task-description {
-    color: var(--muted-text, #999999);
-
-    font-size: 14px;
-
-    line-height: 1.55;
-
-    margin: 10px 0 18px;
-
-    min-height: 21px;
-}
-
-
-/* =========================================================
-   TASK META
-========================================================= */
-
-.task-card-meta {
+.filters-group {
     display: flex;
-
     align-items: center;
-
-    gap: 8px;
-
+    gap: 10px;
     flex-wrap: wrap;
 }
 
-.priority-badge,
-.status-badge {
-    display: inline-flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    padding: 5px 11px;
-
-    border-radius: 20px;
-
-    font-size: 12px;
-
-    font-weight: 750;
-}
-
-
-/* Priority */
-
-.priority-badge.high {
-    background: #ef4444;
-
-    color: #ffffff;
-}
-
-.priority-badge.medium {
-    background: #facc15;
-
-    color: #111111;
-}
-
-.priority-badge.low {
-    background: #4ade80;
-
-    color: #07110a;
-}
-
-
-/* Status */
-
-.status-badge.todo {
-    background: #6b7280;
-
-    color: #ffffff;
-}
-
-.status-badge.in-progress {
-    background: #3b82f6;
-
-    color: #ffffff;
-}
-
-.status-badge.completed {
-    background: #22c55e;
-
-    color: #07110a;
-}
-
-.status-badge.pending {
-    background: #6b7280;
-
-    color: #ffffff;
-}
-
-
-/* =========================================================
-   TASK CARD BOTTOM
-========================================================= */
-
-.task-card-bottom {
-    display: flex;
-
-    align-items: center;
-
-    justify-content: space-between;
-
-    gap: 12px;
-
-    margin-top: 20px;
-
-    padding-top: 15px;
-
-    border-top: 1px solid var(--border-color, #2c2c2c);
-}
-
-.task-card-bottom select {
-    background: var(--input-bg, #101010);
-
-    color: var(--text-color, #ffffff);
-
-    border: 1px solid var(--border-color, #333333);
-
+.filters-group select {
+    font-size: 0.85rem;
     padding: 8px 12px;
-
-    border-radius: 8px;
-
-    font-size: 12px;
-
-    font-weight: 650;
-
-    cursor: pointer;
-
-    outline: none;
 }
 
-.task-card-bottom select:focus {
-    border-color: #4ade80;
+.view-switch-tabs {
+    display: flex;
+    background: var(--bg-subtle);
+    padding: 4px;
+    border-radius: var(--radius-md);
+    gap: 4px;
 }
 
-.delete-task-btn {
-    border: none;
-
+.view-tab {
+    padding: 6px 14px;
+    border-radius: var(--radius-sm);
+    font-size: 0.85rem;
+    font-weight: 600;
     background: transparent;
-
-    color: #f87171;
-
-    font-size: 12px;
-
-    font-weight: 700;
-
-    cursor: pointer;
+    color: var(--text-secondary);
+    border: none;
 }
 
-.delete-task-btn:hover {
-    color: #ff5f5f;
+.view-tab.active {
+    background: var(--bg-surface);
+    color: var(--primary);
+    box-shadow: var(--shadow-sm);
 }
 
-
-/* =========================================================
-   KANBAN BOARD
-========================================================= */
+/* ==========================================================================
+   Kanban Board Layout
+   ========================================================================== */
 
 .kanban-board {
     display: grid;
-
-    grid-template-columns:
-        repeat(3, minmax(0, 1fr));
-
-    gap: 18px;
-
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
     align-items: start;
 }
 
-
-
-
-
-/* =========================================================
-   KANBAN HEADER
-========================================================= */
-
-.kanban-column-header {
+.kanban-column {
+    background: var(--kanban-col-bg);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    padding: 16px;
+    min-height: 520px;
     display: flex;
+    flex-direction: column;
+    transition: all var(--transition-normal);
+}
 
+.kanban-column.column-drag-over {
+    border-color: var(--primary);
+    background: var(--primary-light);
+    box-shadow: 0 0 20px var(--primary-glow);
+    transform: scale(1.01);
+}
+
+.column-header {
+    display: flex;
     align-items: center;
-
     justify-content: space-between;
-
-    padding: 5px 4px 15px;
-
-    border-bottom: 1px solid var(--border-color, #292929);
-
-    margin-bottom: 15px;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border-subtle);
 }
 
-.kanban-column-header > div {
+.column-title-wrap {
     display: flex;
-
     align-items: center;
-
-    gap: 9px;
-}
-
-.kanban-column-header h2 {
-    margin: 0;
-
-    font-size: 15px;
-
-    font-weight: 750;
+    gap: 8px;
 }
 
 .column-dot {
-    width: 9px;
-    height: 9px;
-
+    width: 10px;
+    height: 10px;
     border-radius: 50%;
-
-    display: inline-block;
 }
 
-.todo-dot {
-    background: #9ca3af;
+.dot-todo { background: #94a3b8; }
+.dot-progress { background: var(--primary); box-shadow: 0 0 8px var(--primary); }
+.dot-completed { background: var(--accent-emerald); box-shadow: 0 0 8px var(--accent-emerald); }
+
+.column-title-wrap h3 {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text-primary);
 }
 
-.progress-dot {
-    background: #3b82f6;
+.task-count-badge {
+    font-size: 0.75rem;
+    font-weight: 700;
+    background: var(--bg-subtle);
+    color: var(--text-secondary);
+    padding: 2px 8px;
+    border-radius: var(--radius-full);
 }
 
-.completed-dot {
-    background: #22c55e;
-}
-
-.task-count {
-    min-width: 24px;
-
-    height: 24px;
-
+.column-add-btn {
+    width: 28px;
+    height: 28px;
     display: flex;
-
     align-items: center;
-
     justify-content: center;
-
-    border-radius: 7px;
-
-    background: rgba(255, 255, 255, 0.07);
-
-    color: #999999;
-
-    font-size: 11px;
-
-    font-weight: 750;
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-sm);
+    font-size: 1rem;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all var(--transition-fast);
 }
 
+.column-add-btn:hover {
+    background: var(--primary);
+    color: #ffffff;
+    border-color: var(--primary);
+}
 
-/* =========================================================
-   DROP AREA
-========================================================= */
-
-.kanban-drop-area {
-    min-height: 470px;
-
+.kanban-cards-list {
     display: flex;
-
     flex-direction: column;
-
-    gap: 12px;
+    flex: 1;
 }
 
-.kanban-drop-area .task-card {
+.empty-column-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 16px;
+    text-align: center;
+    border: 2px dashed var(--border-subtle);
+    border-radius: var(--radius-md);
+    margin-top: 12px;
+    color: var(--text-muted);
+}
+
+.empty-column-placeholder span {
+    font-size: 1.5rem;
+    margin-bottom: 6px;
+}
+
+.empty-column-placeholder p {
+    font-size: 0.85rem;
+    margin-bottom: 10px;
+}
+
+.empty-column-placeholder button {
+    background: transparent;
+    border: 1px solid var(--border-subtle);
+    color: var(--primary);
+    padding: 6px 14px;
+    border-radius: var(--radius-sm);
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.empty-column-placeholder button:hover {
+    background: var(--primary-light);
+}
+
+/* ==========================================================================
+   List / Table View
+   ========================================================================== */
+
+.tasks-list-table-container {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    overflow-x: auto;
+    box-shadow: var(--shadow-sm);
+}
+
+.tasks-table {
     width: 100%;
+    border-collapse: collapse;
+    text-align: left;
 }
 
-.kanban-empty {
-    min-height: 130px;
+.tasks-table th {
+    padding: 14px 18px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    background: var(--bg-subtle);
+    border-bottom: 1px solid var(--border-subtle);
+}
 
+.tasks-table td {
+    padding: 14px 18px;
+    font-size: 0.9rem;
+    border-bottom: 1px solid var(--border-subtle);
+    color: var(--text-primary);
+    cursor: pointer;
+}
+
+.tasks-table tr:hover td {
+    background: var(--bg-subtle);
+}
+
+.tasks-table tr.row-completed td {
+    opacity: 0.75;
+}
+
+.table-status-badge {
+    padding: 4px 10px;
+    border-radius: var(--radius-full);
+    font-size: 0.75rem;
+    font-weight: 700;
+    border: none;
+    cursor: pointer;
+}
+
+.table-status-badge.todo { background: rgba(148, 163, 184, 0.2); color: var(--text-secondary); }
+.table-status-badge.in-progress { background: rgba(99, 102, 241, 0.15); color: var(--primary); }
+.table-status-badge.completed { background: rgba(16, 185, 129, 0.15); color: var(--accent-emerald); }
+
+.task-title-cell {
+    max-width: 320px;
+}
+
+.table-task-title {
+    font-weight: 600;
+    display: block;
+    margin-bottom: 4px;
+}
+
+.row-completed .table-task-title {
+    text-decoration: line-through;
+}
+
+.table-tags-wrap {
     display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    border: 1px dashed #3a3a3a;
-
-    border-radius: 12px;
-
-    color: #666666;
-
-    font-size: 13px;
-
-    text-align: center;
+    flex-wrap: wrap;
+    gap: 4px;
 }
 
+.table-tag-chip {
+    font-size: 0.7rem;
+    background: var(--bg-subtle);
+    padding: 1px 6px;
+    border-radius: var(--radius-sm);
+    color: var(--text-muted);
+}
 
-/* =========================================================
-   EMPTY STATE
-========================================================= */
+.table-project-chip {
+    font-weight: 600;
+    font-size: 0.85rem;
+}
 
-.empty-tasks {
-    min-height: 320px;
+.priority-pill-table {
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: var(--radius-sm);
+}
 
+.priority-pill-table.high { color: var(--accent-rose); background: rgba(244, 63, 94, 0.1); }
+.priority-pill-table.medium { color: var(--accent-amber); background: rgba(245, 158, 11, 0.1); }
+.priority-pill-table.low { color: var(--accent-emerald); background: rgba(16, 185, 129, 0.1); }
+
+.table-due-date {
+    font-size: 0.825rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+}
+
+.subtasks-badge {
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding: 2px 8px;
+    background: var(--bg-subtle);
+    border-radius: var(--radius-sm);
+    color: var(--text-secondary);
+}
+
+.table-row-actions {
     display: flex;
-
-    flex-direction: column;
-
     align-items: center;
+    gap: 8px;
+}
 
-    justify-content: center;
+.table-action-btn {
+    background: transparent;
+    border: none;
+    font-size: 0.95rem;
+    padding: 4px;
+    cursor: pointer;
+    border-radius: var(--radius-sm);
+}
 
+.table-action-btn:hover {
+    background: var(--bg-hover);
+}
+
+.table-empty-row {
     text-align: center;
-
-    border: 1px dashed var(--border-color, #333333);
-
-    border-radius: 16px;
-
-    background: var(--card-bg, #181818);
+    padding: 40px !important;
+    color: var(--text-muted);
 }
 
-.empty-icon {
-    font-size: 38px;
-
-    margin-bottom: 12px;
+.text-muted {
+    color: var(--text-muted);
 }
 
-.empty-tasks h2 {
-    margin: 0;
-
-    font-size: 20px;
-}
-
-.empty-tasks p {
-    margin: 8px 0 0;
-
-    color: var(--muted-text, #888888);
-}
-
-
-/* =========================================================
-   LIGHT MODE
-========================================================= */
-
-body.light .task-card,
-[data-theme="light"] .task-card {
-    box-shadow:
-        0 4px 15px rgba(0, 0, 0, 0.05);
-}
-
-body.light .kanban-column,
-[data-theme="light"] .kanban-column {
-    box-shadow:
-        0 4px 15px rgba(0, 0, 0, 0.04);
-}
-
-
-/* =========================================================
-   RESPONSIVE
-========================================================= */
-
-@media (max-width: 1100px) {
-
+/* Responsive */
+@media (max-width: 980px) {
     .kanban-board {
         grid-template-columns: 1fr;
     }
-
-    .kanban-column {
-        min-height: auto;
-    }
-
-    .kanban-drop-area {
-        min-height: 180px;
-    }
-
-}
-
-
-@media (max-width: 900px) {
-
-    .tasks-list {
-        grid-template-columns: 1fr;
-    }
-
-}
-
-
-@media (max-width: 700px) {
-
-    .tasks-page {
-        padding: 28px 20px 45px;
-    }
-
-    .tasks-page-header {
-        flex-direction: column;
-
-        align-items: flex-start;
-
-        gap: 18px;
-    }
-
-    .tasks-page-header h1 {
-        font-size: 32px;
-    }
-
-    .tasks-toolbar {
-        align-items: stretch;
-    }
-
-    .tasks-toolbar input {
-        width: 100%;
-
-        flex-basis: 100%;
-    }
-
-    .tasks-toolbar select {
-        flex: 1;
-    }
-
-    .view-toggle {
-        width: 100%;
-
-        margin-left: 0;
-    }
-
-    .view-toggle button {
-        flex: 1;
-    }
-
-}
-
-
-@media (max-width: 450px) {
-
-    .tasks-page {
-        padding: 22px 15px 35px;
-    }
-
-    .tasks-toolbar select {
-        width: 100%;
-
-        flex-basis: 100%;
-    }
-
-    .task-card-bottom {
-        align-items: stretch;
-
-        flex-direction: column;
-    }
-
-    .task-card-bottom select {
-        width: 100%;
-    }
-
 }

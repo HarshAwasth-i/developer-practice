@@ -1,103 +1,69 @@
-.modal-overlay{
-
-    position:fixed;
-
-    top:0;
-    left:0;
-
-    width:100%;
-    height:100%;
-
-    background:rgba(0,0,0,0.6);
-
-    display:flex;
-
-    justify-content:center;
-
-    align-items:center;
-
-    z-index:999;
-
+.confirm-modal {
+    width: 100%;
+    max-width: 420px;
+    background: var(--bg-surface-elevated);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-xl);
+    padding: 28px;
+    box-shadow: var(--shadow-lg);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
 }
 
-
-
-.confirm-modal{
-
-    background:#222;
-
-    color:white;
-
-    padding:30px;
-
-    border-radius:15px;
-
-    width:350px;
-
-    text-align:center;
-
+.confirm-icon {
+    font-size: 2.2rem;
+    margin-bottom: 4px;
 }
 
-
-
-.confirm-modal h2{
-
-    margin-bottom:15px;
-
+.confirm-modal h3 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text-primary);
 }
 
-
-
-.confirm-modal p{
-
-    color:#aaa;
-
+.confirm-modal p {
+    font-size: 0.925rem;
+    color: var(--text-secondary);
+    line-height: 1.45;
+    margin-bottom: 8px;
 }
 
-
-
-.modal-buttons{
-
-    display:flex;
-
-    justify-content:center;
-
-    gap:15px;
-
-    margin-top:25px;
-
+.modal-buttons {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    justify-content: center;
 }
 
-
-
-.modal-buttons button{
-
-    padding:10px 20px;
-
-    border:none;
-
-    border-radius:8px;
-
-    cursor:pointer;
-
+.cancel-btn {
+    padding: 10px 20px;
+    background: var(--bg-subtle);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-primary);
+    font-size: 0.9rem;
+    font-weight: 600;
+    border-radius: var(--radius-md);
 }
 
-
-
-.cancel-btn{
-
-    background:#555;
-
-    color:white;
-
+.cancel-btn:hover {
+    background: var(--bg-hover);
 }
 
+.confirm-delete-btn {
+    padding: 10px 22px;
+    background: var(--accent-rose);
+    color: #ffffff;
+    font-size: 0.9rem;
+    font-weight: 700;
+    border-radius: var(--radius-md);
+    box-shadow: 0 4px 14px rgba(244, 63, 94, 0.3);
+}
 
-
-.delete-btn{
-
-    background:#ef4444;
-
-    color:white;
-
+.confirm-delete-btn:hover {
+    background: #e11d48;
+    box-shadow: 0 6px 20px rgba(244, 63, 94, 0.4);
 }

@@ -1,900 +1,334 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-
+import { useNavigate, Link } from "react-router-dom";
 import API from "../api/axios";
+import { useAuth } from "../context/AuthContext";
+import toast from "react-hot-toast";
 
-import AddTask from "../components/AddTask";
-import TaskCard from "../components/TaskCard";
 import StatCard from "../components/StatCard";
-import Loader from "../components/Loader";
-import EmptyState from "../components/EmptyState";
+import TaskCard from "../components/TaskCard";
+import AddTask from "../components/AddTask";
+import TaskDetailModal from "../components/TaskDetailModal";
 import ActivityCard from "../components/ActivityCard";
 import TaskChart from "../components/TaskChart";
 import ConfirmModal from "../components/ConfirmModal";
-import AnalyticsCard from "../components/AnalyticsCard";
+import Loader from "../components/Loader";
 
 import "../styles/Dashboard.css";
 
-
 function Dashboard() {
-
     const navigate = useNavigate();
-
+    const { user } = useAuth();
 
     const [tasks, setTasks] = useState([]);
-
     const [projects, setProjects] = useState([]);
-
-    const [editingTask, setEditingTask] = useState(null);
-
+    const [activities, setActivities] = useState([]);
     const [loading, setLoading] = useState(true);
 
+    // Modals
+    const [showAddModal, setShowAddModal] = useState(false);
+    const [selectedTaskForDetail, setSelectedTaskForDetail] = useState(null);
     const [deleteId, setDeleteId] = useState(null);
 
-
-    const [statusFilter, setStatusFilter] = useState("All");
-
-    const [priorityFilter, setPriorityFilter] = useState("All");
-
-    const [search, setSearch] = useState("");
-
-    const [activities, setActivities] = useState([]);
-
-    const [sortBy, setSortBy] = useState("Newest");
-
-
-    // Greeting
-
+    // Time-based greeting
     const hour = new Date().getHours();
+    let greeting = "Good Morning ☀️";
+    if (hour >= 12 && hour < 17) greeting = "Good Afternoon 🌤️";
+    else if (hour >= 17) greeting = "Good Evening 🌙";
 
-    let greeting = "Good Morning 👋";
-
-    if (hour >= 12 && hour < 17) {
-
-        greeting = "Good Afternoon 👋";
-
-    }
-
-    else if (hour >= 17) {
-
-        greeting = "Good Evening 👋";
-
-    }
-
-
-    // Fetch Tasks
-
-    const fetchTasks = async () => {
-
+    const fetchData = async () => {
         try {
-
             setLoading(true);
-
-            const res = await API.get("/tasks");
-
-            setTasks(res.data.tasks);
-
-        }
-
-        catch (err) {
-
-            console.log(err);
-
-        }
-
-        finally {
-
+            const [tasksRes, projectsRes, activityRes] = await Promise.all([
+                API.get("/tasks"),
+                API.get("/projects"),
+                API.get("/activity")
+            ]);
+            setTasks(tasksRes.data.tasks || []);
+            setProjects(projectsRes.data.projects || []);
+            setActivities(activityRes.data.activities || []);
+        } catch (err) {
+            console.error("Dashboard fetch error:", err);
+            toast.error("Failed to load dashboard data");
+        } finally {
             setLoading(false);
-
         }
-
     };
-
-
-    // Fetch Activities
-
-    const fetchActivities = async () => {
-
-        try {
-
-            const res = await API.get("/activity");
-
-            setActivities(res.data.activities);
-
-        }
-
-        catch (err) {
-
-            console.log(err);
-
-        }
-
-    };
-
-
-    // Fetch Projects
-
-    const fetchProjects = async () => {
-
-        try {
-
-            const res = await API.get("/projects");
-
-            setProjects(res.data.projects);
-
-        }
-
-        catch (err) {
-
-            console.log(err);
-
-        }
-
-    };
-
 
     useEffect(() => {
-
-        fetchTasks();
-
-        fetchActivities();
-
-        fetchProjects();
-
+        fetchData();
     }, []);
 
-
-    // Add / Update Task
-
-    const addTask = async (task) => {
-
+    const handleCreateTask = async (taskData) => {
         try {
-
-            if (editingTask) {
-
-                await API.put(
-                    `/tasks/${editingTask._id}`,
-                    {
-                        title: task.title,
-                        description: task.description,
-                        priority: task.priority
-                    }
-                );
-
-                setEditingTask(null);
-
-            }
-
-            else {
-
-                await API.post(
-                    "/tasks",
-                    {
-                        title: task.title,
-                        description: task.description,
-                        priority: task.priority
-                    }
-                );
-
-            }
-
-
-            fetchTasks();
-
-            fetchActivities();
-
+            const res = await API.post("/tasks", taskData);
+            setTasks(prev => [res.data.task, ...prev]);
+            toast.success("Task created successfully!");
+            setShowAddModal(false);
+            fetchData();
+        } catch (err) {
+            toast.error(err.response?.data?.message || "Failed to create task");
         }
-
-        catch (err) {
-
-            console.log(err);
-
-        }
-
     };
 
-
-    // Delete
-
-    const deleteTask = (id) => {
-
-        setDeleteId(id);
-
+    const handleToggleTaskStatus = async (task) => {
+        const nextStatus = task.status === "Completed" ? "Todo" : "Completed";
+        setTasks(prev => prev.map(t => t._id === task._id ? { ...t, status: nextStatus } : t));
+        try {
+            const res = await API.put(`/tasks/${task._id}`, { status: nextStatus });
+            setTasks(prev => prev.map(t => t._id === task._id ? res.data.task : t));
+            fetchData();
+        } catch (err) {
+            toast.error("Failed to update status");
+            fetchData();
+        }
     };
 
-
-    const confirmDelete = async () => {
-
+    const handleDeleteTask = async () => {
+        if (!deleteId) return;
         try {
-
-            await API.delete(
-                `/tasks/${deleteId}`
-            );
-
+            await API.delete(`/tasks/${deleteId}`);
+            setTasks(prev => prev.filter(t => t._id !== deleteId));
+            toast.success("Task deleted");
             setDeleteId(null);
-
-            fetchTasks();
-
-            fetchActivities();
-
+            fetchData();
+        } catch (err) {
+            toast.error("Failed to delete task");
         }
-
-        catch (err) {
-
-            console.log(err);
-
-        }
-
     };
 
-
-    // Complete / Pending
-
-    const toggleStatus = async (task) => {
-
-        try {
-
-            await API.put(
-                `/tasks/${task._id}`,
-                {
-                    completed: !task.completed
-                }
-            );
-
-
-            fetchTasks();
-
-            fetchActivities();
-
-        }
-
-        catch (err) {
-
-            console.log(err);
-
-        }
-
-    };
-
-
-    const editTask = (task) => {
-
-        setEditingTask(task);
-
-    };
-
-
-    const cancelEdit = () => {
-
-        setEditingTask(null);
-
-    };
-
-
-    // Statistics
-
+    // Calculate metrics
     const totalTasks = tasks.length;
+    const completedTasks = tasks.filter(t => t.status === "Completed" || t.completed).length;
+    const inProgressTasks = tasks.filter(t => t.status === "In Progress").length;
+    const todoTasks = tasks.filter(t => t.status === "Todo" || (!t.status && !t.completed)).length;
 
-
-    const completedTasks = tasks.filter(
-        task => task.completed
-    ).length;
-
-
-    const pendingTasks =
-        totalTasks - completedTasks;
-
-
-    const completionRate =
-        totalTasks === 0
-            ? 0
-            : Math.round(
-                (completedTasks / totalTasks) * 100
-            );
-
-
-    const highPriorityTasks = tasks.filter(
-        task => task.priority === "High"
-    ).length;
-
-
-    // Created Today
-
-    const today =
-        new Date().toLocaleDateString();
-
-
-    const createdToday = tasks.filter((task) => {
-
-        return (
-            new Date(task.createdAt)
-                .toLocaleDateString() === today
-        );
-
-    }).length;
-
-
-    // Completed Today
-
-    const completedToday = tasks.filter((task) => {
-
-        return (
-            task.completed &&
-            new Date(task.updatedAt)
-                .toLocaleDateString() === today
-        );
-
-    }).length;
-
-
-    // Top Priority
-
-    const priorityCount = {
-
-        Low: 0,
-
-        Medium: 0,
-
-        High: 0
-
-    };
-
-
-    tasks.forEach((task) => {
-
-        priorityCount[task.priority]++;
-
-    });
-
-
-    const mostUsedPriority =
-        Object.keys(priorityCount)
-            .sort(
-                (a, b) =>
-                    priorityCount[b] -
-                    priorityCount[a]
-            )[0];
-
-
-    // Productivity
-
-    const productivityScore = Math.round(
-        (completedTasks / (totalTasks || 1)) * 100
+    const now = new Date();
+    const overdueTasks = tasks.filter(t => 
+        (t.status !== "Completed" && !t.completed) && 
+        t.dueDate && 
+        new Date(t.dueDate) < new Date(now.setHours(0,0,0,0))
     );
 
+    const completionRate = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
 
-    const progressWidth =
-        `${completionRate}%`;
+    // Recent 5 tasks
+    const recentTasks = tasks.slice(0, 5);
 
-
-    // Filter + Sort
-
-    const filteredTasks = tasks
-
-        .filter((task) => {
-
-            return (
-
-                task.title
-                    .toLowerCase()
-                    .includes(search.toLowerCase())
-
-                ||
-
-                task.description
-                    .toLowerCase()
-                    .includes(search.toLowerCase())
-
-            );
-
-        })
-
-
-        .filter((task) => {
-
-            if (statusFilter === "Completed") {
-
-                return task.completed;
-
-            }
-
-
-            if (statusFilter === "Pending") {
-
-                return !task.completed;
-
-            }
-
-
-            return true;
-
-        })
-
-
-        .filter((task) => {
-
-            if (priorityFilter === "All") {
-
-                return true;
-
-            }
-
-
-            return (
-                task.priority === priorityFilter
-            );
-
-        })
-
-
-        .sort((a, b) => {
-
-            if (sortBy === "Newest") {
-
-                return (
-                    new Date(b.createdAt) -
-                    new Date(a.createdAt)
-                );
-
-            }
-
-
-            if (sortBy === "Oldest") {
-
-                return (
-                    new Date(a.createdAt) -
-                    new Date(b.createdAt)
-                );
-
-            }
-
-
-            if (sortBy === "High") {
-
-                const order = {
-
-                    High: 3,
-
-                    Medium: 2,
-
-                    Low: 1
-
-                };
-
-
-                return (
-                    order[b.priority] -
-                    order[a.priority]
-                );
-
-            }
-
-
-            if (sortBy === "Low") {
-
-                const order = {
-
-                    High: 3,
-
-                    Medium: 2,
-
-                    Low: 1
-
-                };
-
-
-                return (
-                    order[a.priority] -
-                    order[b.priority]
-                );
-
-            }
-
-
-            if (sortBy === "Completed") {
-
-                return (
-                    Number(b.completed) -
-                    Number(a.completed)
-                );
-
-            }
-
-
-            return 0;
-
-        });
-
+    if (loading) return <Loader />;
 
     return (
+        <div className="dashboard-page">
+            {/* Greeting Header */}
+            <div className="dashboard-hero-header">
+                <div className="greeting-text-wrap">
+                    <span className="current-date-badge">
+                        🗓️ {new Date().toLocaleDateString(undefined, { weekday: 'long', month: 'short', day: 'numeric', year: 'numeric' })}
+                    </span>
+                    <h1>{greeting}, <span>{user?.name || "Productivity Hero"}</span></h1>
+                    <p>Here is your daily productivity pulse and project overview.</p>
+                </div>
 
-        <div className="dashboard">
-
-
-            <div className="welcome-section">
-
-                <h1>
-                    {greeting}
-                </h1>
-
-                <p>
-                    Track your tasks, productivity and progress.
-                </p>
-
+                <div className="dashboard-quick-actions">
+                    <button
+                        className="quick-add-task-btn"
+                        onClick={() => setShowAddModal(true)}
+                    >
+                        ⚡ + New Task
+                    </button>
+                    <button
+                        className="quick-kanban-btn"
+                        onClick={() => navigate("/tasks")}
+                    >
+                        📋 Kanban Board
+                    </button>
+                </div>
             </div>
 
+            {/* Overdue Alert Banner (if any) */}
+            {overdueTasks.length > 0 && (
+                <div className="overdue-alert-banner">
+                    <div className="alert-banner-left">
+                        <span className="alert-icon">⚠️</span>
+                        <div>
+                            <strong>Attention Needed: {overdueTasks.length} Overdue Task{overdueTasks.length > 1 ? "s" : ""}</strong>
+                            <p>You have tasks that missed their due date deadline.</p>
+                        </div>
+                    </div>
+                    <button
+                        className="alert-action-btn"
+                        onClick={() => navigate("/tasks")}
+                    >
+                        Review Overdue Tasks →
+                    </button>
+                </div>
+            )}
 
-            <div className="stats-container">
-
+            {/* Metric Stat Cards Grid */}
+            <div className="stats-grid-row">
                 <StatCard
-                    title="Total Tasks"
-                    value={totalTasks}
-                />
-
-                <StatCard
-                    title="Completed"
-                    value={completedTasks}
-                />
-
-                <StatCard
-                    title="Pending"
-                    value={pendingTasks}
-                />
-
-                <StatCard
-                    title="Completion Rate"
-                    value={`${completionRate}%`}
-                />
-
-                <StatCard
-                    title="High Priority"
-                    value={highPriorityTasks}
-                />
-
-                <StatCard
-                    title="Created Today"
-                    value={createdToday}
-                />
-
-                <StatCard
-                    title="Completed Today"
-                    value={completedToday}
-                />
-
-                <StatCard
-                    title="Top Priority"
-                    value={mostUsedPriority}
-                />
-
-                <StatCard
-                    title="Productivity"
-                    value={`${productivityScore}%`}
-                />
-
-            </div>
-
-
-            <div className="analytics-summary">
-
-                <AnalyticsCard
-                    title="Completion"
-                    value={`${completionRate}%`}
-                    icon="⚡"
-                />
-
-                <AnalyticsCard
                     title="Total Tasks"
                     value={totalTasks}
                     icon="📋"
+                    subtitle="All active & archived"
+                    colorVariant="primary"
+                    onClick={() => navigate("/tasks")}
                 />
-
-                <AnalyticsCard
+                <StatCard
+                    title="In Progress"
+                    value={inProgressTasks}
+                    icon="⚡"
+                    subtitle="Currently executing"
+                    colorVariant="warning"
+                    onClick={() => navigate("/tasks")}
+                />
+                <StatCard
                     title="Completed"
-                    value={completedTasks}
-                    icon="✅"
+                    value={`${completedTasks} (${completionRate}%)`}
+                    icon="✓"
+                    subtitle="Productivity velocity"
+                    colorVariant="success"
+                    onClick={() => navigate("/tasks")}
                 />
-
-                <AnalyticsCard
-                    title="Pending"
-                    value={pendingTasks}
-                    icon="⏳"
+                <StatCard
+                    title="Active Projects"
+                    value={projects.length}
+                    icon="📁"
+                    subtitle="Organized workspaces"
+                    colorVariant="info"
+                    onClick={() => navigate("/projects")}
                 />
-
             </div>
 
-
-            <AddTask
-                addTask={addTask}
-                editingTask={editingTask}
-                cancelEdit={cancelEdit}
-            />
-
-
-            <input
-                className="search-bar"
-                placeholder="Search tasks..."
-                value={search}
-                onChange={(e) =>
-                    setSearch(e.target.value)
-                }
-            />
-
-
-            <div className="filters">
-
-                <select
-                    value={statusFilter}
-                    onChange={(e) =>
-                        setStatusFilter(e.target.value)
-                    }
-                >
-
-                    <option value="All">
-                        All Tasks
-                    </option>
-
-                    <option value="Completed">
-                        Completed
-                    </option>
-
-                    <option value="Pending">
-                        Pending
-                    </option>
-
-                </select>
-
-
-                <select
-                    value={priorityFilter}
-                    onChange={(e) =>
-                        setPriorityFilter(e.target.value)
-                    }
-                >
-
-                    <option value="All">
-                        All Priority
-                    </option>
-
-                    <option value="High">
-                        High
-                    </option>
-
-                    <option value="Medium">
-                        Medium
-                    </option>
-
-                    <option value="Low">
-                        Low
-                    </option>
-
-                </select>
-
-
-                <select
-                    value={sortBy}
-                    onChange={(e) =>
-                        setSortBy(e.target.value)
-                    }
-                >
-
-                    <option value="Newest">
-                        Newest
-                    </option>
-
-                    <option value="Oldest">
-                        Oldest
-                    </option>
-
-                    <option value="High">
-                        Highest Priority
-                    </option>
-
-                    <option value="Low">
-                        Lowest Priority
-                    </option>
-
-                    <option value="Completed">
-                        Completed First
-                    </option>
-
-                </select>
-
-            </div>
-
-
-            <div className="progress-section">
-
-                <div className="progress-header">
-
-                    <h2>
-                        Task Progress
-                    </h2>
-
-                    <span>
-                        {completionRate}%
-                    </span>
-
+            {/* Middle Grid: Charts & Project Progress */}
+            <div className="dashboard-mid-grid">
+                {/* Visual Analytics */}
+                <div className="mid-grid-charts">
+                    <TaskChart tasks={tasks} />
                 </div>
 
+                {/* Projects Quick Workspaces Card */}
+                <div className="dashboard-projects-card">
+                    <div className="card-header-row">
+                        <h3>📁 Project Workspaces</h3>
+                        <Link to="/projects" className="see-all-link">All Projects ({projects.length}) →</Link>
+                    </div>
 
-                <div className="progress-bar">
-
-                    <div
-                        className="progress-fill"
-                        style={{
-                            width: progressWidth
-                        }}
-                    />
-
-                </div>
-
-
-                <p>
-                    {completedTasks} completed out of {totalTasks} tasks
-                </p>
-
-            </div>
-
-
-            <div className="analytics-container">
-
-                <TaskChart
-                    tasks={tasks}
-                />
-
-                <ActivityCard
-                    activities={activities}
-                />
-
-            </div>
-
-
-            <div className="dashboard-projects">
-
-                <div className="dashboard-projects-header">
-
-                    <h2>
-                        My Projects
-                    </h2>
-
-                    <button
-                        onClick={() =>
-                            navigate("/projects")
-                        }
-                    >
-                        View All →
-                    </button>
-
-                </div>
-
-
-                {
-                    projects.length === 0 ? (
-
-                        <div className="dashboard-projects-empty">
-
-                            <p>
-                                No projects yet.
-                            </p>
-
-                            <button
-                                onClick={() =>
-                                    navigate("/projects")
-                                }
-                            >
-                                Create Project
-                            </button>
-
+                    {projects.length === 0 ? (
+                        <div className="empty-projects-dash">
+                            <p>No project workspaces created yet.</p>
+                            <Link to="/projects" className="btn-create-proj-sm">+ Create Project</Link>
                         </div>
-
                     ) : (
-
-                        <div className="dashboard-projects-grid">
-
-                            {
-                                projects
-                                    .slice(0, 4)
-                                    .map((project) => (
-
-                                        <div
-                                            className="dashboard-project-card"
-                                            key={project._id}
-                                        >
-
-                                            <h3>
-                                                {project.name}
-                                            </h3>
-
-                                            <p>
-                                                {
-                                                    project.description ||
-                                                    "No description"
-                                                }
-                                            </p>
-
-                                            <button
-                                                onClick={() =>
-                                                    navigate(
-                                                        `/projects/${project._id}`
-                                                    )
-                                                }
-                                            >
-                                                View Project →
-                                            </button>
-
+                        <div className="dash-projects-list">
+                            {projects.slice(0, 4).map((p) => (
+                                <div
+                                    key={p._id}
+                                    className="dash-proj-item"
+                                    onClick={() => navigate(`/projects/${p._id}`)}
+                                >
+                                    <div className="dash-proj-info">
+                                        <span
+                                            className="dash-proj-dot"
+                                            style={{ backgroundColor: p.color || "var(--primary)" }}
+                                        />
+                                        <strong className="dash-proj-name">{p.name}</strong>
+                                    </div>
+                                    <div className="dash-proj-progress-wrap">
+                                        <div className="dash-proj-bar">
+                                            <div
+                                                className="dash-proj-fill"
+                                                style={{
+                                                    width: `${p.progress || 0}%`,
+                                                    backgroundColor: p.color || "var(--primary)"
+                                                }}
+                                            />
                                         </div>
-
-                                    ))
-                            }
-
+                                        <span className="dash-proj-percent">{p.progress || 0}%</span>
+                                    </div>
+                                </div>
+                            ))}
                         </div>
-
-                    )
-                }
-
+                    )}
+                </div>
             </div>
 
+            {/* Bottom Grid: Recent Tasks & Activity Feed */}
+            <div className="dashboard-bottom-grid">
+                {/* Recent Tasks List */}
+                <div className="dashboard-recent-tasks-card">
+                    <div className="card-header-row">
+                        <h3>📌 Recent Tasks</h3>
+                        <Link to="/tasks" className="see-all-link">View Kanban Board →</Link>
+                    </div>
 
-            <h2>
-                My Tasks
-            </h2>
-
-
-            {
-                loading
-
-                    ?
-
-                    <Loader />
-
-                    :
-
-                    filteredTasks.length === 0
-
-                        ?
-
-                        <EmptyState />
-
-                        :
-
-                        <div className="task-container">
-
-                            {
-                                filteredTasks.map((task) => (
-
-                                    <TaskCard
-                                        key={task._id}
-                                        task={task}
-                                        deleteTask={deleteTask}
-                                        editTask={editTask}
-                                        toggleStatus={toggleStatus}
-                                    />
-
-                                ))
-                            }
-
+                    {recentTasks.length === 0 ? (
+                        <div className="empty-recent-tasks">
+                            <p>No tasks created yet. Get started by creating your first task!</p>
+                            <button
+                                className="quick-add-task-btn"
+                                onClick={() => setShowAddModal(true)}
+                            >
+                                + Add Task
+                            </button>
                         </div>
-            }
+                    ) : (
+                        <div className="dash-task-cards-list">
+                            {recentTasks.map((task) => (
+                                <TaskCard
+                                    key={task._id}
+                                    task={task}
+                                    deleteTask={(id) => setDeleteId(id)}
+                                    toggleStatus={handleToggleTaskStatus}
+                                    openDetailModal={(t) => setSelectedTaskForDetail(t)}
+                                />
+                            ))}
+                        </div>
+                    )}
+                </div>
 
+                {/* Activity Feed */}
+                <div className="dashboard-activity-feed">
+                    <ActivityCard activities={activities} />
+                </div>
+            </div>
 
-            <ConfirmModal
+            {/* Add Task Modal */}
+            {showAddModal && (
+                <AddTask
+                    projects={projects}
+                    onAddTask={handleCreateTask}
+                    onClose={() => setShowAddModal(false)}
+                />
+            )}
 
-                show={deleteId !== null}
+            {/* Task Detail Modal */}
+            {selectedTaskForDetail && (
+                <TaskDetailModal
+                    task={selectedTaskForDetail}
+                    projects={projects}
+                    onClose={() => setSelectedTaskForDetail(null)}
+                    onTaskUpdated={(updatedTask) => {
+                        setTasks(prev => prev.map(t => t._id === updatedTask._id ? updatedTask : t));
+                        fetchData();
+                    }}
+                    onTaskDeleted={(id) => {
+                        setTasks(prev => prev.filter(t => t._id !== id));
+                        fetchData();
+                    }}
+                />
+            )}
 
-                onCancel={() =>
-                    setDeleteId(null)
-                }
-
-                onConfirm={confirmDelete}
-
-            />
-
-
+            {/* Confirm Delete Modal */}
+            {deleteId && (
+                <ConfirmModal
+                    title="Delete Task"
+                    message="Are you sure you want to delete this task?"
+                    onConfirm={handleDeleteTask}
+                    onCancel={() => setDeleteId(null)}
+                />
+            )}
         </div>
-
     );
-
 }
-
 
 export default Dashboard;

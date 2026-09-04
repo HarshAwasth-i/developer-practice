@@ -1,66 +1,33 @@
 import "../styles/ConfirmModal.css";
 
-
 function ConfirmModal({
-    show,
+    show = true,
+    title = "Confirm Action",
+    message = "Are you sure you want to proceed?",
+    confirmText = "Delete",
     onConfirm,
     onCancel
-}){
+}) {
+    if (!show) return null;
 
-
-    if(!show)
-        return null;
-
-
-    return(
-
-        <div className="modal-overlay">
-
-
-            <div className="confirm-modal">
-
-
-                <h2>
-                    Delete Task?
-                </h2>
-
-
-                <p>
-                    Are you sure you want to delete this task?
-                </p>
-
+    return (
+        <div className="modal-overlay" onClick={onCancel}>
+            <div className="confirm-modal animate-fade" onClick={(e) => e.stopPropagation()}>
+                <div className="confirm-icon">⚠️</div>
+                <h3>{title}</h3>
+                <p>{message}</p>
 
                 <div className="modal-buttons">
-
-
-                    <button
-                    className="cancel-btn"
-                    onClick={onCancel}
-                    >
+                    <button className="cancel-btn" onClick={onCancel}>
                         Cancel
                     </button>
-
-
-
-                    <button
-                    className="delete-btn"
-                    onClick={onConfirm}
-                    >
-                        Delete
+                    <button className="confirm-delete-btn" onClick={onConfirm}>
+                        {confirmText}
                     </button>
-
-
                 </div>
-
-
             </div>
-
-
         </div>
-
-    )
-
+    );
 }
-
 
 export default ConfirmModal;

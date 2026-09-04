@@ -1,953 +1,492 @@
 import { useEffect, useState } from "react";
-
-import { useParams } from "react-router-dom";
-
+import { useParams, useNavigate, Link } from "react-router-dom";
 import API from "../api/axios";
+import toast from "react-hot-toast";
+
+import TaskCard from "../components/TaskCard";
+import AddTask from "../components/AddTask";
+import TaskDetailModal from "../components/TaskDetailModal";
+import ConfirmModal from "../components/ConfirmModal";
+import Loader from "../components/Loader";
 
 import "../styles/ProjectDetails.css";
 
-
 function ProjectDetails() {
-
-
     const { id } = useParams();
-
+    const navigate = useNavigate();
 
     const [project, setProject] = useState(null);
-
     const [tasks, setTasks] = useState([]);
+    const [loading, setLoading] = useState(true);
 
+    // View: "kanban" or "list"
+    const [viewMode, setViewMode] = useState("kanban");
 
-    const [showForm, setShowForm] = useState(false);
+    // Modals
+    const [showAddModal, setShowAddModal] = useState(false);
+    const [addInitialStatus, setAddInitialStatus] = useState("Todo");
+    const [selectedTaskForDetail, setSelectedTaskForDetail] = useState(null);
+    const [deleteTaskId, setDeleteTaskId] = useState(null);
+    const [showDeleteProjectConfirm, setShowDeleteProjectConfirm] = useState(false);
 
-
-    const [title, setTitle] = useState("");
-
-    const [description, setDescription] = useState("");
-
-    const [priority, setPriority] = useState("Medium");
-
-
-    // List / Kanban
-
-    const [viewMode, setViewMode] = useState("list");
-
-
-    // Task being dragged
-
+    // Drag & drop
     const [draggedTask, setDraggedTask] = useState(null);
+    const [dragOverColumn, setDragOverColumn] = useState(null);
 
-
-    // =========================
-    // FETCH PROJECT
-    // =========================
-
-    const fetchProject = async () => {
-
+    const fetchProjectDetails = async () => {
         try {
-
-            const res = await API.get(
-                `/projects/${id}`
-            );
-
-            setProject(
-                res.data.project
-            );
-
+            setLoading(true);
+            const res = await API.get(`/projects/${id}`);
+            setProject(res.data.project);
+            setTasks(res.data.project.tasks || []);
+        } catch (err) {
+            console.error("Error fetching project:", err);
+            toast.error("Project not found");
+            navigate("/projects");
+        } finally {
+            setLoading(false);
         }
-        catch (err) {
-
-            console.log(
-                "Error fetching project:",
-                err
-            );
-
-        }
-
     };
-
-
-    // =========================
-    // FETCH TASKS
-    // =========================
-
-    const fetchTasks = async () => {
-
-        try {
-
-            const res = await API.get(
-                `/tasks/project/${id}`
-            );
-
-            setTasks(
-                res.data.tasks
-            );
-
-        }
-        catch (err) {
-
-            console.log(
-                "Error fetching tasks:",
-                err
-            );
-
-        }
-
-    };
-
-
-    // =========================
-    // CREATE TASK
-    // =========================
-
-    const createTask = async () => {
-
-        if (!title.trim()) {
-
-            alert(
-                "Task title required"
-            );
-
-            return;
-
-        }
-
-
-        try {
-
-            await API.post(
-                "/tasks",
-                {
-                    title,
-                    description,
-                    priority,
-                    project: id
-                }
-            );
-
-
-            setTitle("");
-
-            setDescription("");
-
-            setPriority("Medium");
-
-            setShowForm(false);
-
-
-            fetchTasks();
-
-            fetchProject();
-
-        }
-        catch (err) {
-
-            console.log(
-                "Error creating task:",
-                err
-            );
-
-        }
-
-    };
-
-
-    // =========================
-    // UPDATE TASK STATUS
-    // =========================
-
-    const updateTaskStatus = async (
-        taskId,
-        status
-    ) => {
-
-        try {
-
-            await API.put(
-                `/tasks/${taskId}`,
-                {
-                    status
-                }
-            );
-
-
-            fetchTasks();
-
-            fetchProject();
-
-        }
-        catch (err) {
-
-            console.log(
-                "Error updating task:",
-                err
-            );
-
-        }
-
-    };
-
-
-    // =========================
-    // DRAG START
-    // =========================
-
-    const handleDragStart = (
-        e,
-        task
-    ) => {
-
-        setDraggedTask(task);
-
-
-        e.dataTransfer.effectAllowed =
-            "move";
-
-    };
-
-
-    // =========================
-    // DRAG OVER
-    // =========================
-
-    const handleDragOver = (e) => {
-
-        e.preventDefault();
-
-        e.dataTransfer.dropEffect =
-            "move";
-
-    };
-
-
-    // =========================
-    // DROP TASK
-    // =========================
-
-    const handleDrop = async (
-        e,
-        newStatus
-    ) => {
-
-        e.preventDefault();
-
-
-        if (!draggedTask) {
-
-            return;
-
-        }
-
-
-        // Don't make an API call
-        // if task is already in this column
-
-        if (
-            draggedTask.status === newStatus
-        ) {
-
-            setDraggedTask(null);
-
-            return;
-
-        }
-
-
-        try {
-
-            await API.put(
-                `/tasks/${draggedTask._id}`,
-                {
-                    status: newStatus
-                }
-            );
-
-
-            // Update UI immediately
-
-            setTasks(
-                prevTasks =>
-                    prevTasks.map(task =>
-                        task._id ===
-                        draggedTask._id
-                            ? {
-                                ...task,
-                                status:
-                                    newStatus
-                            }
-                            : task
-                    )
-            );
-
-
-            // Update project progress
-
-            fetchProject();
-
-        }
-        catch (err) {
-
-            console.log(
-                "Error moving task:",
-                err
-            );
-
-        }
-
-
-        setDraggedTask(null);
-
-    };
-
-
-    // =========================
-    // INITIAL LOAD
-    // =========================
 
     useEffect(() => {
-
-        fetchProject();
-
-        fetchTasks();
-
+        if (id) fetchProjectDetails();
     }, [id]);
 
-
-    // =========================
-    // LOADING
-    // =========================
-
-    if (!project) {
-
-        return (
-            <h2>
-                Loading...
-            </h2>
-        );
-
-    }
-
-
-    // =========================
-    // KANBAN TASK FILTER
-    // =========================
-
-    const todoTasks =
-        tasks.filter(
-            task =>
-                !task.status ||
-                task.status === "Todo"
-        );
-
-
-    const inProgressTasks =
-        tasks.filter(
-            task =>
-                task.status ===
-                "In Progress"
-        );
-
-
-    const completedTasks =
-        tasks.filter(
-            task =>
-                task.status ===
-                "Completed"
-        );
-
-
-    // =========================
-    // TASK CARD
-    // =========================
-
-    const renderKanbanTask = (
-        task
-    ) => {
-
-        return (
-
-            <div
-                className="kanban-task-card"
-                key={task._id}
-                draggable
-                onDragStart={(e) =>
-                    handleDragStart(
-                        e,
-                        task
-                    )
-                }
-            >
-
-                <h3>
-                    {task.title}
-                </h3>
-
-
-                {task.description && (
-
-                    <p>
-                        {task.description}
-                    </p>
-
-                )}
-
-
-                <div className="kanban-task-bottom">
-
-
-                    <span
-                        className={
-                            `priority-${task.priority
-                                ?.toLowerCase()}`
-                        }
-                    >
-
-                        {task.priority}
-
-                    </span>
-
-
-                    <span className="kanban-drag-hint">
-
-                        ⠿
-
-                    </span>
-
-
-                </div>
-
-            </div>
-
-        );
-
+    const handleCreateTask = async (taskData) => {
+        try {
+            const res = await API.post("/tasks", { ...taskData, project: id });
+            setTasks(prev => [res.data.task, ...prev]);
+            toast.success("Task added to project!");
+            setShowAddModal(false);
+            fetchProjectDetails(); // Refresh stats
+        } catch (err) {
+            toast.error("Failed to create task");
+        }
     };
 
+    const handleUpdateTaskStatus = async (taskId, newStatus) => {
+        setTasks(prev => prev.map(t => t._id === taskId ? { ...t, status: newStatus } : t));
+        try {
+            const res = await API.put(`/tasks/${taskId}`, { status: newStatus });
+            setTasks(prev => prev.map(t => t._id === taskId ? res.data.task : t));
+            fetchProjectDetails(); // Refresh stats
+        } catch (err) {
+            toast.error("Failed to update task");
+            fetchProjectDetails();
+        }
+    };
+
+    const handleToggleTaskStatus = (task) => {
+        const nextStatus = task.status === "Completed" ? "Todo" : "Completed";
+        handleUpdateTaskStatus(task._id, nextStatus);
+    };
+
+    const handleDeleteTask = async () => {
+        if (!deleteTaskId) return;
+        try {
+            await API.delete(`/tasks/${deleteTaskId}`);
+            setTasks(prev => prev.filter(t => t._id !== deleteTaskId));
+            toast.success("Task deleted");
+            setDeleteTaskId(null);
+            fetchProjectDetails();
+        } catch (err) {
+            toast.error("Failed to delete task");
+        }
+    };
+
+    const handleDeleteProject = async () => {
+        try {
+            await API.delete(`/projects/${id}`);
+            toast.success("Project deleted successfully");
+            navigate("/projects");
+        } catch (err) {
+            toast.error("Failed to delete project");
+        }
+    };
+
+    // Drag handlers
+    const handleDragStart = (e, task) => {
+        setDraggedTask(task);
+        e.dataTransfer.effectAllowed = "move";
+    };
+
+    const handleDragOver = (e, columnStatus) => {
+        e.preventDefault();
+        e.dataTransfer.dropEffect = "move";
+        if (dragOverColumn !== columnStatus) {
+            setDragOverColumn(columnStatus);
+        }
+    };
+
+    const handleDrop = async (e, targetStatus) => {
+        e.preventDefault();
+        setDragOverColumn(null);
+        if (!draggedTask) return;
+        if (draggedTask.status === targetStatus) {
+            setDraggedTask(null);
+            return;
+        }
+        const taskId = draggedTask._id;
+        setDraggedTask(null);
+        await handleUpdateTaskStatus(taskId, targetStatus);
+    };
+
+    if (loading) return <Loader />;
+    if (!project) return null;
+
+    const color = project.color || "#6366f1";
+    const todoTasks = tasks.filter(t => t.status === "Todo");
+    const inProgressTasks = tasks.filter(t => t.status === "In Progress");
+    const completedTasks = tasks.filter(t => t.status === "Completed");
 
     return (
-
-        <div className="project-details">
-
-
-            {/* =========================
-                PROJECT HEADER
-            ========================= */}
-
-            <h1>
-                📁 {project.name}
-            </h1>
-
-
-            <p>
-                {project.description}
-            </p>
-
-
-            {/* =========================
-                PROJECT PROGRESS
-            ========================= */}
-
-            <div className="project-progress-box">
-
-                Progress:
-                {" "}
-                {project.progress || 0}%
-
+        <div className="project-details-page">
+            {/* Breadcrumb Navigation */}
+            <div className="breadcrumb-nav">
+                <Link to="/projects" className="back-link">← All Projects</Link>
+                <span className="breadcrumb-sep">/</span>
+                <span className="breadcrumb-current">{project.name}</span>
             </div>
 
+            {/* Project Hero Banner */}
+            <div className="project-hero-card" style={{ "--project-theme": color }}>
+                <div className="hero-top-row">
+                    <div className="hero-title-section">
+                        <div className="project-avatar" style={{ backgroundColor: `${color}20`, color: color }}>
+                            📁
+                        </div>
+                        <div>
+                            <div className="hero-badge-row">
+                                <span className="hero-category-badge">{project.category || "General"}</span>
+                                <span className={`hero-status-badge status-${project.status?.toLowerCase().replace(" ", "-")}`}>
+                                    {project.status || "Planning"}
+                                </span>
+                            </div>
+                            <h1 className="hero-project-name">{project.name}</h1>
+                        </div>
+                    </div>
 
-            {/* =========================
-                TASK HEADER
-            ========================= */}
-
-            <div className="tasks-header">
-
-
-                <h2>
-                    Tasks
-                </h2>
-
-
-                <div className="task-header-actions">
-
-
-                    {/* LIST VIEW */}
-
-                    <button
-                        className={
-                            viewMode === "list"
-                                ? "active-view"
-                                : ""
-                        }
-                        onClick={() =>
-                            setViewMode("list")
-                        }
-                    >
-
-                        List View
-
-                    </button>
-
-
-                    {/* KANBAN VIEW */}
-
-                    <button
-                        className={
-                            viewMode === "kanban"
-                                ? "active-view"
-                                : ""
-                        }
-                        onClick={() =>
-                            setViewMode("kanban")
-                        }
-                    >
-
-                        Kanban Board
-
-                    </button>
-
-
-                    {/* ADD TASK */}
-
-                    <button
-                        onClick={() =>
-                            setShowForm(
-                                !showForm
-                            )
-                        }
-                    >
-
-                        + Add Task
-
-                    </button>
-
-
+                    <div className="hero-actions">
+                        <button
+                            className="hero-delete-btn"
+                            onClick={() => setShowDeleteProjectConfirm(true)}
+                        >
+                            🗑️ Delete Project
+                        </button>
+                        <button
+                            className="hero-add-task-btn"
+                            onClick={() => { setAddInitialStatus("Todo"); setShowAddModal(true); }}
+                        >
+                            + Add Task to Project
+                        </button>
+                    </div>
                 </div>
 
+                {project.description && (
+                    <p className="hero-description">{project.description}</p>
+                )}
 
+                {/* Progress & Stats Bar */}
+                <div className="hero-progress-section">
+                    <div className="hero-progress-header">
+                        <span>Project Completion Progress</span>
+                        <strong>{project.progress || 0}% ({project.completedTasks || 0}/{project.totalTasks || 0} Tasks)</strong>
+                    </div>
+                    <div className="hero-progress-bar">
+                        <div
+                            className="hero-progress-fill"
+                            style={{ width: `${project.progress || 0}%`, backgroundColor: color }}
+                        />
+                    </div>
+                </div>
+
+                {/* Quick Metric Counters */}
+                <div className="hero-metrics-row">
+                    <div className="hero-metric-item">
+                        <span>Total Tasks</span>
+                        <strong>{project.totalTasks || 0}</strong>
+                    </div>
+                    <div className="hero-metric-item">
+                        <span>Todo</span>
+                        <strong>{project.todoTasks || 0}</strong>
+                    </div>
+                    <div className="hero-metric-item">
+                        <span>In Progress</span>
+                        <strong className="in-prog">{project.inProgressTasks || 0}</strong>
+                    </div>
+                    <div className="hero-metric-item">
+                        <span>Completed</span>
+                        <strong className="done">{project.completedTasks || 0}</strong>
+                    </div>
+                    {project.dueDate && (
+                        <div className="hero-metric-item">
+                            <span>Deadline</span>
+                            <strong>{new Date(project.dueDate).toLocaleDateString()}</strong>
+                        </div>
+                    )}
+                </div>
             </div>
 
+            {/* Board Controls */}
+            <div className="project-board-controls">
+                <h2>Project Workflow Board</h2>
+                <div className="view-switch-tabs">
+                    <button
+                        className={`view-tab ${viewMode === "kanban" ? "active" : ""}`}
+                        onClick={() => setViewMode("kanban")}
+                    >
+                        📋 Kanban Board
+                    </button>
+                    <button
+                        className={`view-tab ${viewMode === "list" ? "active" : ""}`}
+                        onClick={() => setViewMode("list")}
+                    >
+                        ☰ Table List
+                    </button>
+                </div>
+            </div>
 
-            {/* =========================
-                ADD TASK FORM
-            ========================= */}
-
-            {
-                showForm && (
-
-                    <div className="project-task-form">
-
-
-                        <input
-                            placeholder="Task title"
-                            value={title}
-                            onChange={(e) =>
-                                setTitle(
-                                    e.target.value
-                                )
-                            }
-                        />
-
-
-                        <textarea
-                            placeholder="Description"
-                            value={description}
-                            onChange={(e) =>
-                                setDescription(
-                                    e.target.value
-                                )
-                            }
-                        />
-
-
-                        <select
-                            value={priority}
-                            onChange={(e) =>
-                                setPriority(
-                                    e.target.value
-                                )
-                            }
-                        >
-
-                            <option value="Low">
-                                Low
-                            </option>
-
-
-                            <option value="Medium">
-                                Medium
-                            </option>
-
-
-                            <option value="High">
-                                High
-                            </option>
-
-                        </select>
-
-
-                        <button
-                            onClick={
-                                createTask
-                            }
-                        >
-
-                            Create Task
-
-                        </button>
-
-
+            {/* Main Task View */}
+            {viewMode === "kanban" ? (
+                <div className="kanban-board">
+                    {/* Todo Column */}
+                    <div
+                        className={`kanban-column column-todo ${dragOverColumn === "Todo" ? "column-drag-over" : ""}`}
+                        onDragOver={(e) => handleDragOver(e, "Todo")}
+                        onDragLeave={() => setDragOverColumn(null)}
+                        onDrop={(e) => handleDrop(e, "Todo")}
+                    >
+                        <div className="column-header">
+                            <div className="column-title-wrap">
+                                <span className="column-dot dot-todo"></span>
+                                <h3>Todo</h3>
+                                <span className="task-count-badge">{todoTasks.length}</span>
+                            </div>
+                            <button
+                                className="column-add-btn"
+                                onClick={() => { setAddInitialStatus("Todo"); setShowAddModal(true); }}
+                            >
+                                +
+                            </button>
+                        </div>
+                        <div className="kanban-cards-list">
+                            {todoTasks.map(task => (
+                                <TaskCard
+                                    key={task._id}
+                                    task={task}
+                                    deleteTask={(id) => setDeleteTaskId(id)}
+                                    toggleStatus={handleToggleTaskStatus}
+                                    openDetailModal={(t) => setSelectedTaskForDetail(t)}
+                                    onDragStart={handleDragStart}
+                                />
+                            ))}
+                            {todoTasks.length === 0 && (
+                                <div className="empty-column-placeholder">
+                                    <p>No tasks in Todo</p>
+                                    <button onClick={() => { setAddInitialStatus("Todo"); setShowAddModal(true); }}>+ Add Task</button>
+                                </div>
+                            )}
+                        </div>
                     </div>
 
-                )
-            }
+                    {/* In Progress Column */}
+                    <div
+                        className={`kanban-column column-progress ${dragOverColumn === "In Progress" ? "column-drag-over" : ""}`}
+                        onDragOver={(e) => handleDragOver(e, "In Progress")}
+                        onDragLeave={() => setDragOverColumn(null)}
+                        onDrop={(e) => handleDrop(e, "In Progress")}
+                    >
+                        <div className="column-header">
+                            <div className="column-title-wrap">
+                                <span className="column-dot dot-progress"></span>
+                                <h3>In Progress</h3>
+                                <span className="task-count-badge">{inProgressTasks.length}</span>
+                            </div>
+                            <button
+                                className="column-add-btn"
+                                onClick={() => { setAddInitialStatus("In Progress"); setShowAddModal(true); }}
+                            >
+                                +
+                            </button>
+                        </div>
+                        <div className="kanban-cards-list">
+                            {inProgressTasks.map(task => (
+                                <TaskCard
+                                    key={task._id}
+                                    task={task}
+                                    deleteTask={(id) => setDeleteTaskId(id)}
+                                    toggleStatus={handleToggleTaskStatus}
+                                    openDetailModal={(t) => setSelectedTaskForDetail(t)}
+                                    onDragStart={handleDragStart}
+                                />
+                            ))}
+                            {inProgressTasks.length === 0 && (
+                                <div className="empty-column-placeholder">
+                                    <p>No tasks in progress</p>
+                                    <button onClick={() => { setAddInitialStatus("In Progress"); setShowAddModal(true); }}>+ Add Task</button>
+                                </div>
+                            )}
+                        </div>
+                    </div>
 
-
-            {/* =========================
-                LIST VIEW
-            ========================= */}
-
-            {
-                viewMode === "list" && (
-
-                    <div className="details-tasks">
-
-
-                        {
-                            tasks.length === 0
-
-                                ?
-
-                                (
-
-                                    <h3>
-                                        No tasks yet
-                                    </h3>
-
-                                )
-
-                                :
-
-                                tasks.map(task => (
-
-                                    <div
-                                        className="detail-task-card"
-                                        key={task._id}
-                                    >
-
-
-                                        <h3>
-                                            {task.title}
-                                        </h3>
-
-
-                                        <p>
-                                            {task.description}
-                                        </p>
-
-
-                                        <p className="task-priority">
-
-                                            Priority:
-
-                                            <span
-                                                className={
-                                                    `priority-${task.priority
-                                                        ?.toLowerCase()}`
-                                                }
+                    {/* Completed Column */}
+                    <div
+                        className={`kanban-column column-completed ${dragOverColumn === "Completed" ? "column-drag-over" : ""}`}
+                        onDragOver={(e) => handleDragOver(e, "Completed")}
+                        onDragLeave={() => setDragOverColumn(null)}
+                        onDrop={(e) => handleDrop(e, "Completed")}
+                    >
+                        <div className="column-header">
+                            <div className="column-title-wrap">
+                                <span className="column-dot dot-completed"></span>
+                                <h3>Completed</h3>
+                                <span className="task-count-badge">{completedTasks.length}</span>
+                            </div>
+                            <button
+                                className="column-add-btn"
+                                onClick={() => { setAddInitialStatus("Completed"); setShowAddModal(true); }}
+                            >
+                                +
+                            </button>
+                        </div>
+                        <div className="kanban-cards-list">
+                            {completedTasks.map(task => (
+                                <TaskCard
+                                    key={task._id}
+                                    task={task}
+                                    deleteTask={(id) => setDeleteTaskId(id)}
+                                    toggleStatus={handleToggleTaskStatus}
+                                    openDetailModal={(t) => setSelectedTaskForDetail(t)}
+                                    onDragStart={handleDragStart}
+                                />
+                            ))}
+                            {completedTasks.length === 0 && (
+                                <div className="empty-column-placeholder">
+                                    <p>No completed tasks</p>
+                                    <button onClick={() => { setAddInitialStatus("Completed"); setShowAddModal(true); }}>+ Add Task</button>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            ) : (
+                <div className="tasks-list-table-container">
+                    <table className="tasks-table">
+                        <thead>
+                            <tr>
+                                <th>Status</th>
+                                <th>Task Title</th>
+                                <th>Priority</th>
+                                <th>Due Date</th>
+                                <th>Checklist</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {tasks.map(task => (
+                                <tr
+                                    key={task._id}
+                                    className={task.status === "Completed" ? "row-completed" : ""}
+                                    onClick={() => setSelectedTaskForDetail(task)}
+                                >
+                                    <td onClick={(e) => e.stopPropagation()}>
+                                        <button
+                                            className={`table-status-badge ${task.status?.toLowerCase().replace(" ", "-")}`}
+                                            onClick={() => handleToggleTaskStatus(task)}
+                                        >
+                                            {task.status}
+                                        </button>
+                                    </td>
+                                    <td className="task-title-cell">
+                                        <span className="table-task-title">{task.title}</span>
+                                    </td>
+                                    <td>
+                                        <span className={`priority-pill-table ${task.priority?.toLowerCase()}`}>
+                                            {task.priority || "Medium"}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span className="table-due-date">
+                                            {task.dueDate ? new Date(task.dueDate).toLocaleDateString() : "—"}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span className="subtasks-badge">
+                                            {task.subtasks?.filter(s => s.completed).length || 0}/{task.subtasks?.length || 0}
+                                        </span>
+                                    </td>
+                                    <td onClick={(e) => e.stopPropagation()}>
+                                        <div className="table-row-actions">
+                                            <button
+                                                className="table-action-btn"
+                                                onClick={() => setSelectedTaskForDetail(task)}
                                             >
-
-                                                {task.priority}
-
-                                            </span>
-
-                                        </p>
-
-
-                                        <div className="task-status-row">
-
-
-                                            <span>
-                                                Status
-                                            </span>
-
-
-                                            <select
-                                                value={
-                                                    task.status ||
-                                                    "Todo"
-                                                }
-                                                onChange={(e) =>
-                                                    updateTaskStatus(
-                                                        task._id,
-                                                        e.target.value
-                                                    )
-                                                }
-                                                className={
-                                                    `status-${task.status
-                                                        ?.toLowerCase()
-                                                        .replace(
-                                                            " ",
-                                                            "-"
-                                                        )}`
-                                                }
+                                                ✏️
+                                            </button>
+                                            <button
+                                                className="table-action-btn delete-btn"
+                                                onClick={() => setDeleteTaskId(task._id)}
                                             >
-
-                                                <option value="Todo">
-                                                    Todo
-                                                </option>
-
-
-                                                <option value="In Progress">
-                                                    In Progress
-                                                </option>
-
-
-                                                <option value="Completed">
-                                                    Completed
-                                                </option>
-
-                                            </select>
-
-
+                                                🗑️
+                                            </button>
                                         </div>
-
-
-                                        <p className="task-date">
-
-                                            Created:
-                                            {" "}
-
-                                            {
-                                                task.createdAt
-
-                                                    ?
-
-                                                    new Date(
-                                                        task.createdAt
-                                                    ).toLocaleDateString()
-
-                                                    :
-
-                                                    "Unknown"
-                                            }
-
-                                        </p>
-
-
-                                    </div>
-
-                                ))
-                        }
-
-
-                    </div>
-
-                )
-            }
-
-
-            {/* =========================
-                KANBAN BOARD
-            ========================= */}
-
-            {
-                viewMode === "kanban" && (
-
-                    <div className="kanban-board">
-
-
-                        {/* TODO COLUMN */}
-
-                        <div
-                            className="kanban-column"
-                            onDragOver={
-                                handleDragOver
-                            }
-                            onDrop={(e) =>
-                                handleDrop(
-                                    e,
-                                    "Todo"
-                                )
-                            }
-                        >
-
-
-                            <div className="kanban-column-header">
-
-                                <h3>
-                                    Todo
-                                </h3>
-
-                                <span>
-                                    {todoTasks.length}
-                                </span>
-
-                            </div>
-
-
-                            <div className="kanban-column-body">
-
-
-                                {
-                                    todoTasks.length === 0
-
-                                        ?
-
-                                        (
-
-                                            <p className="empty-column">
-                                                Drop tasks here
-                                            </p>
-
-                                        )
-
-                                        :
-
-                                        todoTasks.map(
-                                            renderKanbanTask
-                                        )
-                                }
-
-
-                            </div>
-
-
-                        </div>
-
-
-                        {/* IN PROGRESS COLUMN */}
-
-                        <div
-                            className="kanban-column"
-                            onDragOver={
-                                handleDragOver
-                            }
-                            onDrop={(e) =>
-                                handleDrop(
-                                    e,
-                                    "In Progress"
-                                )
-                            }
-                        >
-
-
-                            <div className="kanban-column-header">
-
-                                <h3>
-                                    In Progress
-                                </h3>
-
-                                <span>
-                                    {
-                                        inProgressTasks.length
-                                    }
-                                </span>
-
-                            </div>
-
-
-                            <div className="kanban-column-body">
-
-
-                                {
-                                    inProgressTasks.length === 0
-
-                                        ?
-
-                                        (
-
-                                            <p className="empty-column">
-                                                Drop tasks here
-                                            </p>
-
-                                        )
-
-                                        :
-
-                                        inProgressTasks.map(
-                                            renderKanbanTask
-                                        )
-                                }
-
-
-                            </div>
-
-
-                        </div>
-
-
-                        {/* COMPLETED COLUMN */}
-
-                        <div
-                            className="kanban-column"
-                            onDragOver={
-                                handleDragOver
-                            }
-                            onDrop={(e) =>
-                                handleDrop(
-                                    e,
-                                    "Completed"
-                                )
-                            }
-                        >
-
-
-                            <div className="kanban-column-header">
-
-                                <h3>
-                                    Completed
-                                </h3>
-
-                                <span>
-                                    {
-                                        completedTasks.length
-                                    }
-                                </span>
-
-                            </div>
-
-
-                            <div className="kanban-column-body">
-
-
-                                {
-                                    completedTasks.length === 0
-
-                                        ?
-
-                                        (
-
-                                            <p className="empty-column">
-                                                Drop tasks here
-                                            </p>
-
-                                        )
-
-                                        :
-
-                                        completedTasks.map(
-                                            renderKanbanTask
-                                        )
-                                }
-
-
-                            </div>
-
-
-                        </div>
-
-
-                    </div>
-
-                )
-            }
-
-
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+            )}
+
+            {/* Add Task Modal */}
+            {showAddModal && (
+                <AddTask
+                    projects={[project]}
+                    defaultProjectId={project._id}
+                    initialStatus={addInitialStatus}
+                    onAddTask={handleCreateTask}
+                    onClose={() => setShowAddModal(false)}
+                />
+            )}
+
+            {/* Task Detail Modal */}
+            {selectedTaskForDetail && (
+                <TaskDetailModal
+                    task={selectedTaskForDetail}
+                    projects={[project]}
+                    onClose={() => setSelectedTaskForDetail(null)}
+                    onTaskUpdated={(updatedTask) => {
+                        setTasks(prev => prev.map(t => t._id === updatedTask._id ? updatedTask : t));
+                        fetchProjectDetails();
+                    }}
+                    onTaskDeleted={(id) => {
+                        setTasks(prev => prev.filter(t => t._id !== id));
+                        fetchProjectDetails();
+                    }}
+                />
+            )}
+
+            {/* Confirm Delete Task Modal */}
+            {deleteTaskId && (
+                <ConfirmModal
+                    title="Delete Task"
+                    message="Are you sure you want to delete this task from this project?"
+                    onConfirm={handleDeleteTask}
+                    onCancel={() => setDeleteTaskId(null)}
+                />
+            )}
+
+            {/* Confirm Delete Project Modal */}
+            {showDeleteProjectConfirm && (
+                <ConfirmModal
+                    title="Delete Entire Project"
+                    message={`Are you sure you want to delete "${project.name}"? Tasks associated with this project will be unlinked.`}
+                    onConfirm={handleDeleteProject}
+                    onCancel={() => setShowDeleteProjectConfirm(false)}
+                />
+            )}
         </div>
-
     );
-
 }
-
 
 export default ProjectDetails;

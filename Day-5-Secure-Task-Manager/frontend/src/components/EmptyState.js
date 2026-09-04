@@ -1,33 +1,26 @@
 import "../styles/EmptyState.css";
 
-
-function EmptyState(){
-
-    return(
-
-        <div className="empty-state">
-
-
-            <div className="empty-icon">
-                🎯
+function EmptyState({
+    title = "No Tasks Yet",
+    message = "Start adding tasks to organize and track your productivity.",
+    icon = "🎯",
+    actionText,
+    onAction
+}) {
+    return (
+        <div className="empty-state-modern">
+            <div className="empty-icon-circle">
+                {icon}
             </div>
-
-
-            <h2>
-                No Tasks Yet
-            </h2>
-
-
-            <p>
-                Start adding tasks and track your productivity.
-            </p>
-
-
+            <h3>{title}</h3>
+            <p>{message}</p>
+            {actionText && onAction && (
+                <button className="empty-action-btn" onClick={onAction}>
+                    {actionText}
+                </button>
+            )}
         </div>
-
-    )
-
+    );
 }
-
 
 export default EmptyState;

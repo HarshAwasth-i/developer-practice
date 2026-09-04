@@ -1,37 +1,21 @@
 const express = require("express");
-
 const router = express.Router();
-
 
 const {
     createProject,
     getProjects,
-    getProjectById
+    getProjectById,
+    updateProject,
+    deleteProject
 } = require("../controllers/projectController");
-
 
 const authMiddleware = require("../middleware/authMiddleware");
 
-
-
-// Create Project
-
-router.post(
-    "/",
-    authMiddleware,
-    createProject
-);
-
-
-
-// Get Projects
-
-router.get(
-    "/",
-    authMiddleware,
-    getProjects
-);
-
+// Routes
+router.post("/", authMiddleware, createProject);
+router.get("/", authMiddleware, getProjects);
 router.get("/:id", authMiddleware, getProjectById);
+router.put("/:id", authMiddleware, updateProject);
+router.delete("/:id", authMiddleware, deleteProject);
 
 module.exports = router;

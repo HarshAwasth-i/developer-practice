@@ -1,19 +1,12 @@
 import "../styles/Loader.css";
 
-
-function Loader(){
-
-    return(
-
-        <div className="loader">
-
-            Loading tasks...
-
+function Loader({ message = "Loading workspace data..." }) {
+    return (
+        <div className="loader-container">
+            <div className="loader-spinner"></div>
+            <p className="loader-text">{message}</p>
         </div>
-
-    )
-
+    );
 }
-
 
 export default Loader;

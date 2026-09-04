@@ -1,204 +1,113 @@
-.activity-card{
-
-    padding:25px;
-
-    border-radius:15px;
-
-    border:1px solid #333;
-
-    height:350px;
-
-    overflow-y:auto;
-
-    padding-right:15px;
-
+.activity-card-modern {
+    background: var(--bg-surface-elevated);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-xl);
+    padding: 22px;
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    flex-direction: column;
 }
 
-
-
-
-
-.activity-card h2{
-
-    margin-bottom:20px;
-
+.activity-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 18px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border-subtle);
 }
 
-
-
-
-
-.activity-item{
-
-    display:flex;
-
-    align-items:center;
-
-    gap:20px;
-
-    padding:15px;
-
-    margin-bottom:15px;
-
-    border-radius:12px;
-
+.activity-card-header h3 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--text-primary);
 }
 
-
-
-
-
-/* Dark Activity Items */
-
-.app.dark .activity-item{
-
-    background:#1b1b1b;
-
-    color:white;
-
+.activity-count-badge {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    background: var(--bg-subtle);
+    padding: 2px 8px;
+    border-radius: var(--radius-full);
 }
 
-
-
-
-
-/* Light Activity Items */
-
-.app.light .activity-item{
-
-    background:#f5f5f5;
-
-    color:black;
-
+.activity-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 30px;
+    color: var(--text-muted);
+    gap: 6px;
 }
 
-
-
-
-
-.activity-icon{
-
-    font-size:22px;
-
+.activity-timeline {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    position: relative;
 }
 
-
-
-
-
-.activity-content h3{
-
-    margin:0;
-
-    font-size:16px;
-
+.activity-timeline-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    position: relative;
 }
 
-
-
-
-
-.activity-content p{
-
-    margin:5px 0;
-
+.activity-avatar-icon {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.95rem;
+    flex-shrink: 0;
 }
 
-
-
-
-
-.activity-content small{
-
-    color:#aaa;
-
+.activity-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
 }
 
-
-
-
-
-/* Card Theme */
-
-.app.dark .activity-card{
-
-    background:#222;
-
-    color:white;
-
-    border-color:#333;
-
+.activity-row-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
 }
 
-
-
-
-
-.app.light .activity-card{
-
-    background:white;
-
-    color:black;
-
-    border-color:#ddd;
-
+.activity-badge {
+    font-size: 0.725rem;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: var(--radius-sm);
 }
 
+.badge-created { background: var(--primary-light); color: var(--primary); }
+.badge-completed { background: rgba(16, 185, 129, 0.15); color: var(--accent-emerald); }
+.badge-progress { background: rgba(245, 158, 11, 0.15); color: var(--accent-amber); }
+.badge-deleted { background: rgba(244, 63, 94, 0.15); color: var(--accent-rose); }
+.badge-project { background: rgba(168, 85, 247, 0.15); color: var(--accent-purple); }
+.badge-updated { background: var(--bg-subtle); color: var(--text-secondary); }
 
-
-
-
-/* Heading Theme */
-
-.app.dark .activity-card h2{
-
-    color:white;
-
+.activity-time {
+    font-size: 0.75rem;
+    color: var(--text-muted);
 }
 
-
-
-.app.light .activity-card h2{
-
-    color:black;
-
+.activity-task-title {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    line-height: 1.35;
 }
 
-
-
-
-
-/* Text inheritance */
-
-.activity-content h3,
-.activity-content p,
-.activity-content small{
-
-    color:inherit;
-
-}
-
-
-
-
-
-@media(max-width:768px){
-
-    .activity-card{
-
-        height:auto;
-
-    }
-
-
-    .activity-item{
-
-        flex-direction:column;
-
-        align-items:flex-start;
-
-            animation:fadeIn 0.4s ease;
-
-    }
-
+.activity-details-text {
+    font-size: 0.775rem;
+    color: var(--text-muted);
 }
