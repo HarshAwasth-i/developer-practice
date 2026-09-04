@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import API from "../api/axios";
 import toast from "react-hot-toast";
@@ -33,7 +33,7 @@ function ProjectDetails() {
     const [draggedTask, setDraggedTask] = useState(null);
     const [dragOverColumn, setDragOverColumn] = useState(null);
 
-    const fetchProjectDetails = async () => {
+    const fetchProjectDetails = useCallback(async () => {
         try {
             setLoading(true);
             const res = await API.get(`/projects/${id}`);
@@ -46,11 +46,11 @@ function ProjectDetails() {
         } finally {
             setLoading(false);
         }
-    };
+    }, [id, navigate]);
 
     useEffect(() => {
         if (id) fetchProjectDetails();
-    }, [id]);
+    }, [id, fetchProjectDetails]);
 
     const handleCreateTask = async (taskData) => {
         try {
