@@ -28,6 +28,32 @@ The application uses a React frontend, Node.js/Express backend, and MongoDB data
 
 ---
 
+---
+
+## 📸 Screenshots
+
+### 🏠 Landing Page
+
+![TaskPulse Landing Page](screenshots/landing.png)
+
+### 📊 Dashboard
+
+![TaskPulse Dashboard](screenshots/dashboard.png)
+
+### 🧩 Kanban Workspace
+
+![TaskPulse Kanban Board](screenshots/kanban.png)
+
+### 📁 Project Management
+
+![TaskPulse Projects](screenshots/projects.png)
+
+### 🌙 Dark Mode
+
+![TaskPulse Dark Mode](screenshots/dark-mode.png)
+
+---
+
 ## ✨ Features
 
 ### 🔐 Authentication
