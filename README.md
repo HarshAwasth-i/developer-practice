@@ -16,7 +16,7 @@ A production-deployed full-stack task management platform with authentication, p
 
 🌐 **[Live Demo](https://developer-practice-delta.vercel.app)**
 
----
+--- 
 
 ## ✦ Overview
 
