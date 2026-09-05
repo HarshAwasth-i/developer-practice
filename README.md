@@ -34,24 +34,23 @@ The application uses a React frontend, Node.js/Express backend, and MongoDB data
 
 ### 🏠 Landing Page
 
-![TaskPulse Landing Page](screenshots/landing.png)
+![TaskPulse Landing Page](Day-5-Secure-Task-Manager/screenshots/landing.png)
 
 ### 📊 Dashboard
 
-![TaskPulse Dashboard](screenshots/dashboard.png)
+![TaskPulse Dashboard](Day-5-Secure-Task-Manager/screenshots/dashboard.png)
 
 ### 🧩 Kanban Workspace
 
-![TaskPulse Kanban Board](screenshots/kanban.png)
+![TaskPulse Kanban Board](Day-5-Secure-Task-Manager/screenshots/kanban.png)
 
 ### 📁 Project Management
 
-![TaskPulse Projects](screenshots/projects.png)
+![TaskPulse Projects](Day-5-Secure-Task-Manager/screenshots/projects.png)
 
 ### 🌙 Dark Mode
 
-![TaskPulse Dark Mode](screenshots/dark-mode.png)
-
+![TaskPulse Dark Mode](Day-5-Secure-Task-Manager/screenshots/dark-mode.png)
 ---
 
 ## ✨ Features
