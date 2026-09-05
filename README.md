@@ -1,4 +1,4 @@
-# 🚀 TaskPulse
+#  TaskPulse
 
 > A full-stack task management and Kanban workspace built to practice real-world frontend, backend, database, authentication, and deployment concepts.
 
